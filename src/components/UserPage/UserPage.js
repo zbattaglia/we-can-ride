@@ -7,6 +7,7 @@ import LogOutButton from '../LogOutButton/LogOutButton';
 // and then instead of `props.user.username` you could use `user.username`
 const UserPage = (props) => (
   <div>
+    {JSON.stringify(props.volunteer)}
     <h1 id="welcome">
       Welcome, { props.user.username }!
     </h1>
@@ -20,6 +21,7 @@ const UserPage = (props) => (
 // const mapStateToProps = ({user}) => ({ user });
 const mapStateToProps = state => ({
   user: state.user,
+  volunteer: state.volunteers,
 });
 
 // this allows us to use <App /> in index.js
