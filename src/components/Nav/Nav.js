@@ -50,6 +50,9 @@ const Nav = (props) => (
       <Link className="nav-link" to="/standardsession">
         Standard Session
       </Link>
+      <Link className="nav-link" to="/subpage">
+        Sub Page
+      </Link>
     </div>
   </div>
 );
