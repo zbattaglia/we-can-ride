@@ -47,6 +47,9 @@ const Nav = (props) => (
       <Link className="nav-link" to="/myshifts">
         My Shifts
       </Link>
+      <Link className="nav-link" to="/standardsession">
+        Standard Session
+      </Link>
     </div>
   </div>
 );
