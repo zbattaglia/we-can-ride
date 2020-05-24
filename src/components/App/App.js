@@ -16,6 +16,14 @@ import ProtectedRoute from '../ProtectedRoute/ProtectedRoute'
 import AboutPage from '../AboutPage/AboutPage';
 import UserPage from '../UserPage/UserPage';
 import InfoPage from '../InfoPage/InfoPage';
+import Calendar from '../Calendar/Calendar';
+import EditProfile from '../EditProfile/EditProfile';
+import FindASub from '../FindASub/FindASub';
+import Inbox from '../Inbox/Inbox';
+import ManageVolunteers from '../ManageVolunteers/ManageVolunteers';
+import MyShifts from '../MyShifts/MyShifts';
+import StandardSession from '../StandardSession/StandardSession';
+import SubPage from '../SubPage/SubPage';
 
 import './App.css';
 
@@ -55,6 +63,46 @@ class App extends Component {
               exact
               path="/info"
               component={InfoPage}
+            />
+            <ProtectedRoute
+              exact
+              path="/calendar"
+              component={Calendar}
+            />
+            <ProtectedRoute
+              exact
+              path="/editprofile"
+              component={EditProfile}
+            />
+            <ProtectedRoute
+              exact
+              path="/findasub"
+              component={FindASub}
+            />
+            <ProtectedRoute
+              exact
+              path="/inbox"
+              component={Inbox}
+            />
+            <ProtectedRoute
+              exact
+              path="/managevolunteers"
+              component={ManageVolunteers}
+            />
+            <ProtectedRoute
+              exact
+              path="/myshifts"
+              component={MyShifts}
+            />
+            <ProtectedRoute
+              exact
+              path="/standardsession"
+              component={StandardSession}
+            />
+            <ProtectedRoute
+              exact
+              path="/subpage"
+              component={SubPage}
             />
             {/* If none of the other routes matched, we will show a 404. */}
             <Route render={() => <h1>404</h1>} />
