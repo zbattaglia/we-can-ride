@@ -19,6 +19,7 @@ import InfoPage from '../InfoPage/InfoPage';
 import Calendar from '../Calendar/Calendar';
 import EditProfile from '../EditProfile/EditProfile';
 import FindASub from '../FindASub/FindASub';
+import Inbox from '../Inbox/Inbox';
 
 import './App.css';
 
@@ -73,6 +74,11 @@ class App extends Component {
               exact
               path="/findasub"
               component={FindASub}
+            />
+            <ProtectedRoute
+              exact
+              path="/inbox"
+              component={Inbox}
             />
             {/* If none of the other routes matched, we will show a 404. */}
             <Route render={() => <h1>404</h1>} />

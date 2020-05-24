@@ -38,6 +38,9 @@ const Nav = (props) => (
       <Link className="nav-link" to="/findasub">
         Find A Sub
       </Link>
+      <Link className="nav-link" to="/inbox">
+        Inbox
+      </Link>
     </div>
   </div>
 );
