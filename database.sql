@@ -38,7 +38,7 @@ CREATE TABLE "user_skill" (
 CREATE TABLE "session" (
     "id" serial PRIMARY KEY,
     "start_date" DATE,
-    "length_in_weeks" INT,
+    "length_in_weeks" INTERVAL,
     "ready_to_publish" BOOLEAN,
     "session_type" VARCHAR(50)
 );
@@ -48,7 +48,7 @@ CREATE TABLE "lesson" (
     "session_id" INT REFERENCES "session",
     "start_of_lesson" time without time zone,
     "client" VARCHAR(255),
-    "length_of_lesson" INT,
+    "length_of_lesson" INTERVAL,
     "day_of_week" timestamp without time zone
 );
 --Create slots table
