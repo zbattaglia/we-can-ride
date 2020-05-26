@@ -5,6 +5,7 @@ import user from './userReducer';
 import volunteer from './volunteerReducer';
 import shift from './shiftReducer';
 import session from './sessionReducer';
+import message from './messageReducer';
 
 // rootReducer is the primary reducer for our entire project
 // It bundles up all of the other reducers so our project can use them.
@@ -19,6 +20,7 @@ const rootReducer = combineReducers({
   volunteer, //will have information about all of the volunteers
   shift, //will have information relating to all the shifts
   session, //will relate to the sessions which we are dealing with
+  message, //will have all of a user's current messages in their inbox
 });
 
 export default rootReducer;
