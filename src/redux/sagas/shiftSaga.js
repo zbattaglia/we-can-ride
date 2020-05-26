@@ -16,7 +16,7 @@ function* fetchFourWeeksShifts() {
 function* fetchMyShifts(action) {
   console.log( 'In fetchShift Saga', action.payload );
 try {
-  const response = yield axios.get(`/shift/${action.payload.user_id}`);
+  const response = yield axios.get(`/shift/myshift/${action.payload.user_id}`);
   yield put({ type: 'SET_MY_SHIFTS', payload: response.data });
 
 } catch (error) {
