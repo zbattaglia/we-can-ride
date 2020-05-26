@@ -8,7 +8,15 @@ const fourWeeksShifts = (state = [], action) => {
         return state;
     }
   };
-  
+const myShifts = (state = [], action) => {
+  switch (action.type) {
+    case 'SET_MY_SHIFTS':
+      return action.payload;
+    default:
+      return state;
+  }
+};  
   export default combineReducers({
     fourWeeksShifts,
+    myShifts
   });
