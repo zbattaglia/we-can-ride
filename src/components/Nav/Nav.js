@@ -6,52 +6,25 @@ import './Nav.css';
 
 const Nav = (props) => (
   <div className="nav">
-    <Link to="/home">
-      <h2 className="nav-title">Prime Solo Project</h2>
+    <Link to="/calendar">
+      <h2 className="nav-title">We Can Ride</h2>
     </Link>
     <div className="nav-right">
-      <Link className="nav-link" to="/home">
+      <Link className="nav-link" to="/calendar">
         {/* Show this link if they are logged in or not,
         but call this link 'Home' if they are logged in,
         and call this link 'Login / Register' if they are not */}
-        {props.user.id ? 'Home' : 'Login / Register'}
+        {!props.user.id && 'Login / Register'}
       </Link>
-      {/* Show the link to the info page and the logout button if the user is logged in */}
+      {/* If a user is logged in, show the Log Out button*/}
       {props.user.id && (
         <>
-          <Link className="nav-link" to="/info">
-            Info Page
-          </Link>
           <LogOutButton className="nav-link"/>
         </>
       )}
       {/* Always show this link since the about page is not protected */}
       <Link className="nav-link" to="/about">
         About
-      </Link>
-      <Link className="nav-link" to="/calendar">
-        Calendar
-      </Link>
-      <Link className="nav-link" to="/editprofile">
-        Edit Profile
-      </Link>
-      <Link className="nav-link" to="/findasub">
-        Find A Sub
-      </Link>
-      <Link className="nav-link" to="/inbox">
-        Inbox
-      </Link>
-      <Link className="nav-link" to="/managevolunteers">
-        Manage Volunteers
-      </Link>
-      <Link className="nav-link" to="/myshifts">
-        My Shifts
-      </Link>
-      <Link className="nav-link" to="/standardsession">
-        Standard Session
-      </Link>
-      <Link className="nav-link" to="/subpage">
-        Sub Page
       </Link>
     </div>
   </div>
