@@ -66,6 +66,15 @@ CREATE TABLE "shift" (
     "assigned_user" INT REFERENCES "user",
     "user_wants_to_trade" boolean DEFAULT false
 );
+
+--Create message table
+CREATE TABLE "message" (
+	"id" SERIAL PRIMARY KEY,
+	"sender" INT REFERENCES "user",
+	"recipient" INT REFERENCES "user",
+	"message" VARCHAR
+);
+
 --INSERT skills
 INSERT INTO "skill"("id", "title") 
 VALUES

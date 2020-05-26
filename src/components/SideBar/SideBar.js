@@ -30,6 +30,9 @@ const SideBar = (props) => (
                     Find A Sub
                 </Link>
             </li>
+                <Link className="side-link" to="/inbox">
+                  Inbox
+                </Link>
             <li>
                 <Link className="side-link" to="/editprofile">
                     Edit Profile
