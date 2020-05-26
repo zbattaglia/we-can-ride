@@ -13,8 +13,20 @@ function* fetchFourWeeksShifts() {
   }
 };
 
+function* fetchMyShifts(action) {
+  console.log( 'In fetchShift Saga', action.payload );
+try {
+  const response = yield axios.get(`/shift/${action.payload.user_id}`);
+  yield put({ type: 'SET_MY_SHIFTS', payload: response.data });
+
+} catch (error) {
+  console.log('Error in fetching this users shifts', error);
+}
+};
+
 function* shiftSaga() {
   yield takeLatest('FETCH_FOUR_WEEKS_SHIFTS', fetchFourWeeksShifts);
+  yield takeLatest('FETCH_MY_SHIFTS', fetchMyShifts);
 };
 
 export default shiftSaga;

@@ -7,6 +7,22 @@ const { rejectUnauthenticated } = require('../modules/authentication-middleware'
 /**
  * GET route template
  */
+router.get(`/:user_id`, rejectUnauthenticated, (req, res) => {
+    const sqlText = `SELECT "date", ("start_of_lesson" - INTERVAL '15 minutes') AS "time_to_arrive", 
+    "title" AS "role" FROM "shift"
+    JOIN "slot" ON "shift"."slot_id" = "slot"."id"
+    JOIN "lesson" ON "slot"."lesson_id" = "lesson"."id"
+    JOIN "skill" ON "skill_needed" = "skill"."id"
+    WHERE "assigned_user" = $1
+    ;`;
+    pool.query(sqlText, [req.params.user_id]).then( (response) => {
+        res.send( response.rows );
+    }).catch( (error) => {
+        console.log( 'Error getting all shifts', error );
+        res.sendStatus( 500 );
+    });
+});
+
 router.get('/fourweeks', rejectUnauthenticated, (req, res) => {
     const sqlText = `SELECT EXTRACT(DOW FROM "date") AS "weekday", "shift"."id", "date", "start_of_lesson", ("start_of_lesson" + "length_of_lesson") AS "end_of_lesson", "skill"."title", "eu"."first_name" AS "expected_first_name", "au"."first_name" AS "assigned_first_name", LEFT("au"."last_name", 1) AS "assigned_user_last_initial", "expected_user", "assigned_user", "client" FROM "shift" 
     JOIN "slot" ON "shift"."slot_id" = "slot"."id"
