@@ -22,6 +22,8 @@ const styles = theme => ({
   },
 });
 
+
+
 class StandardSession extends Component {
 
   state = {
@@ -39,10 +41,10 @@ class StandardSession extends Component {
   }
   componentDidUpdate (prevProps, prevState) {
     if (this.state.session === '' && this.props.state.session.allSessions[0]){this.setState({
-      session: this.props.state.session.allSessions[0].id
+      session: this.props.state.session.allSessions[0]
     })}
     if (prevState.session !== this.state.session){
-      this.props.dispatch({type: 'FETCH_SESSION_SLOTS', payload: {session_id: this.state.session}});
+      this.props.dispatch({type: 'FETCH_SESSION_SLOTS', payload: {session_id: this.state.session.id}});
     }
   }
 
@@ -52,17 +54,6 @@ class StandardSession extends Component {
     return (
       <>
         <h1>Standard Session</h1>
-        <p>you can look at the user to see if it's an admin to decide how to show this page</p>
-        {JSON.stringify(this.props.state.user)}
-        {JSON.stringify(this.state)}
-        <p>this is the page to see the standard session view</p>
-        <p>the below should let us pick a session to view</p>
-        {JSON.stringify(this.props.state.session.allSessions)}
-        {JSON.stringify(this.props.state.session.slots)}
-        <p> pick a session by its type and start date.
-          get the slots of that session back from the database
-        </p>
-
         <InputLabel htmlFor="age-simple">Session</InputLabel>
           <Select
             value={this.state.session}
@@ -76,9 +67,22 @@ class StandardSession extends Component {
               <em>None</em>
             </MenuItem>
             {this.props.state.session.allSessions.map(item => (
-              <MenuItem key={item.id} value={item.id}>{item.start_date} {item.session_type}</MenuItem>
+              <MenuItem key={item.id} value={item}>{item.start_date} {item.session_type}</MenuItem>
             ))}
           </Select>
+
+        <p>you can look at the user to see if it's an admin to decide how to show this page</p>
+        {JSON.stringify(this.props.state.user)}
+        {JSON.stringify(this.state)}
+        <p>this is the page to see the standard session view</p>
+        <p>the below should let us pick a session to view</p>
+        {JSON.stringify(this.props.state.session.allSessions)}
+        {JSON.stringify(this.props.state.session.slots)}
+        <p> pick a session by its type and start date.
+          get the slots of that session back from the database
+        </p>
+
+
         
       </>
     )
