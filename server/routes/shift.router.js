@@ -7,7 +7,7 @@ const { rejectUnauthenticated } = require('../modules/authentication-middleware'
 /**
  * GET route template
  */
-router.get(`/:user_id`, rejectUnauthenticated, (req, res) => {
+router.get(`/myshift/:user_id`, rejectUnauthenticated, (req, res) => {
     const sqlText = `SELECT "date", ("start_of_lesson" - INTERVAL '15 minutes') AS "time_to_arrive", 
     "title" AS "role" FROM "shift"
     JOIN "slot" ON "shift"."slot_id" = "slot"."id"

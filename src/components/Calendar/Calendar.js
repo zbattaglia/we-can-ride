@@ -17,7 +17,7 @@ class Calendar extends Component {
         <p>here is the user info, use it to compare with all the shifts</p>
         {JSON.stringify(this.props.state.user)}
         <p>this is the page where the calendar will be</p>
-        {JSON.stringify(this.props.state.shift.fourWeeksShifts)}
+        {JSON.stringify(this.props.state.shift)}
       </>
     )
   }
