@@ -4,6 +4,7 @@ import loginMode from './loginModeReducer';
 import user from './userReducer';
 import volunteer from './volunteerReducer';
 import shift from './shiftReducer';
+import session from './sessionReducer';
 import message from './messageReducer';
 
 // rootReducer is the primary reducer for our entire project
@@ -18,6 +19,7 @@ const rootReducer = combineReducers({
   user, // will have an id and username if someone is logged in
   volunteer, //will have information about all of the volunteers
   shift, //will have information relating to all the shifts
+  session, //will relate to the sessions which we are dealing with
   message, //will have all of a user's current messages in their inbox
 });
 
