@@ -79,6 +79,9 @@ class InboxList extends Component {
                 {message.first_name} {message.last_name}
             </CustomTableCell>
             <CustomTableCell>
+                {message.sent}
+            </CustomTableCell>
+            <CustomTableCell>
                 {message.message}
             </CustomTableCell>
             <CustomTableCell>

@@ -58,6 +58,9 @@ class Inbox extends Component {
                 <CustomTableCell id="from">
                   From
                 </CustomTableCell>
+                <CustomTableCell id="received">
+                  Received
+                </CustomTableCell>
                 <CustomTableCell id="message">
                   Message
                 </CustomTableCell>
