@@ -5,7 +5,8 @@ import TableCell from '@material-ui/core/TableCell';
 import TableRow from '@material-ui/core/TableRow';
 import Delete_forever from '@material-ui/icons/DeleteForever';
 import Reply from '@material-ui/icons/Reply';
-import Fab from '@material-ui/core/Fab';
+import Check from '@material-ui/icons/Check';
+import Clear from '@material-ui/icons/Clear';
 import IconButton from '@material-ui/core/IconButton';
 import Tooltip from '@material-ui/core/Tooltip';
 
@@ -54,8 +55,18 @@ const CustomTableCell = withStyles(theme => ({
 
 class InboxList extends Component {
 
+    // method to handlce click on any of the inbox buttons.
     handleClick = ( messageId, button ) => {
-        console.log( `Got a click on ${button} to ${messageId}` );
+        // console.log( `Got a click on ${button} to ${messageId}` );
+        // if button clicked is delete button, dispatch DELETE_MESSAGE action with specific message id
+        if( button === 'delete' ) {
+            this.props.dispatch( { type: 'DELETE_MESSAGE', payload: messageId } );
+        }
+        else {
+            // console.log( 'Replying to message' );
+            // if a message is "accepted" or "declined" send the preset message
+            this.props.dispatch( { type: 'REPLY_TO_MESSAGE', payload: { id: messageId, type: button } } );
+        }
     }
 
   render() {
@@ -71,11 +82,27 @@ class InboxList extends Component {
                 {message.message}
             </CustomTableCell>
             <CustomTableCell>
+                {/* if the user is a volunteer they should only be able to send an accept or decline message. If admin, should be able to custom reply */}
+                {this.props.state.user.type_of_user === 'volunteer' ?
+                <>
+                <CustomTooltip title="Accept">
+                    <IconButton aria-label="Accept" onClick={ (event) => this.handleClick( message.id, 'accept' )}>
+                        <Check className="action"/>
+                    </IconButton>
+                </CustomTooltip>
+                <CustomTooltip title="Decline">
+                    <IconButton aria-label="Decline" onClick={ (event) => this.handleClick( message.id, 'decline' )}>
+                        <Clear className="action"/>
+                    </IconButton>
+                </CustomTooltip>
+                </>
+                :
                 <CustomTooltip title="Reply">
                     <IconButton aria-label="Reply" onClick={ (event) => this.handleClick( message.id, 'reply' )}>
                         <Reply className="action"/>
                     </IconButton>
                 </CustomTooltip>
+                }
                 <CustomTooltip title="Delete">
                     <IconButton aria-label="Delete" onClick={ (event) => this.handleClick( message.id, 'delete' )}>
                         <Delete_forever  className="action"/>
