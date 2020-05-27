@@ -1,5 +1,28 @@
 import React, { Component } from 'react';
 import {connect} from 'react-redux';
+import PropTypes from 'prop-types';
+import classNames from 'classnames';
+import { withStyles } from '@material-ui/core/styles';
+import MenuItem from '@material-ui/core/MenuItem';
+import TextField from '@material-ui/core/TextField';
+
+const styles = theme => ({
+  container: {
+    display: 'flex',
+    flexWrap: 'wrap',
+  },
+  textField: {
+    marginLeft: theme.spacing.unit,
+    marginRight: theme.spacing.unit,
+    width: 200,
+  },
+  dense: {
+    marginTop: 19,
+  },
+  menu: {
+    width: 200,
+  },
+});
 
 class RegisterPage extends Component {
   state = {
@@ -40,6 +63,7 @@ class RegisterPage extends Component {
   }
 
   render() {
+    const { classes } = this.props;
     return (
       <div>
         {this.props.errors.registrationMessage && (
@@ -53,70 +77,58 @@ class RegisterPage extends Component {
         <form onSubmit={this.registerUser}>
           <h1>Register User</h1>
           <div>
-            <label htmlFor="username">
-              Email:
-              <input
+              <TextField
                 type="text"
+                label="Email"
                 name="username"
                 value={this.state.username}
                 onChange={this.handleInputChangeFor('username')}
               />
-            </label>
           </div>
           <div>
-            <label htmlFor="password">
-              Password:
-              <input
+            <TextField
                 type="password"
+                label="Password"
                 name="password"
                 value={this.state.password}
                 onChange={this.handleInputChangeFor('password')}
               />
-            </label>
           </div>
           <div>
-            <label htmlFor="confirmPassword">
-              Confirm Password:
-              <input
+            <TextField
                 type="password"
+                label="Confirm Password"
                 name="confirmPassword"
                 value={this.state.confirmPassword}
                 onChange={this.handleInputChangeFor('confirmPassword')}
               />
-            </label>
           </div>
           <div>
-            <label htmlFor="firstName">
-              First Name:
-              <input
+            <TextField
                 type="text"
+                label="First Name"
                 name="firstName"
                 value={this.state.firstName}
                 onChange={this.handleInputChangeFor('firstName')}
               />
-            </label>
           </div>
           <div>
-            <label htmlFor="lastName">
-              Last Name:
-              <input
+            <TextField
                 type="text"
+                label="Last Name"
                 name="lastName"
                 value={this.state.lastName}
                 onChange={this.handleInputChangeFor('lastName')}
               />
-            </label>
           </div>
           <div>
-            <label htmlFor="phoneNumber">
-              Phone Number:
-              <input
+            <TextField
                 type="tel"
+                label="Phone Number"
                 name="phoneNumber"
                 value={this.state.phoneNumber}
                 onChange={this.handleInputChangeFor('phoneNumber')}
               />
-            </label>
           </div>
           <div>
             <input
@@ -148,5 +160,5 @@ const mapStateToProps = state => ({
   errors: state.errors,
 });
 
-export default connect(mapStateToProps)(RegisterPage);
+export default withStyles(styles)(connect(mapStateToProps)(RegisterPage));
 
