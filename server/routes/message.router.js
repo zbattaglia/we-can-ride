@@ -10,9 +10,10 @@ const sendEmail = require('../modules/emailer');
  */
 router.get('/', (req, res) => {
     console.log( `Getting messages for user with id ${req.user.id}`);
-    const sqlText = `SELECT "message"."id", "user"."first_name", "user"."last_name", "message"."message" FROM "message"
+    const sqlText = `SELECT "message"."id", "user"."first_name", "user"."last_name", "message"."message", "message"."sent" FROM "message"
                     JOIN "user" ON "user"."id" = "message"."sender"
-                    WHERE "message"."recipient" = $1;`;
+                    WHERE "message"."recipient" = $1
+                    ORDER BY "message"."sent" DESC;`;
 
     pool.query( sqlText, [ req.user.id ] )
         .then( (response) => {
@@ -49,8 +50,8 @@ router.post('/', (req, res) => {
     const sqlTextOne = `SELECT "message"."sender", "user"."email", "user"."first_name" FROM "message" 
                         JOIN "user" ON "message"."sender" = "user"."id"
                         WHERE "message"."id" = $1;`;
-    const sqlTextTwo = `INSERT INTO "message" ("sender", "recipient", "message")
-                    VALUES ($1, $2, $3);`
+    const sqlTextTwo = `INSERT INTO "message" ("sender", "recipient", "message", "sent")
+                    VALUES ($1, $2, $3, $4);`
 
     console.log( `User with id ${sender} Replying to message with id ${messageId} on server POST route with reply type ${replyType}` );
 
@@ -60,7 +61,7 @@ router.post('/', (req, res) => {
             const recipient = response.rows[0].sender;
             const email = response.rows[0].email;
             const first_name = response.rows[0].first_name;
-            pool.query( sqlTextTwo, [ sender, recipient, message ] )
+            pool.query( sqlTextTwo, [ sender, recipient, message, 'Now()' ] )
             .then( (response) => {
                 // upon successfully sending message internally in app, call sendEmail to send message in email
                 const emailInfo = { email, first_name, message };
