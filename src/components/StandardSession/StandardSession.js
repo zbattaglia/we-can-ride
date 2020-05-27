@@ -8,19 +8,27 @@ import MenuItem from '@material-ui/core/MenuItem';
 import Select from '@material-ui/core/Select';
 import  moment  from 'moment';
 import Button from '@material-ui/core/Button';
+import Box from '@material-ui/core/Box';
+import Grid from '@material-ui/core/Grid';
 
 const styles = theme => ({
   root: {
     display: 'flex',
     flexWrap: 'wrap',
+    flexGrow: 1,
   },
   formControl: {
-    margin: theme.spacing.unit,
+    margin: theme.spacing(1),
     minWidth: 120,
   },
   selectEmpty: {
-    marginTop: theme.spacing.unit * 2,
+    marginTop: theme.spacing(2),
   },
+  slot: {
+    margin: theme.spacing(1),
+    backgroundColor: 'bisque', 
+    width: '200px'
+  }
 });
 
 
@@ -84,20 +92,32 @@ class StandardSession extends Component {
         </p>
 
         {this.props.state.session.slots.map( slot => (
-          <div style={{height: `${slot.length_of_lesson}`, backgroundColor: 'bisque'}}  key={slot.id}>
-            <p>{slot.start_of_lesson} - {slot.end_of_lesson} 
+          <Box className={classes.slot} style={{height: `${slot.length_of_lesson*10}`}}  key={slot.id}>
+            <Box>{slot.start_of_lesson} - {slot.end_of_lesson} 
               {slot.expected_user == null
               ?
-                <div><Button onClick={() => console.log('fill slot id', slot.slot_id) }>Assign Volunteer</Button></div>
+                <Box><Button onClick={() => console.log('fill slot id', slot.slot_id) }>Assign Volunteer</Button></Box>
               :
-              <div id={slot.expected_user}>{slot.first_name} {slot.last_name}</div>
+              <Box id={slot.expected_user}>{slot.first_name} {slot.last_name}</Box>
               }
               {slot.title}
-            </p>
+            </Box>
             
-          </div>
+          </Box>
         ))}
 
+        {this.state.session.ready_to_publish === true
+        ?
+        <div>can't add lessons to a published session right now</div>
+        :  
+        <Button onClick={() => console.log('add a lesson to session id', this.state.session.id)}>Add New Lesson</Button>
+        }
+        
+        
+        
+        <Grid>
+
+        </Grid>
         
       </>
     )
