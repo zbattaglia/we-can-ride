@@ -18,8 +18,28 @@ const slots = (state = [], action) => {
   }
 };
 
-  export default combineReducers({
-    allSessions,
-    slots
+const saturday = (state = [], action) => {
+  if(action.type === 'SET_SESSION_SLOTS'){
+    let newState = [];
+    if(action.payload[0] && action.payload[0].id){
+      for (let item of action.payload){
+        if(item.weekday === 6){
+          newState.push(item);
+        }
+      }
+      return newState
+    }
+    return state;
+  }
+  else{
+    return state
+  }
+}
+
+
+export default combineReducers({
+  allSessions,
+  slots,
+  saturday,
     
-  });
+});

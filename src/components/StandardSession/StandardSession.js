@@ -68,6 +68,19 @@ class StandardSession extends Component {
     return (
       <>
         <h1>Standard Session</h1>
+
+        {/**this is the button to add new lessons, visible when the session isn't published */}
+        {this.state.session.ready_to_publish === true
+        ?
+        <div>can't add lessons to a published session right now</div>
+        :  
+        <Button color='primary' onClick={() => console.log('add a lesson to session id', this.state.session.id)}>Add New Lesson</Button>
+        }
+
+        {/**here's the button to create a new session */}
+        <Button onclick={() => console.log('create a new session')}>Create Session</Button>
+
+        {/**here's the place to select a session from all the sessions in the database */}
         <InputLabel htmlFor="age-simple">Session</InputLabel>
           <Select
             value={this.state.session}
@@ -85,17 +98,19 @@ class StandardSession extends Component {
             ))}
           </Select>
 
-        <p>you can look at the user to see if it's an admin to decide how to show this page</p>
+
+        {/**here's some random junk to help me see what I'm doing
+         * checking to see which user it is so that you can only do all th
+         * TODO check if the user is an admin to choose how to display the page
+         */}
         {JSON.stringify(this.props.state.user)}
         {JSON.stringify(this.state)}
-        <p>this is the page to see the standard session view</p>
-        <p>the below should let us pick a session to view</p>
+
         {JSON.stringify(this.props.state.session.allSessions)}
         {JSON.stringify(this.props.state.session.slots)}
-        <p> pick a session by its type and start date.
-          get the slots of that session back from the database
-        </p>
+        {JSON.stringify(this.props.state.session.saturday)}
 
+         {/**these are the slots back from the database that associate with this session */}
         {this.props.state.session.slots.map( slot => (
           <Box className={classes.slot} style={{height: `${slot.length_of_lesson*10}`}}  key={slot.id}>
             <Box>{slot.start_of_lesson} - {slot.end_of_lesson} 
@@ -111,12 +126,7 @@ class StandardSession extends Component {
           </Box>
         ))}
 
-        {this.state.session.ready_to_publish === true
-        ?
-        <div>can't add lessons to a published session right now</div>
-        :  
-        <Button color='primary' onClick={() => console.log('add a lesson to session id', this.state.session.id)}>Add New Lesson</Button>
-        }
+
         
         
         
