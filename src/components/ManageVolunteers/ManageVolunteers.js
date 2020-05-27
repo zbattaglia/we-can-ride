@@ -1,6 +1,41 @@
 import React, {Component} from 'react';
-
 import {connect} from 'react-redux';
+import PropTypes from 'prop-types';
+import { withStyles } from '@material-ui/core/styles';
+import Table from '@material-ui/core/Table';
+import TableBody from '@material-ui/core/TableBody';
+import TableCell from '@material-ui/core/TableCell';
+import TableHead from '@material-ui/core/TableHead';
+import TableRow from '@material-ui/core/TableRow';
+import Paper from '@material-ui/core/Paper';
+import './ManageVolunteers.css';
+import ManageVolunteersList from './ManageVolunteersList';
+
+const CustomTableCell = withStyles(theme => ({
+  head: {
+    backgroundColor: 'lightgrey',
+    color: 'black',
+  },
+  body: {
+    fontsize: 14,
+  },
+}))(TableCell)
+
+const styles = theme => ({
+  root: {
+    width: '99%',
+    marginTop: theme.spacing.unit * 3,
+    overflowX: 'auto',
+  },
+  table: {
+    minWidth: 700,
+  },
+  row: {
+    '&:nth-of-type(odd)': {
+      backgroundColor: theme.palette.background.default,
+    },
+  },
+});
 
 
 class ManageVolunteers extends Component {
@@ -10,12 +45,36 @@ class ManageVolunteers extends Component {
   }
 
   render() {
+    const { classes } = this.props
     return (
       <>
-        <h1>Manage Volunteers</h1>
-        <p>here are all the users</p>
-        {JSON.stringify(this.props.state.volunteer.volunteer)}
-        <p>this is the page to manage volunteers</p>
+        <h2 id="managevolunteers-title">Manage Volunteers</h2>
+        <Paper className={classes.root}>
+          <Table className={classes.table}>
+            <TableHead>
+              <TableRow>
+                <CustomTableCell id="name">
+                  Name
+                </CustomTableCell>
+                <CustomTableCell id="Age">
+                  Age
+                </CustomTableCell>
+                <CustomTableCell id="hours">
+                  Hours
+                </CustomTableCell>
+                <CustomTableCell id="role">
+                  Role
+                </CustomTableCell>
+                <CustomTableCell id="actions">
+                  Actions
+                </CustomTableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+                <ManageVolunteersList />
+            </TableBody>
+            </Table>
+            </Paper>
       </>
     )
   }
@@ -23,7 +82,8 @@ class ManageVolunteers extends Component {
 
 
 const mapStateToProps = state => ({
-    state
+    state,
+    classes: PropTypes.object.isRequired,
   });
 
-export default connect(mapStateToProps)(ManageVolunteers);
+  export default connect(mapStateToProps)(withStyles(styles)(ManageVolunteers));
