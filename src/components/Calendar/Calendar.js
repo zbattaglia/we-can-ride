@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-
+import CalendarGrid from '../CalendarGrid/CalendarGrid';
 import {connect} from 'react-redux';
 
 
@@ -18,6 +18,7 @@ class Calendar extends Component {
         {JSON.stringify(this.props.state.user)}
         <p>this is the page where the calendar will be</p>
         {JSON.stringify(this.props.state.shift)}
+        <CalendarGrid />
       </>
     )
   }
