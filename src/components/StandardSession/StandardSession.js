@@ -32,7 +32,8 @@ const styles = theme => ({
   },
   paper: {
     padding: theme.spacing(2),
-    color: theme.palette.text.secondary
+    color: theme.palette.text.secondary,
+    display: 'inline-block'
   }
 });
 
@@ -110,8 +111,19 @@ class StandardSession extends Component {
         {JSON.stringify(this.props.state.session.slots)}
         {JSON.stringify(this.props.state.session.saturday)}
 
-         {/**these are the slots back from the database that associate with this session */}
-        {this.props.state.session.slots.map( slot => (
+
+         
+        
+
+        
+        
+        
+        <Grid container spacing={3}>
+          <Grid item xs={12}>
+            <Paper className={classes.paper}>
+              Saturday
+              {/**these are the slots back from the database that associate with this session saturday */}
+        {this.props.state.session.saturday.map( slot => (
           <Box className={classes.slot} style={{height: `${slot.length_of_lesson*10}`}}  key={slot.id}>
             <Box>{slot.start_of_lesson} - {slot.end_of_lesson} 
               {slot.expected_user == null
@@ -126,14 +138,25 @@ class StandardSession extends Component {
           </Box>
         ))}
 
-
-        
-        
-        
-        <Grid container spacing={3}>
-          <Grid item xs={12}>
+            </Paper>
             <Paper className={classes.paper}>
-              Here's a something wide
+              Saturday
+              {/**these are the slots back from the database that associate with this session saturday */}
+        {this.props.state.session.saturday.map( slot => (
+          <Box className={classes.slot} style={{height: `${slot.length_of_lesson*10}`}}  key={slot.id}>
+            <Box>{slot.start_of_lesson} - {slot.end_of_lesson} 
+              {slot.expected_user == null
+              ?
+                <Box><Button onClick={() => console.log('fill slot id', slot.slot_id) }>Assign Volunteer</Button></Box>
+              :
+              <Box id={slot.expected_user}>{slot.first_name} {slot.last_name}</Box>
+              }
+              {slot.title}
+            </Box>
+            
+          </Box>
+        ))}
+
             </Paper>
           </Grid>
 

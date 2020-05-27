@@ -21,10 +21,12 @@ const slots = (state = [], action) => {
 const saturday = (state = [], action) => {
   if(action.type === 'SET_SESSION_SLOTS'){
     let newState = [];
-    if(action.payload[0] && action.payload[0].id){
+    if(action.payload[0]){
       for (let item of action.payload){
+        console.log('checking if slots are on saturday')
         if(item.weekday === 6){
           newState.push(item);
+          console.log('adding a slot to saturday', newState);
         }
       }
       return newState
