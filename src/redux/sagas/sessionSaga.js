@@ -13,11 +13,11 @@ function* fetchSessions() {
   }
 };
 
-function* fetchSessionSlots(action) {
-  console.log( 'In fetch session slots Saga', action.payload );
+function* fetchSessionLessons(action) {
+  console.log( 'In fetch session lessons Saga', action.payload );
 try {
-  const response = yield axios.get(`/session/slots/${action.payload.session_id}`);
-  yield put({ type: 'SET_SESSION_SLOTS', payload: response.data });
+  const response = yield axios.get(`/session/lessons/${action.payload.session_id}`);
+  yield put({ type: 'SET_SESSION_LESSONS', payload: response.data });
 
 } catch (error) {
   console.log('Error in fetching the slots for this session ', error);
@@ -26,7 +26,7 @@ try {
 
 function* shiftSaga() {
   yield takeLatest('FETCH_SESSIONS', fetchSessions);
-  yield takeLatest('FETCH_SESSION_SLOTS', fetchSessionSlots);
+  yield takeLatest('FETCH_SESSION_LESSONS', fetchSessionLessons);
 
 };
 

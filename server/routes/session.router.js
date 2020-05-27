@@ -17,7 +17,7 @@ router.get(`/all`, rejectUnauthenticated, (req, res) => {
     });
 });
 
-router.get(`/slots/:session_id`, rejectUnauthenticated, (req, res) => {
+router.get(`/lessons/:session_id`, rejectUnauthenticated, (req, res) => {
     const sqlText = `SELECT "user"."first_name", "user"."last_name", "start_of_lesson", ("start_of_lesson" + "length_of_lesson") AS "end_of_lesson", "length_of_lesson", "client", "slot"."id" AS "slot_id", "lesson_id", "expected_user", "skill"."title", EXTRACT (DOW FROM "day_of_week") AS "weekday" FROM "session"
     LEFT JOIN "lesson" ON "session"."id" = "lesson"."session_id"
     LEFT JOIN "slot" ON "lesson"."id" = "slot"."lesson_id"

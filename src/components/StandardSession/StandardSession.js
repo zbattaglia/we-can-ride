@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 
 import {connect} from 'react-redux';
 
+import StandardSessionDay from './StandardSessionDay';
 import { withStyles } from '@material-ui/core/styles';
 import InputLabel from '@material-ui/core/InputLabel';
 import MenuItem from '@material-ui/core/MenuItem';
@@ -33,7 +34,10 @@ const styles = theme => ({
   paper: {
     padding: theme.spacing(2),
     color: theme.palette.text.secondary,
-    display: 'inline-block'
+    display: 'inline-block',
+  },
+  day: {
+    display: 'inline-block',
   }
 });
 
@@ -59,13 +63,35 @@ class StandardSession extends Component {
       session: this.props.state.session.allSessions[0]
     })}
     if (prevState.session !== this.state.session){
-      this.props.dispatch({type: 'FETCH_SESSION_SLOTS', payload: {session_id: this.state.session.id}});
+      this.props.dispatch({type: 'FETCH_SESSION_LESSONS', payload: {session_id: this.state.session.id}});
     }
   }
+/*   {slot.lesson_id = lesson
+    ?
+    {slot.expected_user == null
+      ?
+        <Box><Button onClick={() => console.log('fill slot id', slot.slot_id) }>Assign Volunteer</Button></Box>
+      :
+      <Box id={slot.expected_user}>{slot.first_name} {slot.last_name}</Box>
+      }
+      {slot.title}
+    :
+    <p>no</p>
+    }))} */
+
 
   render() {
     const { classes } = this.props;
-
+    const newWeekdays = [
+      {name: 'Sunday', reducer: this.props.state.session.sunday},
+      {name: 'Monday', reducer: this.props.state.session.monday},
+      {name: "Tuesday", reducer: this.props.state.session.tuesday},
+      {name: 'Wednesday', reducer: this.props.state.session.wednesday},
+      {name: 'Thursday', reducer: this.props.state.session.thursday},
+      {name: 'Friday', reducer: this.props.state.session.friday},
+      {name: 'Saturday', reducer: this.props.state.session.saturday},
+    ]
+    const weekdays = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'];
     return (
       <>
         <h1>Standard Session</h1>
@@ -109,7 +135,7 @@ class StandardSession extends Component {
 
         {JSON.stringify(this.props.state.session.allSessions)}
         {JSON.stringify(this.props.state.session.slots)}
-        {JSON.stringify(this.props.state.session.saturday)}
+        {JSON.stringify(this.props.state.session)}
 
 
          
@@ -117,52 +143,53 @@ class StandardSession extends Component {
 
         
         
-        
         <Grid container spacing={3}>
           <Grid item xs={12}>
-            <Paper className={classes.paper}>
-              Saturday
-              {/**these are the slots back from the database that associate with this session saturday */}
-        {this.props.state.session.saturday.map( slot => (
-          <Box className={classes.slot} style={{height: `${slot.length_of_lesson*10}`}}  key={slot.id}>
-            <Box>{slot.start_of_lesson} - {slot.end_of_lesson} 
-              {slot.expected_user == null
-              ?
-                <Box><Button onClick={() => console.log('fill slot id', slot.slot_id) }>Assign Volunteer</Button></Box>
-              :
-              <Box id={slot.expected_user}>{slot.first_name} {slot.last_name}</Box>
-              }
-              {slot.title}
-            </Box>
-            
-          </Box>
-        ))}
+          {newWeekdays.map( day => (
+          <Paper className={classes.paper}>
+          {day.name}
 
-            </Paper>
-            <Paper className={classes.paper}>
-              Saturday
-              {/**these are the slots back from the database that associate with this session saturday */}
-        {this.props.state.session.saturday.map( slot => (
-          <Box className={classes.slot} style={{height: `${slot.length_of_lesson*10}`}}  key={slot.id}>
-            <Box>{slot.start_of_lesson} - {slot.end_of_lesson} 
-              {slot.expected_user == null
-              ?
-                <Box><Button onClick={() => console.log('fill slot id', slot.slot_id) }>Assign Volunteer</Button></Box>
-              :
-              <Box id={slot.expected_user}>{slot.first_name} {slot.last_name}</Box>
-              }
-              {slot.title}
-            </Box>
-            
-          </Box>
-        ))}
+          {/**these are the slots back from the database that associate with this session saturday */}
+    {day.reducer.map( lesson => (
+      <Box className={classes.slot} style={{height: `${lesson.length_of_lesson*10}`}}  key={lesson.id}>
+        <Box>{lesson.start_of_lesson} - {lesson.end_of_lesson} 
 
-            </Paper>
-          </Grid>
+          {/**in here I should map through the days reducer and show things with this lesson id... */}
+          {this.props.state.session.saturday.map( slot => (
+            <Box>
+              {slot.lesson_id = lesson &&
+      
+              <Box >
+                {slot.title}
+              </Box>
+            
+              }
+            </Box>
+          ))}
+  
+        </Box>
+        
+      </Box>
+    ))}
+
+        </Paper>
+        ))}
+             </Grid>
 
         </Grid>
         
-      </>
+
+      <Box className={classes.day}>
+{/*       <StandardSessionDay session_id={this.state.session.id} day_number='0' day='Sunday' lessons={this.props.state.session.sunday}/>
+      <StandardSessionDay session_id={this.state.session.id} day_number='1' day='Monday' lessons={this.props.state.session.monday}/>
+      <StandardSessionDay session_id={this.state.session.id} day_number='2' day='Tuesday' lessons={this.props.state.session.tuesday}/>
+      <StandardSessionDay session_id={this.state.session.id} day_number='3' day='Wednesday' lessons={this.props.state.session.wednesday}/>
+      <StandardSessionDay session_id={this.state.session.id} day_number='4' day='Thursday' lessons={this.props.state.session.thursday}/>
+      <StandardSessionDay session_id={this.state.session.id} day_number='5' day='Friday' lessons={this.props.state.session.friday}/>
+      <StandardSessionDay session_id={this.state.session.id} day_number='6' day='Saturday' lessons={this.props.state.session.saturday}/>
+      */}
+      </Box>  
+ </>
     )
   }
 }
