@@ -2,6 +2,9 @@ const express = require('express');
 const pool = require('../modules/pool');
 const router = express.Router();
 
+// import emailer to be able to pass messages sent internally in the app by email
+const sendEmail = require('../modules/emailer');
+
 /**
  * GET route to return all messages for a specific user to display on their inbox
  */
@@ -42,8 +45,10 @@ router.post('/', (req, res) => {
         message = rejectMessage;
     }
 
-    // requires two querires. One to get the id of the user the response is being sent to, and the second to send the message
-    const sqlTextOne = `SELECT "message"."sender" FROM "message" WHERE "message"."id" = $1;`;
+    // requires two querires. One to get the id, email, and name of the user the response is being sent to, and the second to send the message
+    const sqlTextOne = `SELECT "message"."sender", "user"."email", "user"."first_name" FROM "message" 
+                        JOIN "user" ON "message"."sender" = "user"."id"
+                        WHERE "message"."id" = $1;`;
     const sqlTextTwo = `INSERT INTO "message" ("sender", "recipient", "message")
                     VALUES ($1, $2, $3);`
 
@@ -53,9 +58,13 @@ router.post('/', (req, res) => {
         .then( (response) => {
             // this will return the id of the original sender who is now the recipient of the reply
             const recipient = response.rows[0].sender;
+            const email = response.rows[0].email;
+            const first_name = response.rows[0].first_name;
             pool.query( sqlTextTwo, [ sender, recipient, message ] )
             .then( (response) => {
-                console.log( 'Sent reply' );
+                // upon successfully sending message internally in app, call sendEmail to send message in email
+                const emailInfo = { email, first_name, message };
+                sendEmail( emailInfo );
                 res.sendStatus( 201 );
             })
             .catch( (error) => {
