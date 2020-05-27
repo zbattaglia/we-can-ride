@@ -11,9 +11,14 @@ export default class CalendarGrid extends React.Component {
   calendarComponentRef = React.createRef()
   state = {
     calendarWeekends: true,
-    calendarEvents: [ // initial event data
-      { title: 'Event Now', start: new Date() }
-    ]
+    calendarEvents: {
+      events: [ // initial event data
+      { title: 'Shift Available', start: new Date(), color: 'goldenrod' },
+      { title: 'Your Shift', start: new Date() },
+      ],
+      color: 'green',
+      textColor: 'white',
+    },
   }
 
   render() {
@@ -22,7 +27,6 @@ export default class CalendarGrid extends React.Component {
         <div className='demo-app-top'>
           <button onClick={ this.toggleWeekends }>toggle weekends</button>&nbsp;
           <button onClick={ this.gotoPast }>go to a date in the past</button>&nbsp;
-          (also, click a date/time to add an event)
         </div>
         <div className='demo-app-calendar'>
           <FullCalendar
@@ -37,6 +41,7 @@ export default class CalendarGrid extends React.Component {
             weekends={ this.state.calendarWeekends }
             events={ this.state.calendarEvents }
             dateClick={ this.handleDateClick }
+            eventClick={this.handleEventClick}
             />
         </div>
       </div>
@@ -54,16 +59,21 @@ export default class CalendarGrid extends React.Component {
     calendarApi.gotoDate('2000-01-01') // call a method on the Calendar object
   }
 
-//   handleDateClick = (arg) => {
-//     if (confirm('Would you like to add an event to ' + arg.dateStr + ' ?')) {
-//       this.setState({  // add new event data
-//         calendarEvents: this.state.calendarEvents.concat({ // creates a new array
-//           title: 'New Event',
-//           start: arg.date,
-//           allDay: arg.allDay
-//         })
-//       })
-//     }
-//   }
+  handleDateClick = (arg) => {
+    // confirm('Would you like to add an event to ' + arg.dateStr + ' ?')
+    // if (true) {
+    //   this.setState({  // add new event data
+    //     calendarEvents: this.state.calendarEvents.concat({ // creates a new array
+    //       title: 'New Event',
+    //       start: arg.date,
+    //       allDay: arg.allDay
+    //     })
+    //   })
+    // }
+  }
+
+  handleEventClick = (info) => {
+    console.log('Clicked on', info.event);
+  }
 
 }
