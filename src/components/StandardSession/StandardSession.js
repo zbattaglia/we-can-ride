@@ -7,6 +7,7 @@ import InputLabel from '@material-ui/core/InputLabel';
 import MenuItem from '@material-ui/core/MenuItem';
 import Select from '@material-ui/core/Select';
 import  moment  from 'moment';
+import Button from '@material-ui/core/Button';
 
 const styles = theme => ({
   root: {
@@ -82,6 +83,20 @@ class StandardSession extends Component {
           get the slots of that session back from the database
         </p>
 
+        {this.props.state.session.slots.map( slot => (
+          <div style={{height: `${slot.length_of_lesson}`, backgroundColor: 'bisque'}}  key={slot.id}>
+            <p>{slot.start_of_lesson} - {slot.end_of_lesson} 
+              {slot.expected_user == null
+              ?
+                <div><Button onClick={() => console.log('fill slot id', slot.slot_id) }>Assign Volunteer</Button></div>
+              :
+              <div id={slot.expected_user}>{slot.first_name} {slot.last_name}</div>
+              }
+              {slot.title}
+            </p>
+            
+          </div>
+        ))}
 
         
       </>
