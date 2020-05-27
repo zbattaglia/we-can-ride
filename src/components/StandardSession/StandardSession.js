@@ -10,6 +10,7 @@ import  moment  from 'moment';
 import Button from '@material-ui/core/Button';
 import Box from '@material-ui/core/Box';
 import Grid from '@material-ui/core/Grid';
+import Paper from '@material-ui/core/Paper';
 
 const styles = theme => ({
   root: {
@@ -26,8 +27,12 @@ const styles = theme => ({
   },
   slot: {
     margin: theme.spacing(1),
-    backgroundColor: 'bisque', 
+    backgroundColor: theme.palette.primary.light, 
     width: '200px'
+  },
+  paper: {
+    padding: theme.spacing(2),
+    color: theme.palette.text.secondary
   }
 });
 
@@ -110,12 +115,17 @@ class StandardSession extends Component {
         ?
         <div>can't add lessons to a published session right now</div>
         :  
-        <Button onClick={() => console.log('add a lesson to session id', this.state.session.id)}>Add New Lesson</Button>
+        <Button color='primary' onClick={() => console.log('add a lesson to session id', this.state.session.id)}>Add New Lesson</Button>
         }
         
         
         
-        <Grid>
+        <Grid container spacing={3}>
+          <Grid item xs={12}>
+            <Paper className={classes.paper}>
+              Here's a something wide
+            </Paper>
+          </Grid>
 
         </Grid>
         
