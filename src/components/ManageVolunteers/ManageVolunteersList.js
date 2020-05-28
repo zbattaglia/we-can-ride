@@ -5,15 +5,8 @@ import TableCell from '@material-ui/core/TableCell';
 import TableRow from '@material-ui/core/TableRow';
 import Button from '@material-ui/core/Button';
 import { connect } from 'react-redux';
-import InputLabel from '@material-ui/core/InputLabel';
-import MenuItem from '@material-ui/core/MenuItem';
-import FormControl from '@material-ui/core/FormControl';
-import Select from '@material-ui/core/Select';
-import Checkbox from '@material-ui/core/Checkbox';
-import ListItemText from '@material-ui/core/ListItemText';
-import Input from '@material-ui/core/Input';
 import { Link } from 'react-router-dom';
-
+import RoleDropdown from './RoleDropdown';
 
 const moment = require('moment');
 
@@ -71,12 +64,6 @@ const MenuProps = {
     },
 };
 
-const names = [
-    'sidewalker',
-    'leader',
-    'barn aid',
-    'feeder',
-];
 
 class ManageVolunteersList extends Component {
 
@@ -125,27 +112,10 @@ class ManageVolunteersList extends Component {
                             {moment(volunteer.birthday).fromNow(true)}
                         </CustomTableCell>
                         <CustomTableCell>
-
+                            14
                         </CustomTableCell>
                         <CustomTableCell>
-                            <FormControl className={classes.formControl}>
-                                <InputLabel htmlFor="select-multiple-checkbox">Role</InputLabel>
-                                <Select
-                                    multiple
-                                    value={this.state.name}
-                                    onChange={this.handleChange}
-                                    input={<Input id="select-multiple-checkbox" />}
-                                    renderValue={selected => selected.join(', ')}
-                                    MenuProps={MenuProps}
-                                >
-                                    {names.map(name => (
-                                        <MenuItem key={name} value={name}>
-                                            <Checkbox checked={this.state.name.indexOf(name) > -1} />
-                                            <ListItemText primary={name} />
-                                        </MenuItem>
-                                    ))}
-                                </Select>
-                            </FormControl>
+                            <RoleDropdown/>
                         </CustomTableCell>
                         <CustomTableCell>
                             <Button variant="contained" onClick={() => this.disableVolunteer(volunteer.id)}>Disable</Button>
