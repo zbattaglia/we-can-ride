@@ -85,10 +85,20 @@ VALUES
 --INSERT availabilities
 INSERT INTO "availability"("id", "time_available") 
 VALUES
-(1, 'weekday morning'),
-(2, 'weekday evening'),
-(3, 'weekend morning'),
-(4, 'wekeend evening')
+('monday morning'),
+('monday evening'),
+('tuesday morning'),
+('tuesday evening'),
+('wednesday morning'),
+('wednesday evening'),
+('thursday morning'),
+('thursday evening'),
+('friday morning'),
+('friday evening'),
+('saturday morning'),
+('saturday evening'),
+('sunday morning'),
+('sunday evening'),
 RETURNING "id", "time_available";
 --TODO eventually the stuff below here should be deleted for the final project
 -- weeks start on Saturday (which is weekday 6)
