@@ -54,25 +54,25 @@ class RegisterPage extends Component {
     lastName: '',
     phoneNumber: '',
     birthday: '',
-      amSunday: '',
-      pmSunday: '',
-      amMonday: '',
-      pmMonday: '',
-      amTuesday: '',
-      pmTuesday: '',
-      amWednesday: '',
-      pmWednesday: '',
-      amThursday: '',
-      pmThursday: '',
-      amFriday: '',
-      pmFriday: '',
-      amSaturday: '',
-      pmSaturday: '',
+      amSunday: false,
+      pmSunday: false,
+      amMonday: false,
+      pmMonday: false,
+      amTuesday: false,
+      pmTuesday: false,
+      amWednesday: false,
+      pmWednesday: false,
+      amThursday: false,
+      pmThursday: false,
+      amFriday: false,
+      pmFriday: false,
+      amSaturday: false,
+      pmSaturday: false,
   };
 
   registerUser = (event) => {
     event.preventDefault();
-
+    console.log(`Dispatching register:`, this.state)
     if (this.state.username && (this.state.password === this.state.confirmPassword)) {
       this.props.dispatch({
         type: 'REGISTER',
@@ -102,21 +102,19 @@ class RegisterPage extends Component {
     } else {
       this.props.dispatch({ type: 'REGISTRATION_INPUT_ERROR' });
     }
-  } // end registerUser
+  }; // end registerUser
 
   handleInputChangeFor = propertyName => (event) => {
     this.setState({
       [propertyName]: event.target.value,
     });
-    console.log('user state:', this.state)
-  }
+  };
 
   handleCheckboxChangeFor = propertyName => (event) => {
     this.setState({
       [propertyName]: event.target.checked,
     });
-    console.log('availability change:', this.state)
-  }
+  };
 
   render() {
     const { classes } = this.props;
@@ -134,7 +132,7 @@ class RegisterPage extends Component {
           <h1>Register as a Volunteer!</h1>
           <div>
             <TextField
-              type="text"
+              type="email"
               label="Email"
               name="username"
               value={this.state.username}
