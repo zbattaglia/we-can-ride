@@ -3,6 +3,7 @@ import {connect} from 'react-redux';
 
 import { withStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
+import Button from '@material-ui/core/Button';
 
 const styles = theme => ({
   container: {
@@ -25,7 +26,10 @@ const styles = theme => ({
   formContent: {
     width: '100%',
     textAlign: 'center',
-  }
+  },
+  button: {
+    margin: theme.spacing.unit,
+  },
 });
 
 class EditVolunteer extends Component {
@@ -37,6 +41,9 @@ class EditVolunteer extends Component {
     phone: '',
     email: '',
     birthday: '',
+    id: '',
+    time_available: [ 'weekday morning', 'weekday evening' ],
+    title: [ 'side walker', 'leader', 'barn aid' ],
   }
 
   // detects a change on an input field and updates the state accordingly
@@ -61,11 +68,18 @@ class EditVolunteer extends Component {
         phone: this.props.state.volunteer.selectedVolunteer.phone,
         email: this.props.state.volunteer.selectedVolunteer.email,
         birthday: this.props.state.volunteer.selectedVolunteer.birthday,
+        id: this.props.state.volunteer.selectedVolunteer.id,
       })
       if(this.state.first_name !== '' && prevState.first_name !== this.state.first_name) {
         this.props.dispatch( { type: 'FETCH_SELECTED_VOLUNTEER', payload: this.props.volunteer.selectedVolunteer.id } );
       }
     }
+  }
+
+  handleClick = () => {
+    // console.log( 'Got a Click', this.state );
+    this.props.dispatch( { type: 'UPDATE_SELECTED_VOLUNTEER', payload: this.state } );
+    this.props.history.push( '/managevolunteers');
   }
 
   render() {
@@ -115,6 +129,14 @@ class EditVolunteer extends Component {
           <p>Availability:</p>
           <p>Skills</p>
           </div>
+          <Button
+            variant="contained"
+            color="primary"
+            className={classes.button}
+            onClick={this.handleClick}
+          >
+            UPDATE
+          </Button>
         </form>
       </>
     )
