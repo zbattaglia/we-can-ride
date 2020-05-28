@@ -12,26 +12,63 @@ router.get('/', rejectUnauthenticated, (req, res) => {
   res.send(req.user);
 });
 
-// Handles POST request with new user data
-// The only thing different from this and every other post we've seen
-// is that the password gets encrypted before being inserted
-router.post('/register', (req, res, next) => {  
+//TODO GET ROUTE AND make sure the server is getting monday morning, monday evening, etc.
+
+
+// Handles POST request with new user information and availability with encrypted password
+router.post('/register', async (req, res, next) => {  
   const username = req.body.username;
   const password = encryptLib.encryptPassword(req.body.password);
 
-  console.log( `Got a user: ${req.body.username}`)
+  // User information
+  const sqlText = [username, password, req.body.firstName, req.body.lastName, req.body.phoneNumber, req.body.birthday];
 
-  const queryText = `INSERT INTO "user" (email, password, first_name, last_name, phone) 
-                    VALUES ($1, $2, $3, $4, $5) RETURNING id`;
-  
-  const sqlText = [username, password, req.body.firstName, req.body.lastName, req.body.phoneNumber]
+  // User availability
+  const sqlText2 = [username,
+                    req.body.amSunday, 
+                    req.body.pmSunday, 
+                    req.body.amMonday, 
+                    req.body.pmMonday, 
+                    req.body.amTuesday, 
+                    req.body.pmTuesday,
+                    req.body.amWednesday,
+                    req.body.pmWednesday,
+                    req.body.amThursday,
+                    req.body.pmThursday,
+                    req.body.amFriday,
+                    req.body.pmFriday,
+                    req.body.amSaturday,
+                    req.body.pmSaturday]
 
-  pool.query(queryText, sqlText)
-    .then(() => res.sendStatus(201))
-    .catch((error) => {
-      console.log( 'Error creating user', error );
-      res.sendStatus(500)
-    });
+  const connection = await pool.connect();
+
+  try {
+    await connection.query(`BEGIN`);
+    
+    // User information
+    const insertSQL = `INSERT INTO "user" (email, password, first_name, last_name, phone, birthday) 
+                       VALUES ($1, $2, $3, $4, $5, $6) RETURNING id;`; 
+                        
+    await connection.query(insertSQL, sqlText);
+    
+    // const insertSQL2 =`INSERT INTO "availability"("id", "time_available") 
+    //                     VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14)
+    //                     `;
+    // await connection.query(insertSQL2, sqlText2)
+    await connection.query(`COMMIT`);
+    res.sendStatus(200);
+  }
+  catch (error) {
+    console.log( `Error on Register`, error)
+    await connection.query(`ROLLBACK`);
+    res.send({error:``});
+    res.sendStatus(500);
+  }
+  finally {
+    //important that we free that connection all the time
+    connection.release();
+  }
+
 });
 
 // Handles login form authenticate/login POST
