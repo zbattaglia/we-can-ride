@@ -9,8 +9,11 @@ import InputLabel from '@material-ui/core/InputLabel';
 import MenuItem from '@material-ui/core/MenuItem';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
-
+import Checkbox from '@material-ui/core/Checkbox';
+import ListItemText from '@material-ui/core/ListItemText';
+import Input from '@material-ui/core/Input';
 import { Link } from 'react-router-dom';
+
 
 const moment = require('moment');
 
@@ -46,19 +49,57 @@ const styles = theme => ({
     formControl: {
         margin: theme.spacing(1),
         minWidth: 120,
-      },
-      selectEmpty: {
+    },
+    selectEmpty: {
         marginTop: theme.spacing(2),
-      },
+    },
+    volunteerHover: {
+        "&:hover": {
+            color: "blue !important"
+        }
+    },
 });
 
+const ITEM_HEIGHT = 48;
+const ITEM_PADDING_TOP = 8;
+const MenuProps = {
+    PaperProps: {
+        style: {
+            maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
+            width: 250,
+        },
+    },
+};
 
+const names = [
+    'sidewalker',
+    'leader',
+    'barn aid',
+    'feeder',
+];
 
 class ManageVolunteersList extends Component {
 
     state = {
-        role: '',
-    }
+        name: [],
+    };
+
+    handleChange = event => {
+        this.setState({ name: event.target.value });
+    };
+
+    handleChangeMultiple = event => {
+        const { options } = event.target;
+        const value = [];
+        for (let i = 0, l = options.length; i < l; i += 1) {
+            if (options[i].selected) {
+                value.push(options[i].value);
+            }
+        }
+        this.setState({
+            name: value,
+        });
+    };
 
     goToEditPage = (id) => {
         console.log('In goToEditPage', id)
@@ -69,16 +110,14 @@ class ManageVolunteersList extends Component {
         console.log('In disableVolunteer', id)
     }
 
-    
-
     render() {
         const { classes } = this.props
         return (
             <>
                 {this.props.state.volunteer.volunteer.map(volunteer => {
                     return <TableRow className={classes.row} key={volunteer.id}>
-                        <CustomTableCell className="edit-link" onClick={() => this.goToEditPage(volunteer.id)} >
-                            <Link to="/editVolunteer">
+                        <CustomTableCell className="edit-link">
+                            <Link to="/editVolunteer" onClick={() => this.goToEditPage(volunteer.id)}>
                                 {volunteer.first_name} {volunteer.last_name}
                             </Link>
                         </CustomTableCell>
@@ -90,17 +129,21 @@ class ManageVolunteersList extends Component {
                         </CustomTableCell>
                         <CustomTableCell>
                             <FormControl className={classes.formControl}>
-                                <InputLabel id="demo-simple-select-label">Role</InputLabel>
+                                <InputLabel htmlFor="select-multiple-checkbox">Role</InputLabel>
                                 <Select
-                                    labelId="demo-simple-select-label"
-                                    id="demo-simple-select"
-                                    
+                                    multiple
+                                    value={this.state.name}
                                     onChange={this.handleChange}
+                                    input={<Input id="select-multiple-checkbox" />}
+                                    renderValue={selected => selected.join(', ')}
+                                    MenuProps={MenuProps}
                                 >
-                                    <MenuItem value={1}>Sidewalker</MenuItem>
-                                    <MenuItem value={2}>Leader</MenuItem>
-                                    <MenuItem value={3}>Barn Aid</MenuItem>
-                                    <MenuItem value={4}>Feeder</MenuItem>
+                                    {names.map(name => (
+                                        <MenuItem key={name} value={name}>
+                                            <Checkbox checked={this.state.name.indexOf(name) > -1} />
+                                            <ListItemText primary={name} />
+                                        </MenuItem>
+                                    ))}
                                 </Select>
                             </FormControl>
                         </CustomTableCell>
@@ -120,4 +163,4 @@ const mapStateToProps = state => ({
     classes: PropTypes.object.isRequired,
 });
 
-export default connect(mapStateToProps)(withStyles(styles)(ManageVolunteersList));
+export default connect(mapStateToProps)(withStyles(styles, { withTheme: true })(ManageVolunteersList));
