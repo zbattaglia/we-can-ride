@@ -26,9 +26,23 @@ function* fetchSelectedVolunteer(action) {
   }
 }
 
+function* updateSelectedVolunteer(action) {
+  console.log( `In updateVolunteer saga`, action.payload );
+
+  try{
+    axios.put( `/volunteer/${action.payload.id}`, action.payload );
+
+    yield put( { type: 'FETCH_VOLUNTEERS' } );
+  }
+  catch(error) {
+    console.log( 'Error updating selected volunteer information', error );
+  }
+}
+
 function* volunteerSaga() {
   yield takeLatest('FETCH_VOLUNTEERS', fetchVolunteer);
   yield takeLatest('FETCH_SELECTED_VOLUNTEER', fetchSelectedVolunteer);
+  yield takeLatest('UPDATE_SELECTED_VOLUNTEER', updateSelectedVolunteer);
 };
 
 export default volunteerSaga;

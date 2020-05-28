@@ -1,6 +1,7 @@
 const express = require('express');
 const pool = require('../modules/pool');
 const router = express.Router();
+const { rejectUnauthenticated } = require('../modules/authentication-middleware');
 
 // import emailer to be able to pass messages sent internally in the app by email
 const sendEmail = require('../modules/emailer');
@@ -8,7 +9,7 @@ const sendEmail = require('../modules/emailer');
 /**
  * GET route to return all messages for a specific user to display on their inbox
  */
-router.get('/', (req, res) => {
+router.get('/', rejectUnauthenticated, (req, res) => {
     console.log( `Getting messages for user with id ${req.user.id}`);
     const sqlText = `SELECT "message"."id", "user"."first_name", "user"."last_name", "message"."message", "message"."sent" FROM "message"
                     JOIN "user" ON "user"."id" = "message"."sender"
@@ -29,7 +30,7 @@ router.get('/', (req, res) => {
 /**
  * POST route to send a message
  */
-router.post('/', (req, res) => {
+router.post('/', rejectUnauthenticated, (req, res) => {
     // Set default accept/reject messages for user's to send.
     const acceptMessage = `I can take your shift!`;
     const rejectMessage = `Sorry I can't take your shift on that day`;
@@ -79,7 +80,7 @@ router.post('/', (req, res) => {
 });
 
 // DELETE route to delete message from database
-router.delete('/:messageId', (req, res) => {
+router.delete('/:messageId', rejectUnauthenticated, (req, res) => {
     console.log( `Got delete message on server for message with id ${req.params.messageId}`)
     // set messageId to value passed in request parameter
     const messageId = req.params.messageId;
