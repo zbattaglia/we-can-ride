@@ -182,7 +182,7 @@ class StandardSession extends Component {
                 {slot.title}: 
                 {slot.expected_user == null
                 ?
-                <Box><Button onClick={() => console.log('fill slot id', slot.slot_id) }>Assign Volunteer</Button></Box>
+                <Box><Button variant='contained' color='secondary' onClick={() => console.log('fill slot id', slot.slot_id) }>Assign Volunteer</Button></Box>
                 :
                 <Box id={slot.expected_user}>{slot.first_name} {slot.last_name}</Box>
                 } 
@@ -192,7 +192,7 @@ class StandardSession extends Component {
               }
             </>
           ))}
-          <Button onClick={() => console.log('add role',lesson.lesson_id )}>Add role</Button>
+          <Button variant='contained' color='secondary' onClick={() => console.log('add role',lesson.lesson_id )}>Add role</Button>
         </Box>
         
       </Box>
