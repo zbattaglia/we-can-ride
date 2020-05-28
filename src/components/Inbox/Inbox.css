@@ -6,6 +6,10 @@
     width: 12%;
 }
 
+#received {
+    width: 10%;
+}
+
 #inbox-title {
     text-align: center;
 }
