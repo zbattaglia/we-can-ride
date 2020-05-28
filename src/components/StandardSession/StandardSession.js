@@ -1,8 +1,7 @@
 import React, {Component} from 'react';
-
+import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
 
-import StandardSessionDay from './StandardSessionDay';
 import { withStyles } from '@material-ui/core/styles';
 import InputLabel from '@material-ui/core/InputLabel';
 import MenuItem from '@material-ui/core/MenuItem';
@@ -37,7 +36,7 @@ const styles = theme => ({
     display: 'inline-block',
   },
   day: {
-    display: 'inline-block',
+    color: theme.palette.secondary,
   }
 });
 
@@ -48,14 +47,29 @@ class StandardSession extends Component {
   state = {
     session: '',
     direction: 'row',
-    justify: 'center',
-    alignItems: 'center',
+    justify: 'flex-start',
+    alignItems: 'stretch',
   };
 
 
   handleChange = event => {
     this.setState({ [event.target.name]: event.target.value });
   };
+
+  findLessons = (day_reducer) => {
+    console.log('find lessons in', day_reducer);
+    let array = [];
+    //i'm assuming here that no lessons have an id of ''
+    let currentLessonId = ''; 
+    for(let i=0; i<day_reducer.length; i++){
+      if(currentLessonId !== day_reducer[i].lesson_id){
+        //put the lesson in the lessons, set currentLessonId
+        array.push({lesson_id: day_reducer[i].lesson_id, start_of_lesson:day_reducer[i].start_of_lesson, end_of_lesson:day_reducer[i].end_of_lesson});
+        currentLessonId = day_reducer[i].lesson_id;
+      }
+    }
+    return array;
+  }
 
   componentDidMount () {
     this.props.dispatch({type: 'FETCH_USER'});
@@ -81,15 +95,15 @@ class StandardSession extends Component {
   render() {
     const { classes } = this.props;
     const newWeekdays = [
-      {name: 'Sunday', reducer: this.props.state.session.sunday},
-      {name: 'Monday', reducer: this.props.state.session.monday},
-      {name: "Tuesday", reducer: this.props.state.session.tuesday},
-      {name: 'Wednesday', reducer: this.props.state.session.wednesday},
-      {name: 'Thursday', reducer: this.props.state.session.thursday},
-      {name: 'Friday', reducer: this.props.state.session.friday},
-      {name: 'Saturday', reducer: this.props.state.session.saturday},
-    ]
-    const weekdays = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'];
+      {name: 'Sunday', reducer: this.props.state.session.sunday, number: '0'},
+      {name: 'Monday', reducer: this.props.state.session.monday, number: '1'},
+      {name: "Tuesday", reducer: this.props.state.session.tuesday, number: '2'},
+      {name: 'Wednesday', reducer: this.props.state.session.wednesday, number: '3'},
+      {name: 'Thursday', reducer: this.props.state.session.thursday, number: '4'},
+      {name: 'Friday', reducer: this.props.state.session.friday, number: '5'},
+      {name: 'Saturday', reducer: this.props.state.session.saturday, number: '6'},
+    ];
+    const { alignItems, direction, justify } = this.state;
     return (
       <>
         <h1>Standard Session</h1>
@@ -128,13 +142,13 @@ class StandardSession extends Component {
          * checking to see which user it is so that you can only do all th
          * TODO check if the user is an admin to choose how to display the page
          */}
-        {JSON.stringify(this.props.state.user)}
+{/*         {JSON.stringify(this.props.state.user)}
         {JSON.stringify(this.state)}
 
         {JSON.stringify(this.props.state.session.allSessions)}
         {JSON.stringify(this.props.state.session.slots)}
         {JSON.stringify(this.props.state.session)}
-
+ */}
 
          
         
@@ -143,24 +157,31 @@ class StandardSession extends Component {
         
         <Grid 
         container 
-        spacing={3}   
-        direction={`${this.state.direction}`}
-        justify={`${this.state.justify}`}
-        alignItems={`${this.state.alignItems}`}>
-          <Grid item xs={12}>
+        styles={{alignItems: 'stretch'}}
+        spacing={4}   
+        direction={direction}
+        justify={justify}
+        alignItems={alignItems}>
+          <Grid item xs={12} className={classes.day}>
+            {/**here, we run through our days object to make the days of the week */}
           {newWeekdays.map( day => (
           <Paper className={classes.paper}>
           {day.name}
 
-          {/**these are the slots back from the database that associate with this session saturday */}
-    {day.reducer.map( lesson => (
+
+          {/*here we get the lessons from the day reducer and make lesson blocks*/}
+    {(this.findLessons(day.reducer)).map( lesson => (
       <Box className={classes.slot} style={{height: `${lesson.length_of_lesson*10}`}}  key={lesson.id}>
         <Box>{lesson.start_of_lesson} - {lesson.end_of_lesson} 
 
-          {/**in here I should map through the days reducer and show things with this lesson id... */}
-          {day.reducer.map( slot => (
+          {/**inside each lesson block we show the things with this lesson id... */}
+
+          {day.reducer.map( (slot) => (
             <>
-              {slot.lesson_id = lesson &&
+            {/**we only want to show lessons that have the same id in this lesson
+             * if they have an expected user they show their name, if not they show a button
+             */}
+              {(slot.lesson_id  === lesson.lesson_id) &&
       
               <Box id={slot.lesson_id}>
                 {slot.title}: 
@@ -176,7 +197,7 @@ class StandardSession extends Component {
               }
             </>
           ))}
-  
+          <Button onClick={() => console.log('add role',lesson.lesson_id )}>Add role</Button>
         </Box>
         
       </Box>
@@ -203,6 +224,10 @@ class StandardSession extends Component {
     )
   }
 }
+
+StandardSession.propTypes = {
+  classes: PropTypes.object.isRequired,
+};
 
 const mapStateToProps = state => ({
     state
