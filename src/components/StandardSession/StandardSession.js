@@ -47,8 +47,11 @@ class StandardSession extends Component {
 
   state = {
     session: '',
-    time: moment(),
+    direction: 'row',
+    justify: 'center',
+    alignItems: 'center',
   };
+
 
   handleChange = event => {
     this.setState({ [event.target.name]: event.target.value });
@@ -68,12 +71,7 @@ class StandardSession extends Component {
   }
 /*   {slot.lesson_id = lesson
     ?
-    {slot.expected_user == null
-      ?
-        <Box><Button onClick={() => console.log('fill slot id', slot.slot_id) }>Assign Volunteer</Button></Box>
-      :
-      <Box id={slot.expected_user}>{slot.first_name} {slot.last_name}</Box>
-      }
+
       {slot.title}
     :
     <p>no</p>
@@ -143,7 +141,12 @@ class StandardSession extends Component {
 
         
         
-        <Grid container spacing={3}>
+        <Grid 
+        container 
+        spacing={3}   
+        direction={`${this.state.direction}`}
+        justify={`${this.state.justify}`}
+        alignItems={`${this.state.alignItems}`}>
           <Grid item xs={12}>
           {newWeekdays.map( day => (
           <Paper className={classes.paper}>
@@ -155,16 +158,23 @@ class StandardSession extends Component {
         <Box>{lesson.start_of_lesson} - {lesson.end_of_lesson} 
 
           {/**in here I should map through the days reducer and show things with this lesson id... */}
-          {this.props.state.session.saturday.map( slot => (
-            <Box>
+          {day.reducer.map( slot => (
+            <>
               {slot.lesson_id = lesson &&
       
-              <Box >
-                {slot.title}
+              <Box id={slot.lesson_id}>
+                {slot.title}: 
+                {slot.expected_user == null
+                ?
+                <Box><Button onClick={() => console.log('fill slot id', slot.slot_id) }>Assign Volunteer</Button></Box>
+                :
+                <Box id={slot.expected_user}>{slot.first_name} {slot.last_name}</Box>
+                } 
+                
               </Box>
             
               }
-            </Box>
+            </>
           ))}
   
         </Box>
