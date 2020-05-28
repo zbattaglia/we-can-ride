@@ -83,13 +83,7 @@ class StandardSession extends Component {
       this.props.dispatch({type: 'FETCH_SESSION_LESSONS', payload: {session_id: this.state.session.id}});
     }
   }
-/*   {slot.lesson_id = lesson
-    ?
 
-      {slot.title}
-    :
-    <p>no</p>
-    }))} */
 
 
   render() {
@@ -113,11 +107,9 @@ class StandardSession extends Component {
         ?
         <div>can't add lessons to a published session right now</div>
         :  
-        <Button color='primary' onClick={() => console.log('add a lesson to session id', this.state.session.id)}>Add New Lesson</Button>
+        <Button variant='contained' color='primary' onClick={() => console.log('add a lesson to session id', this.state.session.id)}>Add New Lesson</Button>
         }
 
-        {/**here's the button to create a new session */}
-        <Button onclick={() => console.log('create a new session')}>Create Session</Button>
 
         {/**here's the place to select a session from all the sessions in the database */}
         <InputLabel htmlFor="age-simple">Session</InputLabel>
@@ -136,6 +128,9 @@ class StandardSession extends Component {
               <MenuItem key={item.id} value={item}>{item.start_date} {item.session_type}</MenuItem>
             ))}
           </Select>
+
+        {/**here's the button to create a new session */}
+        <Button variant='contained' color='secondary' onclick={() => console.log('create a new session')}>Create Session</Button>
 
 
         {/**here's some random junk to help me see what I'm doing
