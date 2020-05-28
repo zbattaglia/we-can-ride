@@ -10,6 +10,8 @@ import MenuItem from '@material-ui/core/MenuItem';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 
+import { Link } from 'react-router-dom';
+
 const moment = require('moment');
 
 const CustomTableCell = withStyles(theme => ({
@@ -60,6 +62,7 @@ class ManageVolunteersList extends Component {
 
     goToEditPage = (id) => {
         console.log('In goToEditPage', id)
+        this.props.dispatch( { type: 'FETCH_SELECTED_VOLUNTEER', payload: id } );
     }
 
     disableVolunteer = (id) => {
@@ -74,8 +77,10 @@ class ManageVolunteersList extends Component {
             <>
                 {this.props.state.volunteer.volunteer.map(volunteer => {
                     return <TableRow className={classes.row} key={volunteer.id}>
-                        <CustomTableCell onClick={() => this.goToEditPage(volunteer.id)} >
-                            {volunteer.first_name} {volunteer.last_name}
+                        <CustomTableCell className="edit-link" onClick={() => this.goToEditPage(volunteer.id)} >
+                            <Link to="/editVolunteer">
+                                {volunteer.first_name} {volunteer.last_name}
+                            </Link>
                         </CustomTableCell>
                         <CustomTableCell>
                             {moment(volunteer.birthday).fromNow(true)}

@@ -25,6 +25,7 @@ import ManageVolunteers from '../ManageVolunteers/ManageVolunteers';
 import MyShifts from '../MyShifts/MyShifts';
 import StandardSession from '../StandardSession/StandardSession';
 import SubPage from '../SubPage/SubPage';
+import EditVolunteer from '../ManageVolunteers/EditVolunteer';
 
 import './App.css';
 
@@ -91,6 +92,11 @@ class App extends Component {
                 exact
                 path="/managevolunteers"
                 component={ManageVolunteers}
+              />
+              <ProtectedRoute
+                exact
+                path="/editVolunteer"
+                component={EditVolunteer}
               />
               <ProtectedRoute
                 exact
