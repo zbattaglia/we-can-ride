@@ -6,6 +6,7 @@ import volunteerSaga from './volunteerSaga';
 import shiftSaga from './shiftSaga';
 import sessionSaga from './sessionSaga';
 import messageSaga from './message';
+import lessonSaga from './lessonSaga';
 
 
 // rootSaga is the primary saga.
@@ -24,5 +25,6 @@ export default function* rootSaga() {
     shiftSaga(),
     sessionSaga(),
     messageSaga(),
+    lessonSaga(),
   ]);
 }

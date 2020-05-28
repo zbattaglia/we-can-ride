@@ -19,10 +19,14 @@ router.post('/register', (req, res, next) => {
   const username = req.body.username;
   const password = encryptLib.encryptPassword(req.body.password);
 
-  console.log( `Got an email: ${req.body.username}`)
+  console.log( `Got a user: ${req.body.username}`)
 
-  const queryText = 'INSERT INTO "user" (email, password) VALUES ($1, $2) RETURNING id';
-  pool.query(queryText, [username, password])
+  const queryText = `INSERT INTO "user" (email, password, first_name, last_name, phone) 
+                    VALUES ($1, $2, $3, $4, $5) RETURNING id`;
+  
+  const sqlText = [username, password, req.body.firstName, req.body.lastName, req.body.phoneNumber]
+
+  pool.query(queryText, sqlText)
     .then(() => res.sendStatus(201))
     .catch((error) => {
       console.log( 'Error creating user', error );

@@ -72,6 +72,7 @@ class LoginPage extends Component {
               value="Log In"
             />
           </div>
+
         </form>
         <center>
           <button

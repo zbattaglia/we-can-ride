@@ -25,6 +25,8 @@ import ManageVolunteers from '../ManageVolunteers/ManageVolunteers';
 import MyShifts from '../MyShifts/MyShifts';
 import StandardSession from '../StandardSession/StandardSession';
 import SubPage from '../SubPage/SubPage';
+import Schedule from '../Schedule/Schedule';
+import EditVolunteer from '../ManageVolunteers/EditVolunteer';
 
 import './App.css';
 
@@ -94,6 +96,11 @@ class App extends Component {
               />
               <ProtectedRoute
                 exact
+                path="/editVolunteer"
+                component={EditVolunteer}
+              />
+              <ProtectedRoute
+                exact
                 path="/myshifts"
                 component={MyShifts}
               />
@@ -106,6 +113,11 @@ class App extends Component {
                 exact
                 path="/subpage"
                 component={SubPage}
+              />
+              <ProtectedRoute
+                exact
+                path="/schedule"
+                component={Schedule}
               />
               {/* If none of the other routes matched, we will show a 404. */}
               <Route render={() => <h1>404</h1>} />
