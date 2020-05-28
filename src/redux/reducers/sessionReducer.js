@@ -18,6 +18,23 @@ const slots = (state = [], action) => {
   }
 };
 
+const lessons = (state = [], action) => {
+  if(action.type === 'SET_SESSION_LESSONS'){
+    if(action.payload[0]){
+      let array = [];
+      let currentLessonId = 0;
+      for (let item of action.payload){
+        if(item.lesson_id !== currentLessonId){
+          array.push({lesson_id: item.lesson_id, start_of_lesson: item.start_of_lesson, end_of_lesson: item.end_of_lesson});
+          currentLessonId = item.lesson_id;
+        }
+      }
+      return array;
+    }
+  }
+  return state;
+}
+
 const saturday = (state = [], action) => {
   if(action.type === 'SET_SESSION_LESSONS'){
     let newState = [];
@@ -137,9 +154,12 @@ const friday = (state = [], action) => {
     return state
   }
 }
+
+
 export default combineReducers({
   allSessions,
   slots,
+  lessons,
   saturday,
   sunday,
   monday, 

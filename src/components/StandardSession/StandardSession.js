@@ -46,9 +46,6 @@ class StandardSession extends Component {
 
   state = {
     session: '',
-    direction: 'row',
-    justify: 'flex-start',
-    alignItems: 'stretch',
   };
 
 
@@ -81,6 +78,10 @@ class StandardSession extends Component {
     })}
     if (prevState.session !== this.state.session){
       this.props.dispatch({type: 'FETCH_SESSION_LESSONS', payload: {session_id: this.state.session.id}});
+    if (prevProps !== this.props){ this.setState({
+      rerender: true
+    })
+    }else if(this.state.rerender = true){this.setState({rerender: false})}
     }
   }
 
@@ -88,7 +89,7 @@ class StandardSession extends Component {
 
   render() {
     const { classes } = this.props;
-    const newWeekdays = [
+    const weekdays = [
       {name: 'Sunday', reducer: this.props.state.session.sunday, number: '0'},
       {name: 'Monday', reducer: this.props.state.session.monday, number: '1'},
       {name: "Tuesday", reducer: this.props.state.session.tuesday, number: '2'},
@@ -97,18 +98,33 @@ class StandardSession extends Component {
       {name: 'Friday', reducer: this.props.state.session.friday, number: '5'},
       {name: 'Saturday', reducer: this.props.state.session.saturday, number: '6'},
     ];
-    const { alignItems, direction, justify } = this.state;
     return (
       <>
         <h1>Standard Session</h1>
-
-        {/**this is the button to add new lessons, visible when the session isn't published */}
+        <Grid container>
+          <Grid item>
+                    {/**this is the button to add new lessons, visible when the session isn't published */}
         {this.state.session.ready_to_publish === true
         ?
         <div>can't add lessons to a published session right now</div>
         :  
         <Button variant='contained' color='primary' onClick={() => console.log('add a lesson to session id', this.state.session.id)}>Add New Lesson</Button>
         }
+          </Grid>
+          <Grid item>
+                    {/**this is the button to add new lessons, visible when the session isn't published */}
+        {this.state.session.ready_to_publish === true
+        ?
+        <div>can't add lessons to a published session right now</div>
+        :  
+        <Button variant='contained' color='primary' onClick={() => console.log('add a lesson to session id', this.state.session.id)}>Add New Lesson</Button>
+        }
+          </Grid>
+          <Grid item>
+
+          </Grid>
+        </Grid>
+
 
 
         {/**here's the place to select a session from all the sessions in the database */}
@@ -137,13 +153,13 @@ class StandardSession extends Component {
          * checking to see which user it is so that you can only do all th
          * TODO check if the user is an admin to choose how to display the page
          */}
-{/*         {JSON.stringify(this.props.state.user)}
+  {/*       {JSON.stringify(this.props.state.user)}
         {JSON.stringify(this.state)}
 
         {JSON.stringify(this.props.state.session.allSessions)}
-        {JSON.stringify(this.props.state.session.slots)}
-        {JSON.stringify(this.props.state.session)}
- */}
+        {JSON.stringify(this.props.state.session.slots)} */}
+        {JSON.stringify(this.props.state.session.lessons)}
+ 
 
          
         
@@ -152,14 +168,13 @@ class StandardSession extends Component {
         
         <Grid 
         container 
-        styles={{alignItems: 'stretch'}}
         spacing={4}   
-        direction={direction}
-        justify={justify}
-        alignItems={alignItems}>
+        direction='row'
+        justify='flex-start'
+        alignItems='stretch'>
           <Grid item xs={12} className={classes.day}>
             {/**here, we run through our days object to make the days of the week */}
-          {newWeekdays.map( day => (
+          {weekdays.map( day => (
           <Paper className={classes.paper}>
           {day.name}
 
@@ -206,14 +221,7 @@ class StandardSession extends Component {
         
 
       <Box className={classes.day}>
-{/*       <StandardSessionDay session_id={this.state.session.id} day_number='0' day='Sunday' lessons={this.props.state.session.sunday}/>
-      <StandardSessionDay session_id={this.state.session.id} day_number='1' day='Monday' lessons={this.props.state.session.monday}/>
-      <StandardSessionDay session_id={this.state.session.id} day_number='2' day='Tuesday' lessons={this.props.state.session.tuesday}/>
-      <StandardSessionDay session_id={this.state.session.id} day_number='3' day='Wednesday' lessons={this.props.state.session.wednesday}/>
-      <StandardSessionDay session_id={this.state.session.id} day_number='4' day='Thursday' lessons={this.props.state.session.thursday}/>
-      <StandardSessionDay session_id={this.state.session.id} day_number='5' day='Friday' lessons={this.props.state.session.friday}/>
-      <StandardSessionDay session_id={this.state.session.id} day_number='6' day='Saturday' lessons={this.props.state.session.saturday}/>
-      */}
+
       </Box>  
  </>
     )
