@@ -13,8 +13,22 @@ function* fetchVolunteer() {
   }
 };
 
+// saga will fire when specific volunteer is selected
+function* fetchSelectedVolunteer(action) {
+  console.log(`In fetchSelectedVolunteer Saga fetching id ${action.payload}`)
+  // make an axios get request with selected volunteers id in parameter
+  try {
+    const response = yield axios.get( `/volunteer/select/${action.payload}` );
+    yield put( { type: 'SET_SELECTED_VOLUNTEER', payload: response.data } );
+  }
+  catch(error) {
+    console.log( 'Error getting selected user', error );
+  }
+}
+
 function* volunteerSaga() {
   yield takeLatest('FETCH_VOLUNTEERS', fetchVolunteer);
+  yield takeLatest('FETCH_SELECTED_VOLUNTEER', fetchSelectedVolunteer);
 };
 
 export default volunteerSaga;
