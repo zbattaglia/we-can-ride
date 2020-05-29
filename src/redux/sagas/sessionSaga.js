@@ -14,7 +14,6 @@ function* fetchSessions() {
 };
 
 function* fetchSessionLessons(action) {
-  console.log( 'In fetch session lessons Saga', action.payload );
 try {
   const response = yield axios.get(`/session/lessons/${action.payload.session_id}`);
   let monday=[];
