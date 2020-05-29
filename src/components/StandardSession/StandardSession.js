@@ -15,6 +15,7 @@ import CreateSessionButton from './CreateSessionButton';
 import AddLessonButton from './AddLessonButton';
 import AssignVolunteerButton from './AssignVolunteerButton';
 import AddRoleButton from './AddRoleButton';
+import DeleteLessonButton from './DeleteLessonButton';
 
 const styles = theme => ({
   root: {
@@ -166,7 +167,7 @@ class StandardSession extends Component {
                       {/**here's the button to add a role */}
                       <AddRoleButton lesson_id={lesson.lesson_id}/>
                       {/**here's the button to delete a lesson */}
-                      <Button variant='contained' color='secondary' onClick={() => console.log('delete lesson',lesson.lesson_id )}>Delete Lesson</Button>
+                      <DeleteLessonButton lesson_id={lesson.lesson_id} />
                     </Box>
                   </Box>}
                   </>
