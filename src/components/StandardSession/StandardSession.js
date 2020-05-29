@@ -17,6 +17,9 @@ import AssignVolunteerButton from './AssignVolunteerButton';
 import AddRoleButton from './AddRoleButton';
 import DeleteLessonButton from './DeleteLessonButton';
 
+
+import DeleteRole from './DeleteRole';
+
 const styles = theme => ({
   root: {
     display: 'flex',
@@ -155,10 +158,15 @@ class StandardSession extends Component {
                           {slot.expected_user == null
                           ?
                           <Box>
+
                             <AssignVolunteerButton slot_id={slot.slot_id}/>
+                            <DeleteRole slot_id={slot.slot_id}/>
                           </Box>
                           :
-                          <Box id={slot.expected_user}>{slot.first_name} {slot.last_name}</Box>
+                          <Box id={slot.expected_user}>
+                            {slot.first_name} {slot.last_name}
+                            <DeleteRole slot_id={slot.slot_id}/>
+                           </Box>
                           }
                         </Box>
                         }
