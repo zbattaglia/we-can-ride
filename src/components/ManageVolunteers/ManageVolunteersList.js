@@ -112,7 +112,8 @@ class ManageVolunteersList extends Component {
                             {moment(volunteer.birthday).fromNow(true)}
                         </CustomTableCell>
                         <CustomTableCell>
-                            14
+                            {/* {JSON.stringify(this.props.state.volunteer)} */}
+                            {volunteer.total_hours && volunteer.total_hours.hours}
                         </CustomTableCell>
                         <CustomTableCell>
                             <RoleDropdown/>
