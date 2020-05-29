@@ -11,6 +11,8 @@ import Button from '@material-ui/core/Button';
 import Box from '@material-ui/core/Box';
 import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
+import CreateSessionButton from './CreateSessionButton';
+import AddLessonButton from './AddLessonButton';
 
 const styles = theme => ({
   root: {
@@ -92,7 +94,7 @@ class StandardSession extends Component {
             ?
             <div>can't add lessons to a published session right now</div>
             :  
-            <Button variant='contained' color='primary' onClick={() => console.log('add a lesson to session id', this.state.session.id)}>Add New Lesson</Button>
+            <AddLessonButton session_id={this.state.session.id}/>
             }
           </Grid>
           <Grid item>
@@ -116,7 +118,7 @@ class StandardSession extends Component {
           </Grid>
           <Grid item>
             {/**here's the button to create a new session */}
-            <Button variant='contained' color='secondary' onclick={() => console.log('create a new session')}>Create Session</Button>
+            <CreateSessionButton/>
           </Grid>
         </Grid>
         

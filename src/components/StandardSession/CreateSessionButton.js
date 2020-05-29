@@ -37,31 +37,17 @@ const styles = theme => ({
   }
 });
 
+//TODO use button to open a modal to create a new session
 
-
-class Slot extends Component {
+class CreateSession extends Component {
     
 
- componentDidMount() {
-     //go get the lessons with this lesson id
-     this.props.dispatch({type: 'FETCH_SESSION_LESSONS', payload: {lesson_id: this.props.lesson_id}});
-   
- }
 
   render() {
     const { classes } = this.props;
    
 return (
-      <>
-      <p> here we should show the slots in this lesson</p>
-{/*           {slot.expected_user == null
-          ?
-            <Box><Button onClick={() => console.log('fill slot id', slot.slot_id) }>Assign Volunteer</Button></Box>
-          :
-          <Box id={slot.expected_user}>{slot.first_name} {slot.last_name}</Box>
-          } */}
-        
-      </>
+  <Button color='secondary' variant='contained' onClick={() => console.log('make new session')} >Create a Session</Button>
     )
   }
 }
@@ -70,4 +56,4 @@ const mapStateToProps = state => ({
     state
   });
 
-export default withStyles(styles)(connect(mapStateToProps)(Slot));
+export default withStyles(styles)(connect(mapStateToProps)(CreateSession));
