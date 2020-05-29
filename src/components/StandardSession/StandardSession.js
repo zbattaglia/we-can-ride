@@ -12,6 +12,9 @@ import Box from '@material-ui/core/Box';
 import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
 
+
+import DeleteRole from './DeleteRole';
+
 const styles = theme => ({
   root: {
     display: 'flex',
@@ -149,7 +152,10 @@ class StandardSession extends Component {
                           {slot.title}:
                           {slot.expected_user == null
                           ?
-                          <Box><Button variant='contained' color='secondary' onClick={() => console.log('fill slot id', slot.slot_id) }>Assign Volunteer</Button></Box>
+                          <Box>
+                            <Button variant='contained' color='secondary' onClick={() => console.log('fill slot id', slot.slot_id) }>Assign Volunteer</Button>
+                            <DeleteRole slot_id={slot.slot_id}/>
+                          </Box>
                           :
                           <Box id={slot.expected_user}>{slot.first_name} {slot.last_name}</Box>
                           }

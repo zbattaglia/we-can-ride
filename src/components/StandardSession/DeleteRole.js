@@ -39,7 +39,7 @@ const styles = theme => ({
 
 
 
-class Slot extends Component {
+class DeleteRole extends Component {
     
 
  componentDidMount() {
@@ -52,16 +52,12 @@ class Slot extends Component {
     const { classes } = this.props;
    
 return (
-      <>
-      <p> here we should show the slots in this lesson</p>
-{/*           {slot.expected_user == null
-          ?
-            <Box><Button onClick={() => console.log('fill slot id', slot.slot_id) }>Assign Volunteer</Button></Box>
-          :
-          <Box id={slot.expected_user}>{slot.first_name} {slot.last_name}</Box>
-          } */}
-        
-      </>
+    <div onClick={() => console.log('slot id of role to remove', this.props.slot_id)}>
+      <h4>
+        X
+      </h4>
+     
+    </div>
     )
   }
 }
@@ -70,4 +66,4 @@ const mapStateToProps = state => ({
     state
   });
 
-export default withStyles(styles)(connect(mapStateToProps)(Slot));
+export default withStyles(styles)(connect(mapStateToProps)(DeleteRole));
