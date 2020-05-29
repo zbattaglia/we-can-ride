@@ -180,7 +180,9 @@ class StandardSession extends Component {
 
 
           {/*here we get the lessons from the day reducer and make lesson blocks*/}
-    {(this.findLessons(day.reducer)).map( lesson => (
+    {this.props.state.session.lessons.map( lesson => (
+      <>
+      {(lesson.weekday == day.number) &&
       <Box className={classes.slot} style={{height: `${lesson.length_of_lesson*10}`}}  key={lesson.id}>
         <Box>{lesson.start_of_lesson} - {lesson.end_of_lesson} 
 
@@ -208,9 +210,10 @@ class StandardSession extends Component {
             </>
           ))}
           <Button variant='contained' color='secondary' onClick={() => console.log('add role',lesson.lesson_id )}>Add role</Button>
-        </Box>
-        
+        </Box>  
       </Box>
+      }
+      </>
     ))}
 
         </Paper>

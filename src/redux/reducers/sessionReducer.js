@@ -25,7 +25,7 @@ const lessons = (state = [], action) => {
       let currentLessonId = 0;
       for (let item of action.payload){
         if(item.lesson_id !== currentLessonId){
-          array.push({lesson_id: item.lesson_id, start_of_lesson: item.start_of_lesson, end_of_lesson: item.end_of_lesson});
+          array.push({lesson_id: item.lesson_id, start_of_lesson: item.start_of_lesson, end_of_lesson: item.end_of_lesson, weekday: item.weekday});
           currentLessonId = item.lesson_id;
         }
       }
