@@ -16,9 +16,11 @@ import AddLessonButton from './AddLessonButton';
 import AssignVolunteerButton from './AssignVolunteerButton';
 import AddRoleButton from './AddRoleButton';
 import DeleteLessonButton from './DeleteLessonButton';
+import PublishSesssionButton from './PublishSessionButton';
 
 
 import DeleteRole from './DeleteRole';
+import PublishSessionButton from './PublishSessionButton';
 
 const styles = theme => ({
   root: {
@@ -186,7 +188,10 @@ class StandardSession extends Component {
             ))}
           </Grid>
         </Grid>
-      
+        {this.state.session.ready_to_publish === false &&
+          <PublishSessionButton session_id={this.state.session.id}/>
+        }
+
       
       </>
     )
