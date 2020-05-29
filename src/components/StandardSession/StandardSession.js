@@ -175,7 +175,7 @@ class StandardSession extends Component {
                       {/**here's the button to add a role */}
                       <AddRoleButton lesson_id={lesson.lesson_id}/>
                       {/**here's the button to delete a lesson */}
-                      <DeleteLessonButton lesson_id={lesson.lesson_id} />
+                      <DeleteLessonButton lesson_id={lesson.lesson_id} session_id={this.state.session.id} />
                     </Box>
                   </Box>}
                   </>
