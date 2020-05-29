@@ -81,7 +81,7 @@ class StandardSession extends Component {
     if (prevProps !== this.props){ this.setState({
       rerender: true
     })
-    }else if(this.state.rerender = true){this.setState({rerender: false})}
+    }else if(this.state.rerender === true){this.setState({rerender: false})}
     }
   }
 
@@ -90,13 +90,13 @@ class StandardSession extends Component {
   render() {
     const { classes } = this.props;
     const weekdays = [
-      {name: 'Sunday', reducer: this.props.state.session.sunday, number: '0'},
-      {name: 'Monday', reducer: this.props.state.session.monday, number: '1'},
-      {name: "Tuesday", reducer: this.props.state.session.tuesday, number: '2'},
-      {name: 'Wednesday', reducer: this.props.state.session.wednesday, number: '3'},
-      {name: 'Thursday', reducer: this.props.state.session.thursday, number: '4'},
-      {name: 'Friday', reducer: this.props.state.session.friday, number: '5'},
-      {name: 'Saturday', reducer: this.props.state.session.saturday, number: '6'},
+      {name: 'Sunday', reducer: this.props.state.session.sunday, number: 0},
+      {name: 'Monday', reducer: this.props.state.session.monday, number: 1},
+      {name: "Tuesday", reducer: this.props.state.session.tuesday, number: 2},
+      {name: 'Wednesday', reducer: this.props.state.session.wednesday, number: 3},
+      {name: 'Thursday', reducer: this.props.state.session.thursday, number: 4},
+      {name: 'Friday', reducer: this.props.state.session.friday, number: 5},
+      {name: 'Saturday', reducer: this.props.state.session.saturday, number: 6},
     ];
     return (
       <>
@@ -112,22 +112,7 @@ class StandardSession extends Component {
         }
           </Grid>
           <Grid item>
-                    {/**this is the button to add new lessons, visible when the session isn't published */}
-        {this.state.session.ready_to_publish === true
-        ?
-        <div>can't add lessons to a published session right now</div>
-        :  
-        <Button variant='contained' color='primary' onClick={() => console.log('add a lesson to session id', this.state.session.id)}>Add New Lesson</Button>
-        }
-          </Grid>
-          <Grid item>
-
-          </Grid>
-        </Grid>
-
-
-
-        {/**here's the place to select a session from all the sessions in the database */}
+               {/**here's the place to select a session from all the sessions in the database */}
         <InputLabel htmlFor="age-simple">Session</InputLabel>
           <Select
             value={this.state.session}
@@ -145,9 +130,18 @@ class StandardSession extends Component {
             ))}
           </Select>
 
+          </Grid>
+          <Grid item>
+                   
         {/**here's the button to create a new session */}
         <Button variant='contained' color='secondary' onclick={() => console.log('create a new session')}>Create Session</Button>
 
+          </Grid>
+        </Grid>
+
+
+
+  
 
         {/**here's some random junk to help me see what I'm doing
          * checking to see which user it is so that you can only do all th
@@ -158,7 +152,7 @@ class StandardSession extends Component {
 
         {JSON.stringify(this.props.state.session.allSessions)}
         {JSON.stringify(this.props.state.session.slots)} */}
-        {JSON.stringify(this.props.state.session.lessons)}
+        {JSON.stringify(this.props.state.session)}
  
 
          
@@ -182,7 +176,7 @@ class StandardSession extends Component {
           {/*here we get the lessons from the day reducer and make lesson blocks*/}
     {this.props.state.session.lessons.map( lesson => (
       <>
-      {(lesson.weekday == day.number) &&
+      {(lesson.weekday === day.number) &&
       <Box className={classes.slot} style={{height: `${lesson.length_of_lesson*10}`}}  key={lesson.id}>
         <Box>{lesson.start_of_lesson} - {lesson.end_of_lesson} 
 

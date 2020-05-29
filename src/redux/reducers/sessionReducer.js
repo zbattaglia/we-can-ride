@@ -9,14 +9,6 @@ const allSessions = (state = [], action) => {
     }
 };
 
-const slots = (state = [], action) => {
-  switch (action.type) {
-    case 'SET_SESSION_LESSONS':
-      return action.payload;
-    default:
-      return state;
-  }
-};
 
 const lessons = (state = [], action) => {
   if(action.type === 'SET_SESSION_LESSONS'){
@@ -158,7 +150,6 @@ const friday = (state = [], action) => {
 
 export default combineReducers({
   allSessions,
-  slots,
   lessons,
   saturday,
   sunday,
