@@ -19,7 +19,7 @@ router.get('/', rejectUnauthenticated, (req, res) => {
 router.post('/register', async (req, res, next) => {  
   const username = req.body.username;
   const password = encryptLib.encryptPassword(req.body.password);
-
+  console.log(req.body.amSunday);
   // User information
   const sqlText = [username, password, req.body.firstName, req.body.lastName, req.body.phoneNumber, req.body.birthday];
 
@@ -51,8 +51,8 @@ router.post('/register', async (req, res, next) => {
                         
     await connection.query(insertSQL, sqlText);
     
-    // const insertSQL2 =`INSERT INTO "availability"("id", "time_available") 
-    //                     VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14)
+    // const insertSQL2 =`INSERT INTO "user_availability" ("id", "time_available") 
+    //                     VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15)
     //                     `;
     // await connection.query(insertSQL2, sqlText2)
     await connection.query(`COMMIT`);
