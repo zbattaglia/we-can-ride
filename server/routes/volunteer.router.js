@@ -61,7 +61,7 @@ router.put( '/:selectedId', rejectUnauthenticated, async(req, res) => {
             time_available.push( availability );
         }
     }
-    // console.log( `Updating user with id ${req.params.selectedId}`, first_name, last_name, phone, email, birthday );
+    console.log( `Updating user with id ${req.params.selectedId}`, id, first_name, last_name, phone, email, birthday );
     console.log( 'Updating selected user on server', req.body, time_available );
     const connection = await pool.connect();
 
