@@ -14,6 +14,7 @@ import Paper from '@material-ui/core/Paper';
 import CreateSessionButton from './CreateSessionButton';
 import AddLessonButton from './AddLessonButton';
 import AssignVolunteerButton from './AssignVolunteerButton';
+import AddRoleButton from './AddRoleButton';
 
 const styles = theme => ({
   root: {
@@ -154,7 +155,6 @@ class StandardSession extends Component {
                           ?
                           <Box>
                             <AssignVolunteerButton slot_id={slot.slot_id}/>
-                            <Button variant='contained' color='secondary' onClick={() => console.log('fill slot id', slot.slot_id) }>Assign Volunteer</Button>
                           </Box>
                           :
                           <Box id={slot.expected_user}>{slot.first_name} {slot.last_name}</Box>
@@ -164,7 +164,7 @@ class StandardSession extends Component {
                         </>
                       ))}
                       {/**here's the button to add a role */}
-                      <Button variant='contained' color='secondary' onClick={() => console.log('add role',lesson.lesson_id )}>Add role</Button>
+                      <AddRoleButton lesson_id={lesson.lesson_id}/>
                       {/**here's the button to delete a lesson */}
                       <Button variant='contained' color='secondary' onClick={() => console.log('delete lesson',lesson.lesson_id )}>Delete Lesson</Button>
                     </Box>

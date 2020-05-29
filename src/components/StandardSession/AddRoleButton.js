@@ -37,9 +37,9 @@ const styles = theme => ({
   }
 });
 
-//TODO use button to open a modal to assign a volunteer to a slot
+//TODO use button to open a modal to add a lesson to the session
 
-class AssignVolunteer extends Component {
+class AddRoleButton extends Component {
     
 
 
@@ -47,7 +47,7 @@ class AssignVolunteer extends Component {
     const { classes } = this.props;
    
 return (
-  <Button color='secondary' variant='contained' onClick={() => console.log('assign volunteer to slot', this.props.slot_id)} >Assign A Volunteer</Button>
+  <Button color='secondary' variant='contained' onClick={() => console.log('add role to lesson id:', this.props.lesson_id)} >Add Role</Button>
     )
   }
 }
@@ -56,4 +56,4 @@ const mapStateToProps = state => ({
     state
   });
 
-export default withStyles(styles)(connect(mapStateToProps)(AssignVolunteer));
+export default withStyles(styles)(connect(mapStateToProps)(AddRoleButton));
