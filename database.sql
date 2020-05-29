@@ -83,22 +83,22 @@ VALUES
 (3, 'barn aid'),
 (4, 'feeder') RETURNING "id", "title";
 --INSERT availabilities
-INSERT INTO "availability"("id", "time_available") 
+INSERT INTO "availability"("time_available") 
 VALUES
-('monday morning'),
-('monday evening'),
-('tuesday morning'),
-('tuesday evening'),
-('wednesday morning'),
-('wednesday evening'),
-('thursday morning'),
-('thursday evening'),
-('friday morning'),
-('friday evening'),
-('saturday morning'),
-('saturday evening'),
-('sunday morning'),
-('sunday evening'),
+('amMonday'),
+('pmMonday'),
+('amTuesday'),
+('pmTuesday'),
+('amWednesday'),
+('pmWednesday'),
+('amThursday'),
+('pmThursday'),
+('amFriday'),
+('pmFriday'),
+('amSaturday'),
+('pmSaturday'),
+('amSunday'),
+('pmSunday');
 RETURNING "id", "time_available";
 --TODO eventually the stuff below here should be deleted for the final project
 -- weeks start on Saturday (which is weekday 6)
