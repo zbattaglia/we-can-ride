@@ -11,6 +11,11 @@ import Button from '@material-ui/core/Button';
 import Box from '@material-ui/core/Box';
 import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
+import CreateSessionButton from './CreateSessionButton';
+import AddLessonButton from './AddLessonButton';
+import AssignVolunteerButton from './AssignVolunteerButton';
+import AddRoleButton from './AddRoleButton';
+import DeleteLessonButton from './DeleteLessonButton';
 
 
 import DeleteRole from './DeleteRole';
@@ -95,7 +100,7 @@ class StandardSession extends Component {
             ?
             <div>can't add lessons to a published session right now</div>
             :  
-            <Button variant='contained' color='primary' onClick={() => console.log('add a lesson to session id', this.state.session.id)}>Add New Lesson</Button>
+            <AddLessonButton session_id={this.state.session.id}/>
             }
           </Grid>
           <Grid item>
@@ -119,7 +124,7 @@ class StandardSession extends Component {
           </Grid>
           <Grid item>
             {/**here's the button to create a new session */}
-            <Button variant='contained' color='secondary' onclick={() => console.log('create a new session')}>Create Session</Button>
+            <CreateSessionButton/>
           </Grid>
         </Grid>
         
@@ -153,18 +158,24 @@ class StandardSession extends Component {
                           {slot.expected_user == null
                           ?
                           <Box>
-                            <Button variant='contained' color='secondary' onClick={() => console.log('fill slot id', slot.slot_id) }>Assign Volunteer</Button>
+
+                            <AssignVolunteerButton slot_id={slot.slot_id}/>
                             <DeleteRole slot_id={slot.slot_id}/>
                           </Box>
                           :
-                          <Box id={slot.expected_user}>{slot.first_name} {slot.last_name}</Box>
+                          <Box id={slot.expected_user}>
+                            {slot.first_name} {slot.last_name}
+                            <DeleteRole slot_id={slot.slot_id}/>
+                           </Box>
                           }
                         </Box>
                         }
                         </>
                       ))}
-                      <Button variant='contained' color='secondary' onClick={() => console.log('add role',lesson.lesson_id )}>Add role</Button>
-
+                      {/**here's the button to add a role */}
+                      <AddRoleButton lesson_id={lesson.lesson_id}/>
+                      {/**here's the button to delete a lesson */}
+                      <DeleteLessonButton lesson_id={lesson.lesson_id} />
                     </Box>
                   </Box>}
                   </>
