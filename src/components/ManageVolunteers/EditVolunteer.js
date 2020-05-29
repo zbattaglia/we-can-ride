@@ -165,6 +165,7 @@ class EditVolunteer extends Component {
             value="*******"
           />
           <TextField
+            type="date"
             label="Birthday"
             className={classes.textField}
             value={this.state.birthday}

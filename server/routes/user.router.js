@@ -19,27 +19,16 @@ router.get('/', rejectUnauthenticated, (req, res) => {
 router.post('/register', async (req, res, next) => {  
   const username = req.body.username;
   const password = encryptLib.encryptPassword(req.body.password);
-  console.log(req.body.amSunday);
-  // User information
-  const sqlText = [username, password, req.body.firstName, req.body.lastName, req.body.phoneNumber, req.body.birthday];
+  const time_available = [];
 
-  // User availability
-  const sqlText2 = [username,
-                    req.body.amSunday, 
-                    req.body.pmSunday, 
-                    req.body.amMonday, 
-                    req.body.pmMonday, 
-                    req.body.amTuesday, 
-                    req.body.pmTuesday,
-                    req.body.amWednesday,
-                    req.body.pmWednesday,
-                    req.body.amThursday,
-                    req.body.pmThursday,
-                    req.body.amFriday,
-                    req.body.pmFriday,
-                    req.body.amSaturday,
-                    req.body.pmSaturday]
+  // loop over the req.body and create an array of avalabilities to insert in database.
+  for ( let availability in req.body ) {
+      if( req.body[ availability ] === true ) {
+          time_available.push( availability );
+      }
+  };
 
+  //Transactional query
   const connection = await pool.connect();
 
   try {
@@ -48,20 +37,28 @@ router.post('/register', async (req, res, next) => {
     // User information
     const insertSQL = `INSERT INTO "user" (email, password, first_name, last_name, phone, birthday) 
                        VALUES ($1, $2, $3, $4, $5, $6) RETURNING id;`; 
-                        
-    await connection.query(insertSQL, sqlText);
+                      
+    // UserId is used to reference user_availability
+    const userId = await connection.query(insertSQL, 
+                                          [username, password, req.body.firstName, 
+                                          req.body.lastName, req.body.phoneNumber, req.body.birthday]);
+
+    // console.log(`user id:`, userId)
+    const sqlTextThree = `SELECT "id" FROM "availability" WHERE "availability"."time_available" = $1;`;
+    // fourth query inserts user.id and availability id from third query into user_availability
+    const sqlTextFour = `INSERT INTO "user_availability" ("user_id", "availability_id") VALUES ($1, $2);`;
     
-    // const insertSQL2 =`INSERT INTO "user_availability" ("id", "time_available") 
-    //                     VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15)
-    //                     `;
-    // await connection.query(insertSQL2, sqlText2)
+    // run SQL transaction's
+    for( const availability of time_available ) {
+        let response = await connection.query( sqlTextThree, [ availability ] );
+        await connection.query( sqlTextFour, [ userId.rows[0].id, response.rows[0].id ] );
+    }
     await connection.query(`COMMIT`);
     res.sendStatus(200);
   }
   catch (error) {
     console.log( `Error on Register`, error)
     await connection.query(`ROLLBACK`);
-    res.send({error:``});
     res.sendStatus(500);
   }
   finally {
