@@ -12,6 +12,11 @@ function* fetchDayOfWeekLessons(action) {
   }
 };
 
+function* deleteLesson(action) {
+  console.log( 'in delete a lesson by id saga', action.payload);
+  //TODO actually delete the lesson
+}
+
 /* function* fetchMyShifts(action) {
   console.log( 'In fetchShift Saga', action.payload );
 try {
@@ -25,6 +30,7 @@ try {
 
 function* shiftSaga() {
   yield takeLatest('FETCH_DAY_OF_SESSION_LESSONS', fetchDayOfWeekLessons);
+  yield takeLatest('DELETE_LESSON', deleteLesson);
 };
 
 export default shiftSaga;
