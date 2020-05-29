@@ -13,6 +13,7 @@ import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
 import CreateSessionButton from './CreateSessionButton';
 import AddLessonButton from './AddLessonButton';
+import AssignVolunteerButton from './AssignVolunteerButton';
 
 const styles = theme => ({
   root: {
@@ -151,7 +152,10 @@ class StandardSession extends Component {
                           {slot.title}:
                           {slot.expected_user == null
                           ?
-                          <Box><Button variant='contained' color='secondary' onClick={() => console.log('fill slot id', slot.slot_id) }>Assign Volunteer</Button></Box>
+                          <Box>
+                            <AssignVolunteerButton slot_id={slot.slot_id}/>
+                            <Button variant='contained' color='secondary' onClick={() => console.log('fill slot id', slot.slot_id) }>Assign Volunteer</Button>
+                          </Box>
                           :
                           <Box id={slot.expected_user}>{slot.first_name} {slot.last_name}</Box>
                           }
