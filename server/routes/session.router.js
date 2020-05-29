@@ -29,39 +29,7 @@ router.get(`/lessons/:session_id`, rejectUnauthenticated, (req, res) => {
     WHERE "session"."id" = $1
     ORDER BY "lesson_id"`;
     pool.query(sqlText, [req.params.session_id]).then( (response) => {
-        let monday=[];
-        let tuesday=[];
-        let wednesday=[];
-        let thursday=[];
-        let friday=[];
-        let saturday=[];
-        let sunday=[];
-        let lessons = [];
-        let currentLessonId = 0;
-        for(let row of response.rows){
-            if(row.lesson_id !== currentLessonId){
-                lessons.push({lesson_id: row.lesson_id, start_of_lesson: row.start_of_lesson, end_of_lesson: row.end_of_lesson, weekday: row.weekday});
-                currentLessonId = row.lesson_id;
-            }
-            switch (row.weekday) {
-                case 0 :
-                  sunday.push(row);
-                case 1 :
-                  monday.push(row);
-                case 2 :
-                  tuesday.push(row);
-                case 3 :
-                  wednesday.push(row);
-                case 4 :
-                  thursday.push(row);
-                case 5 :
-                  friday.push(row);
-                case 6 :
-                  saturday.push(row);
-              }
-        }
-        console.log({sunday, monday, tuesday, wednesday, thursday, friday, saturday, lessons})
-        res.send( response.rows );
+        res.send(response.rows );
     }).catch( (error) => {
         console.log( 'Error getting session slots', error );
         res.sendStatus( 500 );

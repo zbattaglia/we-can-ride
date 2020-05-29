@@ -43,191 +43,138 @@ const styles = theme => ({
 
 
 class StandardSession extends Component {
-
+  
   state = {
     session: '',
   };
 
-
   handleChange = event => {
     this.setState({ [event.target.name]: event.target.value });
   };
-
-  findLessons = (day_reducer) => {
-    console.log('find lessons in', day_reducer);
-    let array = [];
-    //i'm assuming here that no lessons have an id of ''
-    let currentLessonId = ''; 
-    for(let i=0; i<day_reducer.length; i++){
-      if(currentLessonId !== day_reducer[i].lesson_id){
-        //put the lesson in the lessons, set currentLessonId
-        array.push({lesson_id: day_reducer[i].lesson_id, start_of_lesson:day_reducer[i].start_of_lesson, end_of_lesson:day_reducer[i].end_of_lesson});
-        currentLessonId = day_reducer[i].lesson_id;
-      }
-    }
-    return array;
-  }
 
   componentDidMount () {
     this.props.dispatch({type: 'FETCH_USER'});
     this.props.dispatch({type: 'FETCH_SESSIONS'});
   }
   componentDidUpdate (prevProps, prevState) {
-    if (this.state.session === '' && this.props.state.session.allSessions[0]){this.setState({
-      session: this.props.state.session.allSessions[0]
-    })}
-    if (prevState.session !== this.state.session){
-      this.props.dispatch({type: 'FETCH_SESSION_LESSONS', payload: {session_id: this.state.session.id}});
-    if (prevProps !== this.props){ this.setState({
-      rerender: true
-    })
-    }else if(this.state.rerender === true){this.setState({rerender: false})}
+    if ((this.state.session == '') && this.props.state.session.allSessions[0]){
+
+      this.setState({
+        session: this.props.state.session.allSessions[0]
+      })
+    }
+    if(prevState.session !== this.state.session){
+      this.props.dispatch({ type: 'FETCH_SESSION_LESSONS', payload: {session_id: this.state.session.id}})
     }
   }
 
 
 
+
   render() {
-    const { classes } = this.props;
+    const {classes} = this.props;
     const weekdays = [
-      {name: 'Sunday', reducer: this.props.state.session.sunday, number: 0},
-      {name: 'Monday', reducer: this.props.state.session.monday, number: 1},
-      {name: "Tuesday", reducer: this.props.state.session.tuesday, number: 2},
-      {name: 'Wednesday', reducer: this.props.state.session.wednesday, number: 3},
-      {name: 'Thursday', reducer: this.props.state.session.thursday, number: 4},
-      {name: 'Friday', reducer: this.props.state.session.friday, number: 5},
-      {name: 'Saturday', reducer: this.props.state.session.saturday, number: 6},
+      {name: 'Sunday', reducer: this.props.state.session.slots.sunday, number: 0},
+      {name: 'Monday', reducer: this.props.state.session.slots.monday, number: 1},
+      {name: "Tuesday", reducer: this.props.state.session.slots.tuesday, number: 2},
+      {name: 'Wednesday', reducer: this.props.state.session.slots.wednesday, number: 3},
+      {name: 'Thursday', reducer: this.props.state.session.slots.thursday, number: 4},
+      {name: 'Friday', reducer: this.props.state.session.slots.friday, number: 5},
+      {name: 'Saturday', reducer: this.props.state.session.slots.saturday, number: 6},
     ];
     return (
       <>
         <h1>Standard Session</h1>
         <Grid container>
           <Grid item>
-                    {/**this is the button to add new lessons, visible when the session isn't published */}
-        {this.state.session.ready_to_publish === true
-        ?
-        <div>can't add lessons to a published session right now</div>
-        :  
-        <Button variant='contained' color='primary' onClick={() => console.log('add a lesson to session id', this.state.session.id)}>Add New Lesson</Button>
-        }
+            {/**this is the button to add new lessons, visible when the session isn't published */}
+            {this.state.session.ready_to_publish === true
+            ?
+            <div>can't add lessons to a published session right now</div>
+            :  
+            <Button variant='contained' color='primary' onClick={() => console.log('add a lesson to session id', this.state.session.id)}>Add New Lesson</Button>
+            }
           </Grid>
           <Grid item>
-               {/**here's the place to select a session from all the sessions in the database */}
-        <InputLabel htmlFor="age-simple">Session</InputLabel>
-          <Select
-            value={this.state.session}
-            onChange={this.handleChange}
-            inputProps={{
-              name: 'session',
-              id: 'select-session',
-            }}
-          >
+            {/**here's the place to select a session from all the sessions in the database */}
+            <InputLabel htmlFor="session">Session</InputLabel>
+            <Select
+              value={this.state.session}
+              onChange={this.handleChange}
+              inputProps={{
+                name: 'session',
+                id: 'select-session',
+               }}
+            >
             <MenuItem value="">
               <em>None</em>
             </MenuItem>
             {this.props.state.session.allSessions.map(item => (
-              <MenuItem key={item.id} value={item}>{item.start_date} {item.session_type}</MenuItem>
+            <MenuItem key={item.id} value={item}>{item.start_date} {item.session_type}</MenuItem>
             ))}
-          </Select>
-
+            </Select>
           </Grid>
           <Grid item>
-                   
-        {/**here's the button to create a new session */}
-        <Button variant='contained' color='secondary' onclick={() => console.log('create a new session')}>Create Session</Button>
-
+            {/**here's the button to create a new session */}
+            <Button variant='contained' color='secondary' onclick={() => console.log('create a new session')}>Create Session</Button>
           </Grid>
         </Grid>
-
-
-
-  
-
-        {/**here's some random junk to help me see what I'm doing
-         * checking to see which user it is so that you can only do all th
-         * TODO check if the user is an admin to choose how to display the page
-         */}
-  {/*       {JSON.stringify(this.props.state.user)}
-        {JSON.stringify(this.state)}
-
-        {JSON.stringify(this.props.state.session.allSessions)}
-        {JSON.stringify(this.props.state.session.slots)} */}
-        {JSON.stringify(this.props.state.session)}
- 
-
-         
         
 
-        
         
         <Grid 
-        container 
-        spacing={4}   
-        direction='row'
-        justify='flex-start'
-        alignItems='stretch'>
+          container
+          spacing={4}
+          direction='row'
+          justify='flex-start'
+          alignItems='stretch'
+        >
           <Grid item xs={12} className={classes.day}>
-            {/**here, we run through our days object to make the days of the week */}
-          {weekdays.map( day => (
-          <Paper className={classes.paper}>
-          {day.name}
+            {/**here we make the weekdays */}
+            {weekdays.map( day => (
+              <Paper className={classes.paper}>
+                {day.name}
+                {/**here's where we get the lessons in a day */}
+                {this.props.state.session.slots.lessons && this.props.state.session.slots.lessons.map( lesson => (
+                  <>
+                  {(lesson.weekday === day.number) && 
+                  <Box className={classes.slot} key={lesson.id}>
+                    <Box>
+                      {lesson.start_of_lesson} - {lesson.end_of_lesson}
+                      {/**here's where we get the information about each lesson */}
+                      {day.reducer && day.reducer.map( slot => (
+                        <>
+                        {(slot.lesson_id === lesson.lesson_id) &&
+                        <Box id={slot.lesson_id}>
+                          {slot.title}:
+                          {slot.expected_user == null
+                          ?
+                          <Box><Button variant='contained' color='secondary' onClick={() => console.log('fill slot id', slot.slot_id) }>Assign Volunteer</Button></Box>
+                          :
+                          <Box id={slot.expected_user}>{slot.first_name} {slot.last_name}</Box>
+                          }
+                        </Box>
+                        }
+                        </>
+                      ))}
+                      <Button variant='contained' color='secondary' onClick={() => console.log('add role',lesson.lesson_id )}>Add role</Button>
 
+                    </Box>
+                  </Box>}
+                  </>
+                ))
+                }
 
-          {/*here we get the lessons from the day reducer and make lesson blocks*/}
-    {this.props.state.session.lessons.map( lesson => (
-      <>
-      {(lesson.weekday === day.number) &&
-      <Box className={classes.slot} style={{height: `${lesson.length_of_lesson*10}`}}  key={lesson.id}>
-        <Box>{lesson.start_of_lesson} - {lesson.end_of_lesson} 
-
-          {/**inside each lesson block we show the things with this lesson id... */}
-
-          {day.reducer.map( (slot) => (
-            <>
-            {/**we only want to show lessons that have the same id in this lesson
-             * if they have an expected user they show their name, if not they show a button
-             */}
-              {(slot.lesson_id  === lesson.lesson_id) &&
-      
-              <Box id={slot.lesson_id}>
-                {slot.title}: 
-                {slot.expected_user == null
-                ?
-                <Box><Button variant='contained' color='secondary' onClick={() => console.log('fill slot id', slot.slot_id) }>Assign Volunteer</Button></Box>
-                :
-                <Box id={slot.expected_user}>{slot.first_name} {slot.last_name}</Box>
-                } 
-                
-              </Box>
-            
-              }
-            </>
-          ))}
-          <Button variant='contained' color='secondary' onClick={() => console.log('add role',lesson.lesson_id )}>Add role</Button>
-        </Box>  
-      </Box>
-      }
-      </>
-    ))}
-
-        </Paper>
-        ))}
-             </Grid>
-
+              </Paper>
+            ))}
+          </Grid>
         </Grid>
-        
-
-      <Box className={classes.day}>
-
-      </Box>  
- </>
+      
+      
+      </>
     )
   }
 }
-
-StandardSession.propTypes = {
-  classes: PropTypes.object.isRequired,
-};
 
 const mapStateToProps = state => ({
     state
