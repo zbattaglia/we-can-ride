@@ -42,7 +42,7 @@ class DeleteLessonButton extends Component {
     if(task === 'delete'){
       console.log('delete', this.props.lesson_id);
       //TODO here's where we send the action
-      this.props.dispatch({ type: 'DELETE_LESSON', payload: {lesson_id: this.props.lesson_id}});
+      this.props.dispatch({ type: 'DELETE_LESSON', payload: {lesson_id: this.props.lesson_id, session_id:this.props.session_id}});
     } else {
       console.log('keep')
     }
@@ -66,7 +66,7 @@ return (
           <DialogTitle id="alert-dialog-title">{"Delete This Lesson?"}</DialogTitle>
           <DialogContent>
             <DialogContentText id="alert-dialog-description">
-              This will delete this lesson and all associated roles
+              This will delete this lesson and all associated roles and all associated shifts and will cancel this lesson from the whole session
             </DialogContentText>
           </DialogContent>
           <DialogActions>
