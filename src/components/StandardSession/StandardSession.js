@@ -157,8 +157,10 @@ class StandardSession extends Component {
                         }
                         </>
                       ))}
+                      {/**here's the button to add a role */}
                       <Button variant='contained' color='secondary' onClick={() => console.log('add role',lesson.lesson_id )}>Add role</Button>
-
+                      {/**here's the button to delete a lesson */}
+                      <Button variant='contained' color='secondary' onClick={() => console.log('delete lesson',lesson.lesson_id )}>Delete Lesson</Button>
                     </Box>
                   </Box>}
                   </>
