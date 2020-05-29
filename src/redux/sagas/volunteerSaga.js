@@ -5,7 +5,7 @@ import { put, takeLatest } from 'redux-saga/effects';
 function* fetchVolunteer() {
     console.log( 'In fetchVolunteer Saga' );
   try {
-    const response = yield axios.get('/volunteer');
+    const response = yield axios.get('/volunteer/volunteer');
     yield put({ type: 'SET_VOLUNTEERS', payload: response.data });
 
   } catch (error) {

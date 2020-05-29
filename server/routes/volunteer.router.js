@@ -7,19 +7,16 @@ const { rejectUnauthenticated } = require('../modules/authentication-middleware'
 /**
  * GET route template
  */
-router.get('/', rejectUnauthenticated, (req, res) => {
+router.get('/volunteer', rejectUnauthenticated, (req, res) => {
     const sqlText = `
-    SELECT "type_of_user", "email", "birthday", "phone", 
+    SELECT "user"."id", "type_of_user", "email", "birthday", "phone", 
                     "first_name", "last_name", "total_hours" FROM "user" LEFT JOIN (SELECT "user"."id", SUM("length_of_lesson") AS "total_hours" FROM "user" 
                     LEFT JOIN "shift" ON "shift"."assigned_user" = "user"."id"
                     JOIN "slot" ON "shift"."slot_id" = "slot"."id"
                     JOIN "lesson" ON "lesson"."id" = "slot"."lesson_id"
                     WHERE "date" < NOW()
                     GROUP BY "user"."id") AS "hours" ON "hours"."id" = "user"."id"
-                    ;
-
-    
-    `;
+                    ; `;
 
     pool.query( sqlText )
         .then( (response) => {
