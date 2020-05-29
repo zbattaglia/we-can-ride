@@ -27,9 +27,9 @@ router.get(`/lessons/:session_id`, rejectUnauthenticated, (req, res) => {
     JOIN "skill" ON "skill"."id" = "skill_needed"
     LEFT JOIN "user" ON "expected_user" = "user"."id"
     WHERE "session"."id" = $1
-    ORDER BY "weekday", "start_of_lesson", "title"`;
+    ORDER BY "lesson_id"`;
     pool.query(sqlText, [req.params.session_id]).then( (response) => {
-        res.send( response.rows );
+        res.send(response.rows );
     }).catch( (error) => {
         console.log( 'Error getting session slots', error );
         res.sendStatus( 500 );
