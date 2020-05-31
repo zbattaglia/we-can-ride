@@ -67,12 +67,19 @@ class StandardSession extends Component {
     this.props.dispatch({type: 'FETCH_SESSIONS'});
   }
   componentDidUpdate (prevProps, prevState) {
+    //if the page just loaded, set the top session in the reducer as the current session
     if ((this.state.session == '') && this.props.state.session.allSessions[0]){
-
       this.setState({
         session: this.props.state.session.allSessions[0]
       })
     }
+    //if we just added/deleted a session, set the top session in the reducer as the current session
+    if (prevProps.state.session.allSessions.length !== this.props.state.session.allSessions.length){
+      this.setState({
+        session: this.props.state.session.allSessions[0]
+      })
+    }
+    //if we picked a different session, fetch the lessons that are associated with that session
     if(prevState.session !== this.state.session){
       this.props.dispatch({ type: 'FETCH_SESSION_LESSONS', payload: {session_id: this.state.session.id}})
     }

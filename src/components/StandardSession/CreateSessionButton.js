@@ -60,6 +60,7 @@ class CreateSession extends Component {
     open: false,
     date: '',
     yearlong: false,
+    length: '',
   };
 
   
@@ -69,7 +70,7 @@ class CreateSession extends Component {
 
   handleClose = (blob) => {
     if(blob === 'create'){
-      this.props.dispatch({ type: 'CREATE_SESSION', payload: {date: this.state.date, yearlong: this.state.yearlong}});
+      this.props.dispatch({ type: 'CREATE_SESSION', payload: {date: this.state.date, yearlong: this.state.yearlong, length: this.state.length}});
     }
     this.setState({ open: false });
   };
@@ -113,6 +114,16 @@ return (
         value={this.state.date}
         onChange={this.handleInputChangeFor('date')}
         className={classes.textField}
+        InputLabelProps={{
+          shrink: true,
+        }}
+      />
+      <TextField 
+        id='length'
+        label='Session length in weeks'
+        type='number'
+        value={this.state.length}
+        onChange={this.handleInputChangeFor('length')}
         InputLabelProps={{
           shrink: true,
         }}

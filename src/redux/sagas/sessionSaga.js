@@ -14,7 +14,8 @@ function* fetchSessions() {
 };
 
 function* createSession(action) {
-  console.log('in create session saga', action.payload);
+  yield axios.post('session/new', action.payload);
+  yield put({type: 'FETCH_SESSIONS'});
 }
 
 function* fetchSessionLessons(action) {
