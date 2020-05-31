@@ -138,7 +138,7 @@ class StandardSession extends Component {
         </Grid>
         
 
-        
+        This is a {this.state.session.length_in_weeks && this.state.session.length_in_weeks.days} day long session
         <Grid 
           container
           className={classes.root}
