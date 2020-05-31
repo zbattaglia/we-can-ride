@@ -13,6 +13,10 @@ function* fetchSessions() {
   }
 };
 
+function* createSession(action) {
+  console.log('in create session saga', action.payload);
+}
+
 function* fetchSessionLessons(action) {
 try {
   const response = yield axios.get(`/session/lessons/${action.payload.session_id}`);
@@ -65,6 +69,7 @@ try {
 function* shiftSaga() {
   yield takeLatest('FETCH_SESSIONS', fetchSessions);
   yield takeLatest('FETCH_SESSION_LESSONS', fetchSessionLessons);
+  yield takeLatest('CREATE_SESSION', createSession);
 
 };
 

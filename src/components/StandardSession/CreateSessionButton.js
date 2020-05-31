@@ -58,7 +58,8 @@ class CreateSession extends Component {
     
   state = {
     open: false,
-    date: ''
+    date: '',
+    yearlong: false,
   };
 
   
@@ -66,7 +67,10 @@ class CreateSession extends Component {
     this.setState({ open: true });
   };
 
-  handleClose = () => {
+  handleClose = (blob) => {
+    if(blob === 'create'){
+      this.props.dispatch({ type: 'CREATE_SESSION', payload: {date: this.state.date, yearlong: this.state.yearlong}});
+    }
     this.setState({ open: false });
   };
 
@@ -114,13 +118,20 @@ return (
         }}
       />
       {JSON.stringify(this.state)}
-      <Checkbox />
+        yearlong?
+      <Checkbox 
+        id='yearlong'
+        label='yearlong'
+        checked={this.state.yearlong}
+        onChange={this.handleCheckboxChangeFor('yearlong')}
+        value="yearlong"
+      />
           </DialogContent>
           <DialogActions>
             <Button onClick={this.handleClose} color="primary">
               Cancel
             </Button>
-            <Button onClick={this.handleClose} color="primary">
+            <Button onClick={() => this.handleClose('create')} color="primary">
               Create New Session
             </Button>
           </DialogActions>
