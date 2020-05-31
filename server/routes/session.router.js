@@ -8,7 +8,7 @@ const { rejectUnauthenticated } = require('../modules/authentication-middleware'
  * GET route template
  */
 router.get(`/all`, rejectUnauthenticated, (req, res) => {
-    const sqlText = `SELECT * FROM "session";`;
+    const sqlText = `SELECT * FROM "session" ORDER BY "id" DESC;`;
     pool.query(sqlText).then( (response) => {
         res.send( response.rows );
     }).catch( (error) => {
@@ -39,8 +39,26 @@ router.get(`/lessons/:session_id`, rejectUnauthenticated, (req, res) => {
 /**
  * POST route template
  */
-router.post('/', rejectUnauthenticated, (req, res) => {
-
+router.post('/new', rejectUnauthenticated, (req, res) => {
+  console.log(req.body.date, req.body.yearlong, req.body.length); //yearlong is a boolean
+  let yearlong = 'session';
+  if (req.body.yearlong === true){
+    yearlong = 'yearlong'
+  };
+  let length = req.body.length + ' WEEKS';
+  const sqlText = `INSERT INTO "session"
+  ("start_date", "ready_to_publish", "session_type", "length_in_weeks") 
+  VALUES( $1, FALSE, $2, $3) 
+  RETURNING "id", "start_date", "ready_to_publish", "session_type", "length_in_weeks"
+  ;
+  `;
+  pool.query(sqlText, [req.body.date, yearlong, length]).then( response => {
+    console.log('response from database', response);
+    res.sendStatus(200);
+  }).catch( error => {
+    console.log('error in adding session to database', error);
+    res.sendStatus(500);
+  });
 });
 
 module.exports = router;

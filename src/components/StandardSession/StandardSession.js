@@ -16,9 +16,11 @@ import AddLessonButton from './AddLessonButton';
 import AssignVolunteerButton from './AssignVolunteerButton';
 import AddRoleButton from './AddRoleButton';
 import DeleteLessonButton from './DeleteLessonButton';
+import PublishSesssionButton from './PublishSessionButton';
 
 
 import DeleteRole from './DeleteRole';
+import PublishSessionButton from './PublishSessionButton';
 
 const styles = theme => ({
   root: {
@@ -65,12 +67,19 @@ class StandardSession extends Component {
     this.props.dispatch({type: 'FETCH_SESSIONS'});
   }
   componentDidUpdate (prevProps, prevState) {
+    //if the page just loaded, set the top session in the reducer as the current session
     if ((this.state.session == '') && this.props.state.session.allSessions[0]){
-
       this.setState({
         session: this.props.state.session.allSessions[0]
       })
     }
+    //if we just added/deleted a session, set the top session in the reducer as the current session
+    if (prevProps.state.session.allSessions.length !== this.props.state.session.allSessions.length){
+      this.setState({
+        session: this.props.state.session.allSessions[0]
+      })
+    }
+    //if we picked a different session, fetch the lessons that are associated with that session
     if(prevState.session !== this.state.session){
       this.props.dispatch({ type: 'FETCH_SESSION_LESSONS', payload: {session_id: this.state.session.id}})
     }
@@ -129,13 +138,15 @@ class StandardSession extends Component {
         </Grid>
         
 
-        
+        This is a {this.state.session.length_in_weeks && this.state.session.length_in_weeks.days} day long session
         <Grid 
           container
+          className={classes.root}
           spacing={4}
           direction='row'
           justify='flex-start'
           alignItems='stretch'
+          style={{minHeight: '100vh'}}
         >
           <Grid item xs={12} className={classes.day}>
             {/**here we make the weekdays */}
@@ -186,7 +197,10 @@ class StandardSession extends Component {
             ))}
           </Grid>
         </Grid>
-      
+        {this.state.session.ready_to_publish === false &&
+          <PublishSessionButton session_id={this.state.session.id}/>
+        }
+
       
       </>
     )
