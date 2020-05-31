@@ -128,7 +128,6 @@ return (
           shrink: true,
         }}
       />
-      {JSON.stringify(this.state)}
         yearlong?
       <Checkbox 
         id='yearlong'
