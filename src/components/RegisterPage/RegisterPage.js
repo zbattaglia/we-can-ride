@@ -7,12 +7,8 @@ import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
-import Paper from '@material-ui/core/Paper';
 import Checkbox from '@material-ui/core/Checkbox';
-import FormGroup from '@material-ui/core/FormGroup';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import FormControl from '@material-ui/core/FormControl';
-import FormLabel from '@material-ui/core/FormLabel';
+
 
 
 const styles = theme => ({
@@ -185,29 +181,34 @@ class RegisterPage extends Component {
             />
           </div>
           <div>
+          
           <TextField
             id="date"
-            label="Date of Birth"
             type="date"
             value={this.state.birthday}
             onChange={this.handleInputChangeFor('birthday')}
+            className={classes.textField}
             InputLabelProps={{
               shrink: false,
             }}
           />
           </div>
           <div>
-          <Paper>
-            <Table  className={classes.table}>
+            <Table className={classes.table}>
               <TableHead>
+              <TableRow>
+                  <TableCell className={classes.tableTitle} colSpan={7}>
+                    Add Availability
+                  </TableCell>
+                </TableRow>
                 <TableRow>
-                  <TableCell>Sunday</TableCell>
-                  <TableCell>Monday</TableCell>
-                  <TableCell>Tuesday</TableCell>
-                  <TableCell>Wednesday</TableCell>
-                  <TableCell>Thursday</TableCell>
-                  <TableCell>Friday</TableCell>
-                  <TableCell>Saturday</TableCell>
+                  <TableCell className={classes.columnTitle}>Sunday</TableCell>
+                  <TableCell className={classes.columnTitle}>Monday</TableCell>
+                  <TableCell className={classes.columnTitle}>Tuesday</TableCell>
+                  <TableCell className={classes.columnTitle}>Wednesday</TableCell>
+                  <TableCell className={classes.columnTitle}>Thursday</TableCell>
+                  <TableCell className={classes.columnTitle}>Friday</TableCell>
+                  <TableCell className={classes.columnTitle}>Saturday</TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
@@ -313,7 +314,6 @@ class RegisterPage extends Component {
                   </TableRow>
               </TableBody>
             </Table>
-          </Paper>
           </div>
           <div>
             <input
