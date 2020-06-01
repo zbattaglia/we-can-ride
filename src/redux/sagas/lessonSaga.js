@@ -25,8 +25,8 @@ function* createLesson(action) {
       const response = yield axios.post(`lesson/create`, action.payload );
 //  go get the lessons for the session again - so the post needs to return the session id from the query
 // TODO get the session_id back from the database
-      yield console.log( 'the session_id back from the database', response);
-      yield put({ type: 'FETCH_SESSION_LESSONS', payload: {session_id: `${response.session_id}`}})
+      yield console.log( 'the session_id back from the database', response.data);
+      yield put({ type: 'FETCH_SESSION_LESSONS', payload: response.data});
     } catch (error) {
       console.log('error in creating a lesson', error);
     }

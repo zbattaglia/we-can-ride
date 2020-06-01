@@ -40,11 +40,20 @@ router.get(`/lessons/:session_id`, rejectUnauthenticated, (req, res) => {
  * POST route template
  */
 router.post('/create', rejectUnauthenticated, (req, res) => {
-  console.log('in create a lesson', req.body.client, req.body.day, req.body.duration, req.body.start_time, req.body.session_id); //yearlong is a boolean
-  /* let yearlong = 'session';
-  if (req.body.yearlong === true){
-    yearlong = 'yearlong'
-  };
+  console.log('in create a lesson',   req.body.duration ); //yearlong is a boolean
+  const sqlText = `INSERT INTO "lesson"("session_id", "start_of_lesson", "day_of_week", "client", "length_of_lesson") 
+  VALUES($1, $2, $3, $4, $5) 
+  RETURNING "session_id";`;
+  pool.query(sqlText, 
+    [req.body.session_id, req.body.start_time, req.body.day, req.body.client, req.body.duration ] )
+    .then( response => {
+      const session_id = response.rows[0].session_id
+      console.log('get session', session_id);
+      res.send({session_id});
+    }).catch( error => {
+      console.log('error in create new session', error);
+    });
+  /* 
   let length = req.body.length + ' WEEKS';
   const sqlText = `INSERT INTO "session"
   ("start_date", "ready_to_publish", "session_type", "length_in_weeks") 
