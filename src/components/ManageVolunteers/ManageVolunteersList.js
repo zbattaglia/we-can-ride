@@ -98,6 +98,12 @@ class ManageVolunteersList extends Component {
         this.props.dispatch( { type: 'DISABLE_VOLUNTEER', payload: id } );
     }
 
+    activateVolunteer = (id) => {
+        console.log('In activateVolunteer', id)
+        this.props.dispatch( { type: 'ACTIVATE_VOLUNTEER', payload: id } );
+
+    }
+
     render() {
         const { classes } = this.props
         return (
@@ -120,7 +126,12 @@ class ManageVolunteersList extends Component {
                             <RoleDropdown/>
                         </CustomTableCell>
                         <CustomTableCell>
+                            {volunteer.disable?
+                            <Button variant="contained" onClick={() => this.activateVolunteer(volunteer.id)}>Activate</Button>
+                            :
                             <Button variant="contained" onClick={() => this.disableVolunteer(volunteer.id)}>Disable</Button>
+
+                            }
                         </CustomTableCell>
                     </TableRow>
                 })}

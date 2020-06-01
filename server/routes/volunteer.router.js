@@ -16,6 +16,7 @@ router.get('/volunteer', rejectUnauthenticated, (req, res) => {
                     JOIN "lesson" ON "lesson"."id" = "slot"."lesson_id"
                     WHERE "date" < NOW()
                     GROUP BY "user"."id") AS "hours" ON "hours"."id" = "user"."id"
+                    ORDER BY "last_name", "first_name"
                     ; `;
 
     pool.query( sqlText )

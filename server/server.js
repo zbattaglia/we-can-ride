@@ -16,7 +16,7 @@ const sessionRouter = require('./routes/session.router');
 const messageRouter = require('./routes/message.router');
 
 const disableRouter = require('./routes/disable.router');
-
+const activateRouter = require('./routes/activate.router');
 const lessonRouter = require('./routes/lesson.router');
 
 
@@ -40,7 +40,7 @@ app.use('/session', sessionRouter);
 app.use('/message', messageRouter);
 
 app.use('/disable', disableRouter);
-
+app.use('/activate', activateRouter);
 app.use('/lesson', lessonRouter);
 
 
