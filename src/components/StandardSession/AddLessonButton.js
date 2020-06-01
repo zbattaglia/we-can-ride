@@ -72,7 +72,7 @@ class AddLessonButton extends Component {
 
   handleClose = (blob) => {
     if(blob === 'create'){
-      console.log('send the state to the server', this.state);
+      console.log('send the state to the server', this.state, this.props.session_id);
       //this.props.dispatch({ type: 'CREATE_SESSION', payload: {date: this.state.date, yearlong: this.state.yearlong, length: this.state.length}});
     }
     this.setState({ open: false });
@@ -105,7 +105,7 @@ class AddLessonButton extends Component {
    
 return (
   <>
-  <Button color='secondary' variant='contained' onClick={this.handleClickOpen} >Add a Lesson{this.props.session_id}</Button>
+  <Button color='secondary' variant='contained' onClick={this.handleClickOpen} >Add a Lesson</Button>
   <Dialog
   open={this.state.open}
   onClose={this.handleClose}
@@ -123,6 +123,7 @@ return (
 
 
      */}
+     {JSON.stringify(this.state)}
       <Select
             value={this.state.day}
             onChange={this.handleChange}
@@ -131,30 +132,33 @@ return (
               id: 'day',
             }}
           >
+                        <MenuItem value="">
+              <em>None</em>
+            </MenuItem>
             {weekdays.map( weekday => (
               <MenuItem value={weekday.sqlDate}>{weekday.day}</MenuItem>
             ))}
-            <MenuItem value="">
-              <em>None</em>
-            </MenuItem>
-            <MenuItem value={10}>Ten</MenuItem>
-            <MenuItem value={20}>Twenty</MenuItem>
-            <MenuItem value={30}>Thirty</MenuItem>
           </Select>
      <TextField
       label='Client'
       type='text'
+      onChange={this.handleInputChangeFor('client')}
      />
 
 <TextField
-      label='Lesson Length'
+      label='Lesson Length in Minutes'
       type='number'
+      InputLabelProps={{
+        shrink: true,
+      }}
+      onChange={this.handleInputChangeFor('duration')}
      />
            <TextField
         id="time"
         label="Lesson Start Time"
         type="time"
-        defaultValue="07:30"
+        value={this.state.start_time}
+        onChange={this.handleInputChangeFor('start_time')}
         className={classes.textField}
         InputLabelProps={{
           shrink: true,
@@ -163,35 +167,9 @@ return (
           step: 300, // 5 min
         }}
       />
-<TextField
-id="date"
-label="Start Date"
-type="date"
-value={this.state.date}
-onChange={this.handleInputChangeFor('date')}
-className={classes.textField}
-InputLabelProps={{
-  shrink: true,
-}}
-/>
-<TextField 
-id='length'
-label='Session length in weeks'
-type='number'
-value={this.state.length}
-onChange={this.handleInputChangeFor('length')}
-InputLabelProps={{
-  shrink: true,
-}}
-/>
-yearlong?
-<Checkbox 
-id='yearlong'
-label='yearlong'
-checked={this.state.yearlong}
-onChange={this.handleCheckboxChangeFor('yearlong')}
-value="yearlong"
-/>
+
+
+
   </DialogContent>
   <DialogActions>
     <Button onClick={this.handleClose} color="primary">
