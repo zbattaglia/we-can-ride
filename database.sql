@@ -10,7 +10,8 @@ CREATE TABLE "user" (
     "birthday" DATE,
     "phone" VARCHAR(22),
     "first_name" VARCHAR(50),
-    "last_name" VARCHAR(50)
+    "last_name" VARCHAR(50),
+    "disable" BOOLEAN DEFAULT false
 );
 --Create availablity table
 CREATE TABLE "availability" (

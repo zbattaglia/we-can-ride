@@ -37,12 +37,26 @@ function* updateSelectedVolunteer(action) {
   catch(error) {
     console.log( 'Error updating selected volunteer information', error );
   }
+};
+
+function* disableVolunteer(action) {
+  console.log( `In disableVolunteer saga`, action.payload );
+
+  try{
+    yield axios.put( `/disable/${action.payload}`, action.payload );
+
+    // yield put( { type: 'FETCH_VOLUNTEERS' } );
+  }
+  catch(error) {
+    console.log( 'Error disabling user', error );
+  }
 }
 
 function* volunteerSaga() {
   yield takeLatest('FETCH_VOLUNTEERS', fetchVolunteer);
   yield takeLatest('FETCH_SELECTED_VOLUNTEER', fetchSelectedVolunteer);
   yield takeLatest('UPDATE_SELECTED_VOLUNTEER', updateSelectedVolunteer);
+  yield takeLatest('DISABLE_VOLUNTEER', disableVolunteer);
 };
 
 export default volunteerSaga;
