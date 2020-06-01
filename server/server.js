@@ -14,7 +14,7 @@ const volunteerRouter = require('./routes/volunteer.router');
 const shiftRouter = require('./routes/shift.router');
 const sessionRouter = require('./routes/session.router');
 const messageRouter = require('./routes/message.router');
-
+const disableRouter = require('./routes/disable.router');
 
 // Body parser middleware
 app.use(bodyParser.json());
@@ -33,7 +33,7 @@ app.use('/volunteer', volunteerRouter);
 app.use('/shift', shiftRouter);
 app.use('/session', sessionRouter);
 app.use('/message', messageRouter);
-
+app.use('/disable', disableRouter);
 
 // Serve static files
 app.use(express.static('build'));
