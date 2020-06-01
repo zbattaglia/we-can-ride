@@ -1,7 +1,6 @@
 import axios from 'axios';
 import { put, takeLatest } from 'redux-saga/effects';
 
-// worker Saga: will be fired on "FETCH_FOUR_WEEKS_SHIFTS" actions
 function* fetchSessions() {
     console.log( 'In fetchShift Saga' );
   try {

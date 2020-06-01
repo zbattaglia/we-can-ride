@@ -27,7 +27,7 @@ router.get(`/lessons/:session_id`, rejectUnauthenticated, (req, res) => {
     JOIN "skill" ON "skill"."id" = "skill_needed"
     LEFT JOIN "user" ON "expected_user" = "user"."id"
     WHERE "session"."id" = $1
-    ORDER BY "lesson_id";`;
+    ORDER BY "lesson_id"`;
     pool.query(sqlText, [req.params.session_id]).then( (response) => {
         res.send(response.rows );
     }).catch( (error) => {
@@ -39,26 +39,30 @@ router.get(`/lessons/:session_id`, rejectUnauthenticated, (req, res) => {
 /**
  * POST route template
  */
-router.post('/new', rejectUnauthenticated, (req, res) => {
-  console.log(req.body.date, req.body.yearlong, req.body.length); //yearlong is a boolean
-  let yearlong = 'session';
-  if (req.body.yearlong === true){
-    yearlong = 'yearlong'
-  };
-  let length = req.body.length + ' WEEKS';
-  const sqlText = `INSERT INTO "session"
-  ("start_date", "ready_to_publish", "session_type", "length_in_weeks") 
-  VALUES( $1, FALSE, $2, $3) 
-  RETURNING "id", "start_date", "ready_to_publish", "session_type", "length_in_weeks"
-  ;
-  `;
-  pool.query(sqlText, [req.body.date, yearlong, length]).then( response => {
-    console.log('response from database', response);
-    res.sendStatus(200);
-  }).catch( error => {
-    console.log('error in adding session to database', error);
+router.post('/create', rejectUnauthenticated, async (req, res, next) => {
+  console.log('in create a lesson for',   req.body.client );
+  const connection = await pool.connect();
+  const session_id = req.body.session_id;
+  try {
+    await connection.query(`BEGIN`);
+    const createLessonQuery = `INSERT INTO "lesson"
+    ("session_id", "start_of_lesson", "day_of_week", "client", "length_of_lesson") 
+    VALUES($1, $2, $3, $4, $5) 
+    RETURNING "lesson"."id" AS "lesson_id";`;
+    const createSlotQuery = `INSERT INTO "slot"("lesson_id", "skill_needed") 
+    VALUES($1, 1), ($1, 1), ($1, 2);`;
+    const lesson_id = await connection.query(createLessonQuery, 
+      [req.body.session_id, req.body.start_time, req.body.day, req.body.client, req.body.duration] );
+    const response = await connection.query(createSlotQuery, [lesson_id.rows[0].lesson_id]);
+    await connection.query(`COMMIT`);
+    res.send({session_id});
+  } catch (error){
+    console.log( `Error on create slots for lesson`, error)
+    await connection.query(`ROLLBACK`);
     res.sendStatus(500);
-  });
+  } finally {
+    connection.release();
+  };
 });
 
 module.exports = router;
