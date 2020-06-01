@@ -127,7 +127,7 @@ class StandardSession extends Component {
               <em>None</em>
             </MenuItem>
             {this.props.state.session.allSessions.map(item => (
-            <MenuItem key={item.id} value={item}>{item.start_date} {item.session_type}</MenuItem>
+            <MenuItem key={item.id} value={item}>{moment(item.start_date).format("MMM Do YYYY")} {item.session_type}</MenuItem>
             ))}
             </Select>
           </Grid>
