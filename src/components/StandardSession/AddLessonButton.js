@@ -73,7 +73,7 @@ class AddLessonButton extends Component {
   handleClose = (blob) => {
     if(blob === 'create'){
       console.log('send the state to the server', this.state, this.props.session_id);
-      //this.props.dispatch({ type: 'CREATE_SESSION', payload: {date: this.state.date, yearlong: this.state.yearlong, length: this.state.length}});
+      this.props.dispatch({ type: 'CREATE_LESSON', payload: {client: this.state.client, day: this.state.day, duration: this.state.duration, start_time: this.state.start_time, session_id: this.props.session_id}});
     }
     this.setState({ open: false });
   };
@@ -125,25 +125,25 @@ return (
      */}
      {JSON.stringify(this.state)}
       <Select
-            value={this.state.day}
-            onChange={this.handleChange}
-            inputProps={{
-              name: 'day',
-              id: 'day',
-            }}
-          >
-                        <MenuItem value="">
-              <em>None</em>
-            </MenuItem>
-            {weekdays.map( weekday => (
-              <MenuItem value={weekday.sqlDate}>{weekday.day}</MenuItem>
-            ))}
-          </Select>
-     <TextField
-      label='Client'
-      type='text'
-      onChange={this.handleInputChangeFor('client')}
-     />
+        value={this.state.day}
+        onChange={this.handleInputChangeFor('day')}
+        inputProps={{
+          name: 'day',
+          id: 'day',
+        }}
+      >
+        <MenuItem value="">
+          <em>None</em>
+        </MenuItem>
+        {weekdays.map( weekday => (
+          <MenuItem value={weekday.sqlDate}>{weekday.day}</MenuItem>
+        ))}
+      </Select>
+      <TextField
+        label='Client'
+        type='text'
+        onChange={this.handleInputChangeFor('client')}
+      />
 
 <TextField
       label='Lesson Length in Minutes'

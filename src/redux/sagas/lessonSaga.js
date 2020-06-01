@@ -19,6 +19,18 @@ function* deleteLesson(action) {
   // actually needs to fetch lessons based on session_id yield put({ type: 'FETCH_SESSION_LESSONS', payload: {session_id: action.payload.session.id}});
 }
 
+function* createLesson(action) {
+  console.log('saga for create a lesson', action.payload);
+    try {
+      const response = yield axios.post(`lesson/create`, action.payload );
+//  go get the lessons for the session again - so the post needs to return the session id from the query
+// TODO get the session_id back from the database
+      yield console.log( 'the session_id back from the database', response);
+      yield put({ type: 'FETCH_SESSION_LESSONS', payload: {session_id: `${response.session_id}`}})
+    } catch (error) {
+      console.log('error in creating a lesson', error);
+    }
+}
 /* function* fetchMyShifts(action) {
   console.log( 'In fetchShift Saga', action.payload );
 try {
@@ -32,6 +44,7 @@ try {
 
 function* shiftSaga() {
   yield takeLatest('DELETE_LESSON', deleteLesson);
+  yield takeLatest('CREATE_LESSON', createLesson);
 };
 
 export default shiftSaga;
