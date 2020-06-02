@@ -11,6 +11,15 @@ import Button from '@material-ui/core/Button';
 import Box from '@material-ui/core/Box';
 import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
+import TextField from '@material-ui/core/TextField';
+import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogContentText from '@material-ui/core/DialogContentText';
+import DialogTitle from '@material-ui/core/DialogTitle';
+import PropTypes from 'prop-types';
+import Checkbox from '@material-ui/core/Checkbox';
+
 
 const styles = theme => ({
   root: {
@@ -30,30 +39,99 @@ const styles = theme => ({
     backgroundColor: theme.palette.primary.light, 
     width: '200px'
   },
-  paper: {
-    padding: theme.spacing(2),
-    color: theme.palette.text.secondary,
-    display: 'inline-block'
-  }
+  container: {
+    display: 'flex',
+    flexWrap: 'wrap',
+  },
+  textField: {
+    marginLeft: theme.spacing.unit,
+    marginRight: theme.spacing.unit,
+    width: 200,
+  },
 });
 
-//TODO use button to open a modal to assign a volunteer to a slot
 
-class AssignVolunteer extends Component {
+
+//TODO use button to open a modal to create a new session
+
+class AssignVolunteerButton extends Component {
     
+  state = {
+    open: false,
+    volunteer: ''
+  };
 
+  
+  handleClickOpen = () => {
+    this.setState({ open: true });
+  };
+
+  handleClose = (blob) => {
+    if(blob === 'create'){
+      this.props.dispatch({ type: 'CREATE_VOLUNTEER', payload: {volunteer: this.state.volunteer}});
+    }
+    this.setState({ open: false });
+  };
+
+  handleInputChangeFor = propertyName => (event) => {
+    this.setState({
+      [propertyName]: event.target.value,
+    });
+  };
 
   render() {
     const { classes } = this.props;
    
 return (
-  <Button color='secondary' variant='contained' onClick={() => console.log('assign volunteer to slot', this.props.slot_id)} >Assign A Volunteer</Button>
+  <div>
+    <Button color='secondary' variant='contained' onClick={this.handleClickOpen} >Add A Volunteer</Button>
+    <Dialog
+  open={this.state.open}
+  onClose={this.handleClose}
+  aria-labelledby="add-volunteer"
+>
+  <DialogTitle id="add-volunteer">Add A Volunteer</DialogTitle>
+  <DialogContent>
+    <DialogContentText>
+      Select and assign a volunteer.
+    </DialogContentText>
+     {JSON.stringify(this.state)}
+      {/* <Select
+        value={this.state.volunteers}
+        onChange={this.handleInputChangeFor('volunteer')}
+        inputProps={{
+          volunteer: 'volunteer',
+        }}
+      >
+        <MenuItem value="">
+          <em>None</em>
+        </MenuItem>
+        {weekdays.map( weekday => (
+          <MenuItem value={weekday.sqlDate}>{weekday.day}</MenuItem>
+        ))}
+      </Select> */}
+
+  </DialogContent>
+  <DialogActions>
+    <Button onClick={this.handleClose} color="primary">
+      Cancel
+    </Button>
+    <Button onClick={() => this.handleClose('create')} color="primary">
+      Add Volunteer
+    </Button>
+  </DialogActions>
+</Dialog>
+  </div>
     )
   }
 }
+
+AssignVolunteerButton.propTypes = {
+  classes: PropTypes.object.isRequired,
+};
 
 const mapStateToProps = state => ({
     state
   });
 
-export default withStyles(styles)(connect(mapStateToProps)(AssignVolunteer));
+export default withStyles(styles)(connect(mapStateToProps)(AssignVolunteerButton));
