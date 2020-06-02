@@ -14,9 +14,16 @@ function* fetchSessionLessons(action) {
  */
 function* deleteLesson(action) {
   console.log( 'in delete a lesson by id saga', action.payload);
-  //TODO actually delete the lesson
-
-  // actually needs to fetch lessons based on session_id yield put({ type: 'FETCH_SESSION_LESSONS', payload: {session_id: action.payload.session.id}});
+  //TODO actually delete the lesson// action.payload shaped like {session_id: 4, lesson_id: 4}
+  const session_id = action.payload.session_id;
+  try{
+    yield axios.delete('lesson', {data: action.payload});
+    yield put({ type: 'FETCH_SESSION_LESSONS', payload: {session_id}});
+  }
+  catch (error) {
+    console.log('error in deleting a lesson', error);
+  }
+  
 }
 
 function* createLesson(action) {
