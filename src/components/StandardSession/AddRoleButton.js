@@ -64,7 +64,7 @@ class AddRoleButton extends Component {
     if(blob === 'add role'){
       console.log('add role!', this.state.role);
       //TODO actually send this to the saga
-      this.props.dispatch({type: 'ADD_ROLE_TO_LESSON', payload: {lesson_id: this.props.lesson_id, session_id: this.props.session_id}});
+      this.props.dispatch({type: 'ADD_ROLE_TO_LESSON', payload: {lesson_id: this.props.lesson_id, session_id: this.props.session_id, skill_id: this.state.role}});
     
     }
    this.setState({ open: false });

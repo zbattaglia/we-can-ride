@@ -59,11 +59,24 @@ function* getRoles() {
   yield put({ type: 'SET_ROLES', payload: response.data});
 }
 
+function* addRole(action) {
+  // action.payload look like this: {lesson_id: 35, session_id:6, skill_id:3}
+  const session_id = action.payload.session_id;
+  try{
+    yield axios.post('lesson/roles', action.payload);
+    yield put({ type: 'FETCH_SESSION_LESSONS', payload: {session_id}});
+  }
+  catch (error) { 
+    console.log('error in adding a role to the lesson saga', error);
+  }
+}
+
 function* shiftSaga() {
   yield takeLatest('DELETE_LESSON', deleteLesson);
   yield takeLatest('CREATE_LESSON', createLesson);
   yield takeLatest('DELETE_ROLE', deleteRole);
-  yield takeLatest('GET_ROLES', getRoles)
+  yield takeLatest('GET_ROLES', getRoles);
+  yield takeLatest('ADD_ROLE_TO_LESSON', addRole);
 };
 
 export default shiftSaga;

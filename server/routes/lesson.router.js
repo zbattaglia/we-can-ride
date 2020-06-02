@@ -27,6 +27,20 @@ router.get(`/roles`, rejectUnauthenticated, (req, res) => {
   });
  
 });
+router.post(`/roles`, rejectUnauthenticated, (req, res) => {
+  //req.body looks like {lesson_id: 35, session_id: 6, skill_id: 1}
+  console.log('in server in add a role to a lesson', req.body);
+  const sqlText = `INSERT INTO "slot"("lesson_id", "skill_needed") 
+  VALUES($1, $2);
+  `;
+  pool.query(sqlText, [req.body.lesson_id, req.body.skill_id]).then(response =>{
+    console.log('inserted a new slot', response);
+    res.sendStatus(200)
+  }).catch( error => {
+    console.log('error in inserting a slot into a lesson', error)
+    res.sendStatus(500);
+  });
+});
 
 router.get(`/lessons/:session_id`, rejectUnauthenticated, (req, res) => {
     const sqlText = `SELECT "user"."first_name", "user"."last_name", "start_of_lesson", 
