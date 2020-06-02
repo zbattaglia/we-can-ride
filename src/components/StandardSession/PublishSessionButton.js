@@ -11,6 +11,11 @@ import Button from '@material-ui/core/Button';
 import Box from '@material-ui/core/Box';
 import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
+import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogContentText from '@material-ui/core/DialogContentText';
+import DialogTitle from '@material-ui/core/DialogTitle';
 
 const styles = theme => ({
   root: {
@@ -37,17 +42,60 @@ const styles = theme => ({
   }
 });
 
-//TODO use button to open a modal to create a new session
+
+//TODO switch ready to publish to true
+//TODO make the shifts for the whole session 
 
 class PublishSessionButton extends Component {
+  state = {
+    open: false,
+  };
+
+  handleClickOpen = () => {
+    console.log('opend modal to publish session:', this.props.session_id);
+    this.setState({ open: true });
+  };
+
+  handleClose = (blob) => {
+    if(blob === 'publish'){
+      console.log('publish session!', this.props.session_id);
+      this.props.dispatch({type: 'PUBLISH_SESSION', payload: {lesson_id: this.props.lesson_id, session_id: this.props.session_id, skill_id: this.state.role}});
     
+    }
+   this.setState({ open: false });
+  };
+
+
 
 
   render() {
     const { classes } = this.props;
    
 return (
-  <Button color='secondary' variant='contained' onClick={() => console.log('publish session with id', this.props.session_id)} >Publish Session</Button>
+  <>
+  <Button color='secondary' variant='contained' onClick={this.handleClickOpen} >Publish Session</Button>
+  <Dialog
+  open={this.state.open}
+  onClose={this.handleClose}
+  aria-labelledby="form-dialog-title"
+>
+  <DialogTitle id="form-dialog-title">Publish Session</DialogTitle>
+  <DialogContent>
+    <DialogContentText>
+     Are you sure you would like to publish this session? Once you do, you won't be able to edit the roles and lessons
+    </DialogContentText>
+    {JSON.stringify(this.state)}
+  </DialogContent>
+  <DialogActions>
+    <Button onClick={this.handleClose} color="primary">
+      Cancel
+    </Button>
+    <Button onClick={() => this.handleClose('publish')} color="primary">
+      Add Role
+    </Button>
+  </DialogActions>
+</Dialog>
+  </>
     )
   }
 }
