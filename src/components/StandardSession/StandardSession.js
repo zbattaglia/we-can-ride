@@ -65,6 +65,7 @@ class StandardSession extends Component {
   componentDidMount () {
     this.props.dispatch({type: 'FETCH_USER'});
     this.props.dispatch({type: 'FETCH_SESSIONS'});
+    this.props.dispatch({type: 'GET_ROLES'});
   }
   componentDidUpdate (prevProps, prevState) {
     //if the page just loaded, set the top session in the reducer as the current session
@@ -184,7 +185,7 @@ class StandardSession extends Component {
                         </>
                       ))}
                       {/**here's the button to add a role */}
-                      <AddRoleButton lesson_id={lesson.lesson_id}/>
+                      <AddRoleButton lesson_id={lesson.lesson_id} session_id={this.state.session.id}/>
                       {/**here's the button to delete a lesson */}
                       <DeleteLessonButton lesson_id={lesson.lesson_id} session_id={this.state.session.id} />
                     </Box>
