@@ -173,7 +173,7 @@ class StandardSession extends Component {
                           ?
                           <Box>
 
-                            <AssignVolunteerButton slot_id={slot.slot_id}/>
+                            <AssignVolunteerButton session_id={this.state.session.id} slot_id={slot.slot_id}/>
                             <DeleteRole session_id={this.state.session.id} slot_id={slot.slot_id}/>
                           </Box>
                           :

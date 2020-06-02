@@ -64,13 +64,20 @@ class AssignVolunteerButton extends Component {
   
   handleClickOpen = () => {
     this.setState({ open: true });
-    this.props.dispatch({type: 'FETCH_VOLUNTEERS'}, console.log('Got volunteers:', this.state))
+    this.props.dispatch({type: 'FETCH_VOLUNTEERS'})
 
   };
 
   handleClose = (blob) => {
     if(blob === 'create'){
-      this.props.dispatch({ type: 'ASSIGN_VOLUNTEER', payload: {volunteer: this.state.volunteer}});
+      
+      // console.log(`Sending assigned volunteer with session id: ${this.props.session_id}, slot id: ${this.props.slot_id}, user id: ${this.state.volunteer}`);
+      this.props.dispatch({ type: 'ASSIGN_VOLUNTEER', 
+                            payload: {volunteer: this.state.volunteer, 
+                                      session: this.props.session_id,
+                                      slot_id: this.props.slot_id}});
+
+
     }
     this.setState({ open: false });
   };

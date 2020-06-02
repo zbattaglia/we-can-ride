@@ -89,6 +89,7 @@ router.post('/create', rejectUnauthenticated, async (req, res, next) => {
     connection.release();
   };
 });
+
   router.delete('/slot', rejectUnauthenticated, async (req, res, next) => {
     console.log('in delete route slot', req.body.slot_id, 'session', req.body.session_id);
     const connection = await pool.connect();
@@ -118,6 +119,31 @@ router.post('/create', rejectUnauthenticated, async (req, res, next) => {
       connection.release();
     }
   });
+
+/**
+ * POST route template
+ */
+router.post('/assign', rejectUnauthenticated, async (req, res, next) => {
+  console.log('In assign volunteer with:', req.body);
+  const connection = await pool.connect();
+  const volunteer_id = req.body.volunteer;
+  const slot_id = req.body.slot_id
+  try {
+    await connection.query(`BEGIN`);
+    const assignVolunteerQuery = `INSERT INTO "slot"
+    ("lesson_id", "expected_user") 
+    VALUES($1, $2)`;
+    await connection.query(assignVolunteerQuery, [slot_id, volunteer_id]);
+    await connection.query(`COMMIT`);
+    res.send({session_id});
+  } catch (error){
+    console.log( `Error on assign volunteer`, error)
+    await connection.query(`ROLLBACK`);
+    res.sendStatus(500);
+  } finally {
+    connection.release();
+  };
+});
 
   router.delete('/lesson', rejectUnauthenticated, async (req, res, next) => {
    console.log('in delete route lesson:', req.body.lesson_id, 'session', req.body.session_id);
