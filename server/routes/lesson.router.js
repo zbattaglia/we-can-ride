@@ -64,10 +64,39 @@ router.post('/create', rejectUnauthenticated, async (req, res, next) => {
     connection.release();
   };
 });
- router.delete('/', rejectUnauthenticated, async (req, res, next) => {
-   console.log('in delete route lesson:', req.body.lesson_id, 'session', req.body.session_id)
+  router.delete('/slot', rejectUnauthenticated, async (req, res, next) => {
+    console.log('in delete route slot', req.body.slot_id, 'session', req.body.session_id);
+    const connection = await pool.connect();
+    try {
+      await connection.query(`BEGIN;`);
+      const getShiftsQuery = `SELECT "shift"."id" AS "shift_id" FROM "slot"
+      LEFT JOIN "shift" ON "shift"."slot_id" = "slot"."id"
+      WHERE "slot_id" = $1;`;
+      const shiftsToDelete = await connection.query(getShiftsQuery, [req.body.slot_id]);
+      //delete the shifts so the slot can be deleted
+      const deleteShiftsQuery = `DELETE FROM "shift" WHERE "id" = $1;`;
+      for(i=0; i<shiftsToDelete.rows.length; i++){
+        console.log('deleting shift', shiftsToDelete.rows[i].shift_id);
+        await connection.query(deleteShiftsQuery, [shiftsToDelete.rows[i].shift_id]);
+      }
+      // delete the slots
+      const deleteSlotsQuery = `DELETE FROM "slot" WHERE "id" = $1;`;
+      await connection.query(deleteSlotsQuery, [req.body.slot_id]);
+      await connection.query(`COMMIT;`);
+      res.sendStatus(200);
+
+    } catch (error) { 
+      console.log('error in deleting that role', error);
+      await connection.query(`ROLLBACK`);
+      res.sendStatus(500);
+    } finally {
+      connection.release();
+    }
+  });
+
+  router.delete('/lesson', rejectUnauthenticated, async (req, res, next) => {
+   console.log('in delete route lesson:', req.body.lesson_id, 'session', req.body.session_id);
    const connection = await pool.connect();
-   const session_id = req.body.session_id;
  
    try {
     await connection.query(`BEGIN`);
@@ -84,7 +113,6 @@ router.post('/create', rejectUnauthenticated, async (req, res, next) => {
         console.log('deleting shift', shiftsToDelete.rows[i].shift_id);
         await connection.query(deleteShiftsQuery, [shiftsToDelete.rows[i].shift_id]);
       }
-      console.log('shifts to delete', shiftsToDelete.rows);
       const getSlotsQuery = `SELECT "lesson"."id" AS "lesson_id",
        "slot"."id" AS "slot_id" FROM "lesson"
       LEFT JOIN "slot" ON "slot"."lesson_id" = "lesson"."id"

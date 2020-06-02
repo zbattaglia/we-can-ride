@@ -17,7 +17,7 @@ function* deleteLesson(action) {
   // action.payload shaped like {session_id: 4, lesson_id: 4}
   const session_id = action.payload.session_id;
   try{
-    yield axios.delete('lesson', {data: action.payload});
+    yield axios.delete('lesson/lesson', {data: action.payload});
     yield put({ type: 'FETCH_SESSION_LESSONS', payload: {session_id}});
   }
   catch (error) {
@@ -40,7 +40,16 @@ function* createLesson(action) {
 }
 function* deleteRole(action) {
   console.log('saga for deleting a role/slot', action.payload);
-  //action.payload is shaped like {slot_id: 38}
+  //action.payload is shaped like {slot_id: 38, session_id: 12}
+  const session_id = action.payload.session_id;
+  try {
+    //go to delete a slot in the lesson
+    yield axios.delete('lesson/slot', {data: action.payload});
+    //send the session id on to the fetch session lessons saga to get the page re rendered
+    yield put({ type: 'FETCH_SESSION_LESSONS', payload: {session_id}});
+  } catch (error) {
+    console.log('error in deleting a slot', error);
+  }
 }
 
 function* shiftSaga() {

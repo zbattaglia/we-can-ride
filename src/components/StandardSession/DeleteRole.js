@@ -53,7 +53,7 @@ class DeleteRole extends Component {
 
  handleClick = () => {
    console.log('slot id of role to remove', this.props.slot_id);
-   this.props.dispatch({type: 'DELETE_ROLE', payload: {slot_id: this.props.slot_id}});
+   this.props.dispatch({type: 'DELETE_ROLE', payload: {slot_id: this.props.slot_id, session_id: this.props.session_id}});
  }
   render() {
     const { classes } = this.props;
