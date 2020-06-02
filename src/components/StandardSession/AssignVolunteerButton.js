@@ -64,11 +64,13 @@ class AssignVolunteerButton extends Component {
   
   handleClickOpen = () => {
     this.setState({ open: true });
+    this.props.dispatch({type: 'FETCH_VOLUNTEERS'}, console.log('Got volunteers:', this.state))
+
   };
 
   handleClose = (blob) => {
     if(blob === 'create'){
-      this.props.dispatch({ type: 'CREATE_VOLUNTEER', payload: {volunteer: this.state.volunteer}});
+      this.props.dispatch({ type: 'ASSIGN_VOLUNTEER', payload: {volunteer: this.state.volunteer}});
     }
     this.setState({ open: false });
   };
@@ -84,20 +86,20 @@ class AssignVolunteerButton extends Component {
    
 return (
   <div>
-    <Button color='secondary' variant='contained' onClick={this.handleClickOpen} >Add A Volunteer</Button>
+    <Button color='secondary' variant='contained' onClick={this.handleClickOpen} >Assign A Volunteer</Button>
     <Dialog
   open={this.state.open}
   onClose={this.handleClose}
-  aria-labelledby="add-volunteer"
+  aria-labelledby="assign-volunteer"
 >
-  <DialogTitle id="add-volunteer">Add A Volunteer</DialogTitle>
+  <DialogTitle id="assign-volunteer">Assign A Volunteer</DialogTitle>
   <DialogContent>
     <DialogContentText>
       Select and assign a volunteer.
     </DialogContentText>
-     {JSON.stringify(this.state)}
-      {/* <Select
-        value={this.state.volunteers}
+     {/* {JSON.stringify(this.props.state.volunteer.volunteer)} */}
+      <Select
+        value={this.state.volunteer}
         onChange={this.handleInputChangeFor('volunteer')}
         inputProps={{
           volunteer: 'volunteer',
@@ -106,10 +108,10 @@ return (
         <MenuItem value="">
           <em>None</em>
         </MenuItem>
-        {weekdays.map( weekday => (
-          <MenuItem value={weekday.sqlDate}>{weekday.day}</MenuItem>
+        {this.props.state.volunteer.volunteer.map( volunteer => (
+          <MenuItem value={volunteer.id}>{volunteer.first_name} {volunteer.last_name}</MenuItem>
         ))}
-      </Select> */}
+      </Select>
 
   </DialogContent>
   <DialogActions>
@@ -117,7 +119,7 @@ return (
       Cancel
     </Button>
     <Button onClick={() => this.handleClose('create')} color="primary">
-      Add Volunteer
+      Assign Volunteer
     </Button>
   </DialogActions>
 </Dialog>
