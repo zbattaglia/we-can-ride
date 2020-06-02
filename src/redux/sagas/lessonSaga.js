@@ -51,11 +51,19 @@ function* deleteRole(action) {
     console.log('error in deleting a slot', error);
   }
 }
+function* getRoles() {
+  console.log('saga for getting the possible roles from the server');
+  //TODO actually get the roles from the server.
+  const response = yield axios.get('lesson/roles');
+  yield console.log('response to getting roles from server', response.data);
+  yield put({ type: 'SET_ROLES', payload: response.data});
+}
 
 function* shiftSaga() {
   yield takeLatest('DELETE_LESSON', deleteLesson);
   yield takeLatest('CREATE_LESSON', createLesson);
   yield takeLatest('DELETE_ROLE', deleteRole);
+  yield takeLatest('GET_ROLES', getRoles)
 };
 
 export default shiftSaga;

@@ -16,6 +16,17 @@ router.get(`/all`, rejectUnauthenticated, (req, res) => {
         res.sendStatus( 500 );
     });
 });
+router.get(`/roles`, rejectUnauthenticated, (req, res) => {
+  console.log('in get roles on server');
+  const queryText = `SELECT * FROM "skill";`;
+  pool.query(queryText).then(response => {
+    res.send(response.rows);
+  }).catch(error => {
+    console.log('error in getting the roles', error);
+    res.sendStatus(500);
+  });
+ 
+});
 
 router.get(`/lessons/:session_id`, rejectUnauthenticated, (req, res) => {
     const sqlText = `SELECT "user"."first_name", "user"."last_name", "start_of_lesson", 
