@@ -63,7 +63,18 @@ function* activateVolunteer(action) {
   catch(error) {
     console.log( 'Error disabling user', error );
   }
+};
+
+function* getUserRoles() {
+  console.log( 'In getUserRoles Saga' );
+try {
+  const response = yield axios.get('/roles');
+  yield put({ type: 'SET_USER_ROLES', payload: response.data });
+
+} catch (error) {
+  console.log('Error in getUserRoles', error);
 }
+};
 
 function* volunteerSaga() {
   yield takeLatest('FETCH_VOLUNTEERS', fetchVolunteer);
@@ -71,6 +82,7 @@ function* volunteerSaga() {
   yield takeLatest('UPDATE_SELECTED_VOLUNTEER', updateSelectedVolunteer);
   yield takeLatest('DISABLE_VOLUNTEER', disableVolunteer);
   yield takeLatest('ACTIVATE_VOLUNTEER', activateVolunteer);
+  yield takeLatest('GET_USER_ROLES', getUserRoles);
 };
 
 export default volunteerSaga;

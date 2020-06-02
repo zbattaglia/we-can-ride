@@ -14,11 +14,10 @@ const volunteerRouter = require('./routes/volunteer.router');
 const shiftRouter = require('./routes/shift.router');
 const sessionRouter = require('./routes/session.router');
 const messageRouter = require('./routes/message.router');
-
 const disableRouter = require('./routes/disable.router');
 const activateRouter = require('./routes/activate.router');
 const lessonRouter = require('./routes/lesson.router');
-
+const rolesRouter = require('./routes/roles.router');
 
 
 // Body parser middleware
@@ -38,11 +37,10 @@ app.use('/volunteer', volunteerRouter);
 app.use('/shift', shiftRouter);
 app.use('/session', sessionRouter);
 app.use('/message', messageRouter);
-
 app.use('/disable', disableRouter);
 app.use('/activate', activateRouter);
 app.use('/lesson', lessonRouter);
-
+app.use('/roles', rolesRouter);
 
 
 // Serve static files
