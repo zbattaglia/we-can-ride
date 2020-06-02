@@ -59,7 +59,7 @@ class PublishSessionButton extends Component {
   handleClose = (blob) => {
     if(blob === 'publish'){
       console.log('publish session!', this.props.session_id);
-      this.props.dispatch({type: 'PUBLISH_SESSION', payload: {lesson_id: this.props.lesson_id, session_id: this.props.session_id, skill_id: this.state.role}});
+      this.props.dispatch({type: 'PUBLISH_SESSION', payload: {session_id: this.props.session_id}});
     
     }
    this.setState({ open: false });
@@ -91,7 +91,7 @@ return (
       Cancel
     </Button>
     <Button onClick={() => this.handleClose('publish')} color="primary">
-      Add Role
+      Publish Session
     </Button>
   </DialogActions>
 </Dialog>

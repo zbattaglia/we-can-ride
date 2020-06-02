@@ -61,4 +61,9 @@ router.post('/new', rejectUnauthenticated, (req, res) => {
   });
 });
 
+router.put('/edit/:session_id', async (req, res, next) => {
+  console.log('in the publish session router', req.params.session_id);
+  res.sendStatus(200);
+})
+
 module.exports = router;
