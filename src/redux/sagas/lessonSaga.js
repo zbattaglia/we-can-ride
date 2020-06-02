@@ -14,7 +14,7 @@ function* fetchSessionLessons(action) {
  */
 function* deleteLesson(action) {
   console.log( 'in delete a lesson by id saga', action.payload);
-  //TODO actually delete the lesson// action.payload shaped like {session_id: 4, lesson_id: 4}
+  // action.payload shaped like {session_id: 4, lesson_id: 4}
   const session_id = action.payload.session_id;
   try{
     yield axios.delete('lesson', {data: action.payload});
@@ -38,20 +38,15 @@ function* createLesson(action) {
       console.log('error in creating a lesson', error);
     }
 }
-/* function* fetchMyShifts(action) {
-  console.log( 'In fetchShift Saga', action.payload );
-try {
-  const response = yield axios.get(`/shift/myshift/${action.payload.user_id}`);
-  yield put({ type: 'SET_MY_SHIFTS', payload: response.data });
-
-} catch (error) {
-  console.log('Error in fetching this users shifts', error);
+function* deleteRole(action) {
+  console.log('saga for deleting a role/slot', action.payload);
+  //action.payload is shaped like {slot_id: 38}
 }
-}; */
 
 function* shiftSaga() {
   yield takeLatest('DELETE_LESSON', deleteLesson);
   yield takeLatest('CREATE_LESSON', createLesson);
+  yield takeLatest('DELETE_ROLE', deleteRole);
 };
 
 export default shiftSaga;
