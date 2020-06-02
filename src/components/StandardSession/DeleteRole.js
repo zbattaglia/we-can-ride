@@ -51,11 +51,14 @@ class DeleteRole extends Component {
    
  }
 
+ handleClick = () => {
+   console.log('slot id of role to remove', this.props.slot_id)
+ }
   render() {
     const { classes } = this.props;
    
 return (
-    <div className={classes.pointer} onClick={() => console.log('slot id of role to remove', this.props.slot_id)}>
+    <div className={classes.pointer} onClick={this.handleClick}>
       <h4>
         X
       </h4>
