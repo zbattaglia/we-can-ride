@@ -30,6 +30,8 @@ input {
   min-width: 100px;
   outline:0;
   cursor: pointer;
+  position: absolute;
+  top: 300px;
 }
 
 .log-in:hover, .log-out:hover, .register:hover {

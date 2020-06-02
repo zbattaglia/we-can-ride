@@ -17,7 +17,9 @@ const messageRouter = require('./routes/message.router');
 const disableRouter = require('./routes/disable.router');
 const activateRouter = require('./routes/activate.router');
 const lessonRouter = require('./routes/lesson.router');
+const passwordRouter = require('./routes/password.router');
 const rolesRouter = require('./routes/roles.router');
+
 
 
 // Body parser middleware
@@ -40,6 +42,7 @@ app.use('/message', messageRouter);
 app.use('/disable', disableRouter);
 app.use('/activate', activateRouter);
 app.use('/lesson', lessonRouter);
+app.use('/resetPassword', passwordRouter);
 app.use('/roles', rolesRouter);
 
 

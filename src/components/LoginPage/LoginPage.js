@@ -45,7 +45,7 @@ class LoginPage extends Component {
           <div>
             <label htmlFor="username">
               Email:
-              <input
+                <input
                 type="text"
                 name="username"
                 value={this.state.username}
@@ -56,7 +56,7 @@ class LoginPage extends Component {
           <div>
             <label htmlFor="password">
               Password:
-              <input
+                <input
                 type="password"
                 name="password"
                 value={this.state.password}
@@ -78,10 +78,10 @@ class LoginPage extends Component {
           <button
             type="button"
             className="link-button"
-            onClick={() => {this.props.dispatch({type: 'SET_TO_REGISTER_MODE'})}}
+            onClick={() => { this.props.dispatch({ type: 'SET_TO_FORGOT_PASSWORD' }) }}
           >
-            Register
-          </button>
+            Forgot Password
+            </button>
         </center>
       </div>
     );

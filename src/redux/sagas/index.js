@@ -7,6 +7,7 @@ import shiftSaga from './shiftSaga';
 import sessionSaga from './sessionSaga';
 import messageSaga from './message';
 import lessonSaga from './lessonSaga';
+import resetPasswordSaga from './resetPasswordSaga'
 
 
 // rootSaga is the primary saga.
@@ -26,5 +27,6 @@ export default function* rootSaga() {
     sessionSaga(),
     messageSaga(),
     lessonSaga(),
+    resetPasswordSaga(),
   ]);
 }
