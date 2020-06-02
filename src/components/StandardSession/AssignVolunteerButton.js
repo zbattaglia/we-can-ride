@@ -97,7 +97,6 @@ return (
     <DialogContentText>
       Select and assign a volunteer.
     </DialogContentText>
-     {/* {JSON.stringify(this.props.state.volunteer.volunteer)} */}
       <Select
         value={this.state.volunteer}
         onChange={this.handleInputChangeFor('volunteer')}
