@@ -14,9 +14,16 @@ function* fetchSessionLessons(action) {
  */
 function* deleteLesson(action) {
   console.log( 'in delete a lesson by id saga', action.payload);
-  //TODO actually delete the lesson
-
-  // actually needs to fetch lessons based on session_id yield put({ type: 'FETCH_SESSION_LESSONS', payload: {session_id: action.payload.session.id}});
+  // action.payload shaped like {session_id: 4, lesson_id: 4}
+  const session_id = action.payload.session_id;
+  try{
+    yield axios.delete('lesson/lesson', {data: action.payload});
+    yield put({ type: 'FETCH_SESSION_LESSONS', payload: {session_id}});
+  }
+  catch (error) {
+    console.log('error in deleting a lesson', error);
+  }
+  
 }
 
 function* createLesson(action) {
@@ -31,20 +38,45 @@ function* createLesson(action) {
       console.log('error in creating a lesson', error);
     }
 }
-/* function* fetchMyShifts(action) {
-  console.log( 'In fetchShift Saga', action.payload );
-try {
-  const response = yield axios.get(`/shift/myshift/${action.payload.user_id}`);
-  yield put({ type: 'SET_MY_SHIFTS', payload: response.data });
-
-} catch (error) {
-  console.log('Error in fetching this users shifts', error);
+function* deleteRole(action) {
+  console.log('saga for deleting a role/slot', action.payload);
+  //action.payload is shaped like {slot_id: 38, session_id: 12}
+  const session_id = action.payload.session_id;
+  try {
+    //go to delete a slot in the lesson
+    yield axios.delete('lesson/slot', {data: action.payload});
+    //send the session id on to the fetch session lessons saga to get the page re rendered
+    yield put({ type: 'FETCH_SESSION_LESSONS', payload: {session_id}});
+  } catch (error) {
+    console.log('error in deleting a slot', error);
+  }
 }
-}; */
+function* getRoles() {
+  console.log('saga for getting the possible roles from the server');
+  //TODO actually get the roles from the server.
+  const response = yield axios.get('lesson/roles');
+  yield console.log('response to getting roles from server', response.data);
+  yield put({ type: 'SET_ROLES', payload: response.data});
+}
+
+function* addRole(action) {
+  // action.payload look like this: {lesson_id: 35, session_id:6, skill_id:3}
+  const session_id = action.payload.session_id;
+  try{
+    yield axios.post('lesson/roles', action.payload);
+    yield put({ type: 'FETCH_SESSION_LESSONS', payload: {session_id}});
+  }
+  catch (error) { 
+    console.log('error in adding a role to the lesson saga', error);
+  }
+}
 
 function* shiftSaga() {
   yield takeLatest('DELETE_LESSON', deleteLesson);
   yield takeLatest('CREATE_LESSON', createLesson);
+  yield takeLatest('DELETE_ROLE', deleteRole);
+  yield takeLatest('GET_ROLES', getRoles);
+  yield takeLatest('ADD_ROLE_TO_LESSON', addRole);
 };
 
 export default shiftSaga;

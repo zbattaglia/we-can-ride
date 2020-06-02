@@ -34,7 +34,10 @@ const styles = theme => ({
     padding: theme.spacing(2),
     color: theme.palette.text.secondary,
     display: 'inline-block'
-  }
+  },
+  pointer: {
+    cursor: 'default'
+  },
 });
 
 
@@ -48,11 +51,15 @@ class DeleteRole extends Component {
    
  }
 
+ handleClick = () => {
+   console.log('slot id of role to remove', this.props.slot_id);
+   this.props.dispatch({type: 'DELETE_ROLE', payload: {slot_id: this.props.slot_id, session_id: this.props.session_id}});
+ }
   render() {
     const { classes } = this.props;
    
 return (
-    <div onClick={() => console.log('slot id of role to remove', this.props.slot_id)}>
+    <div className={classes.pointer} onClick={this.handleClick}>
       <h4>
         X
       </h4>
