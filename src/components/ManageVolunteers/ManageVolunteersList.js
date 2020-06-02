@@ -75,6 +75,11 @@ class ManageVolunteersList extends Component {
         this.setState({ name: event.target.value });
     };
 
+    componentDidMount () {
+        this.props.dispatch ({ type: "GET_USER_ROLES"})
+      }
+      
+
     handleChangeMultiple = event => {
         const { options } = event.target;
         const value = [];
@@ -123,7 +128,7 @@ class ManageVolunteersList extends Component {
                             {volunteer.total_hours && volunteer.total_hours.hours}
                         </CustomTableCell>
                         <CustomTableCell>
-                            <RoleDropdown/>
+                            <RoleDropdown user_id={volunteer.id}/>
                         </CustomTableCell>
                         <CustomTableCell>
                             {volunteer.disable?

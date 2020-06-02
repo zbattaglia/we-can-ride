@@ -17,8 +17,19 @@ const volunteer = (state = [], action) => {
         return state;
     }
   };
+
+  const userRoles = (state = [], action ) => {
+    console.log('userRoles', action.payload)
+    switch ( action.type ) {
+      case 'SET_USER_ROLES':
+        return action.payload;
+      default:
+        return state;
+    }
+  };
   
   export default combineReducers({
     volunteer,
     selectedVolunteer,
+    userRoles,
   });

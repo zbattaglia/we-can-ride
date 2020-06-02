@@ -146,7 +146,9 @@ class StandardSession extends Component {
           direction='row'
           justify='flex-start'
           alignItems='stretch'
-          style={{minHeight: '100vh'}}
+          style={{minHeight: '100vh'
+        }}
+          
         >
           <Grid item xs={12} className={classes.day}>
             {/**here we make the weekdays */}

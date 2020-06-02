@@ -49,27 +49,19 @@ const styles = theme => ({
     'leader',
     'barn aid',
     'feeder',
-  ];
-  
-  function getStyles(name, that) {
-    return {
-      fontWeight:
-        that.state.name.indexOf(name) === -1
-          ? that.props.theme.typography.fontWeightRegular
-          : that.props.theme.typography.fontWeightMedium,
-    };
-  }
-  
-
-
+  ];  
 
   class RoleDropdown extends React.Component {
     state = {
         name: [],
       };
     
+      
+
+
       handleChange = event => {
         this.setState({ name: event.target.value });
+        console.log('In handleChange', event.target.value);
       };
     
       handleChangeMultiple = event => {
@@ -87,7 +79,6 @@ const styles = theme => ({
     
       render() {
         const { classes } = this.props;
-    
         return (
           <div className={classes.root}>
             <FormControl className={classes.formControl}>
@@ -100,11 +91,16 @@ const styles = theme => ({
             renderValue={selected => selected.join(', ')}
             MenuProps={MenuProps}
           >
-            {names.map(name => (
-              <MenuItem key={name} value={name}>
-                <Checkbox checked={this.state.name.indexOf(name) > -1} />
-                <ListItemText primary={name} />
-              </MenuItem>
+            {this.props.state.volunteer.userRoles.map(name => (
+              <>
+              {(this.props.user_id === name.user_id) && 
+                            <MenuItem key={name.id} value={name.title}>
+                            <Checkbox checked={this.state.name.indexOf(name.title) > -1} />
+                            <ListItemText primary={name.title} />
+                          </MenuItem> }
+ 
+              </>
+              
             ))}
           </Select>
         </FormControl>
