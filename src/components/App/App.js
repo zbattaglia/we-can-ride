@@ -27,6 +27,7 @@ import StandardSession from '../StandardSession/StandardSession';
 import SubPage from '../SubPage/SubPage';
 import Schedule from '../Schedule/Schedule';
 import EditVolunteer from '../ManageVolunteers/EditVolunteer';
+import ResetPasswordPage from '../ResetPasswordPage/ResetPasswordPage';
 
 import './App.css';
 
@@ -118,6 +119,13 @@ class App extends Component {
                 exact
                 path="/schedule"
                 component={Schedule}
+              />
+              {/* We do not want this route to be protected because it will be verified with web token
+              It also should not be on an exact path because the token will be in the URL paramaters
+              */}
+              <Route
+                path="/reset/:id/:token"
+                component={ResetPasswordPage}
               />
               {/* If none of the other routes matched, we will show a 404. */}
               <Route render={() => <h1>404</h1>} />
