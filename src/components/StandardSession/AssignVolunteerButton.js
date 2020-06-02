@@ -70,11 +70,11 @@ class AssignVolunteerButton extends Component {
 
   handleClose = (blob) => {
     if(blob === 'create'){
-      
+
       // console.log(`Sending assigned volunteer with session id: ${this.props.session_id}, slot id: ${this.props.slot_id}, user id: ${this.state.volunteer}`);
       this.props.dispatch({ type: 'ASSIGN_VOLUNTEER', 
-                            payload: {volunteer: this.state.volunteer, 
-                                      session: this.props.session_id,
+                            payload: {volunteer_id: this.state.volunteer, 
+                                      session_id: this.props.session_id,
                                       slot_id: this.props.slot_id}});
 
 

@@ -76,13 +76,13 @@ function* assignVolunteer(action) {
   // action.payload look like this: {volunteer: 1, session: 1, slot_id: 2}
   const session_id = action.payload.session_id;
   const slot_id = action.payload.slot_id;
-  const user_id = action.payload
+  const user_id = action.payload.volunteer_id
   try{
     yield axios.post('lesson/assign', action.payload);
     yield put({ type: 'FETCH_SESSION_LESSONS', payload: {session_id}});
   }
   catch (error) { 
-    console.log('error in adding a role to the lesson saga', error);
+    console.log('error in assigning volunteer', error);
   }
 };
 
