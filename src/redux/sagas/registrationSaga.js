@@ -22,8 +22,28 @@ function* registerUser(action) {
   }
 }
 
+function* sendRegistrationLink(action) {
+  console.log( 'In sendRegistrationLink saga', action );
+  yield axios.post( `/api/user/register/new`, { email: action.payload } );
+}
+
+// saga will fire on decode registration action
+function* decodeRegistrationToken(action) {
+  // console.log( 'In decodeRegistrationToken saga', action );
+  try {
+  const response = yield axios.get( `/api/user/register/${action.payload}`)
+  console.log( 'got response in decode registration saga', response.data );
+  yield put( { type: 'SET_TO_REGISTER_MODE' } );
+  }
+  catch( error ) {
+    console.log( 'Error decoding Token ', error );
+  }
+}
+
 function* registrationSaga() {
   yield takeLatest('REGISTER', registerUser);
+  yield takeLatest('SEND_REGISTRATION', sendRegistrationLink );
+  yield takeLatest('DECODE_REGISTRATION_TOKEN', decodeRegistrationToken);
 }
 
 export default registrationSaga;

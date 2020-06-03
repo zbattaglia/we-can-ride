@@ -4,6 +4,10 @@ const encryptLib = require('../modules/encryption');
 const pool = require('../modules/pool');
 const userStrategy = require('../strategies/user.strategy');
 
+const createRegistrationToken = require('../modules/createRegistrationToken');
+const sendRegistrationLink = require('../modules/registrationLinkEmailer');
+const decodeRegistrationToken = require('../modules/decodeRegistrationToken');
+
 const router = express.Router();
 
 // Handles Ajax request for user information if user is authenticated
@@ -12,8 +16,20 @@ router.get('/', rejectUnauthenticated, (req, res) => {
   res.send(req.user);
 });
 
-//TODO GET ROUTE AND make sure the server is getting monday morning, monday evening, etc.
-
+router.get('/register/:token', async (req, res) => {
+  // get token from req.params
+  const token = req.params.token;
+  console.log( 'got a token on server', token );
+  try {
+    if( decodeRegistrationToken( token ) ) {
+      res.sendStatus( 200 );
+    }
+  }
+  catch(error) {
+    console.log( 'Error decoding token', error );
+    res.sendStatus( 500 );
+  }
+})
 
 // Handles POST request with new user information and availability with encrypted password
 router.post('/register', async (req, res, next) => {  
@@ -82,5 +98,22 @@ router.post('/logout', (req, res) => {
   req.logout();
   res.sendStatus(200);
 });
+
+router.post('/register/new', async (req, res) => {
+  // get email from req.body
+  const email = req.body.email;
+  console.log( 'sending link to new email', email );
+
+  try {
+    const token = await createRegistrationToken();
+    console.log( 'Got registration token on user router', token );
+    await sendRegistrationLink( { email, token } );
+    res.sendStatus( 200 );
+  }
+  catch(error) {
+    console.log( 'Error sending registration link', error );
+    res.sendStatus( 500 );
+  }
+})
 
 module.exports = router;

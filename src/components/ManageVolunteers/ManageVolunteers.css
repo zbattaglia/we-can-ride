@@ -22,3 +22,7 @@
     width: 20%;
 }
 
+#registration-content {
+    width: 40%;
+    padding: .5rem;
+}

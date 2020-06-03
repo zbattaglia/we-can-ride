@@ -10,6 +10,7 @@ import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
 import './ManageVolunteers.css';
 import ManageVolunteersList from './ManageVolunteersList';
+import SendRegistration from './SendRegistration';
 
 const CustomTableCell = withStyles(theme => ({
   head: {
@@ -49,6 +50,9 @@ class ManageVolunteers extends Component {
     return (
       <>
         <h2 id="managevolunteers-title">Manage Volunteers</h2>
+        <Paper className={classes.root} id="registration-content">
+          <SendRegistration />
+        </Paper>
         <Paper className={classes.root}>
           <Table className={classes.table}>
             <TableHead>
