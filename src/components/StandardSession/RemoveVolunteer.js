@@ -54,7 +54,7 @@ const styles = theme => ({
 
 //TODO use button to open a modal to create a new session
 
-class AssignVolunteerButton extends Component {
+class RemoveVolunteer extends Component {
     
   state = {
     open: false,
@@ -93,48 +93,51 @@ class AssignVolunteerButton extends Component {
    
 return (
   <div>
-    <Button color='secondary' variant='contained' onClick={this.handleClickOpen} >{this.props.name}</Button>
-    <Dialog
-  open={this.state.open}
-  onClose={this.handleClose}
-  aria-labelledby="assign-volunteer"
->
-<DialogTitle id="assign-volunteer">{this.props.name}</DialogTitle>
-  <DialogContent>
-    <DialogContentText>
-      Choose which volunteer will be taking this role.
-    </DialogContentText>
-      <Select
-        value={this.state.volunteer}
-        onChange={this.handleInputChangeFor('volunteer')}
-        inputProps={{
-          volunteer: 'volunteer',
-        }}
-      >
-        <MenuItem value="">
-          <em>None</em>
-        </MenuItem>
-        {this.props.state.volunteer.volunteer.map( volunteer => (
-          <MenuItem value={volunteer.id}>{volunteer.first_name} {volunteer.last_name}</MenuItem>
-        ))}
-      </Select>
+    <Button color='secondary' variant='contained' onClick={this.handleClickOpen} >Remove Volunteer</Button>
+          <Dialog
+          open={this.state.open}
+          onClose={this.handleClose}
+          aria-labelledby="assign-volunteer"
+        >
+          <DialogTitle id="assign-volunteer">Reassign A Volunteer</DialogTitle>
+          <DialogContent>
+            <DialogContentText>
+              Remove the volunteer from this position, and if you want, replace the volunteer with someone else.
+              {JSON.stringify(this.state)}
+            </DialogContentText>
+              <Select
+                value={this.state.volunteer}
+                onChange={this.handleInputChangeFor('volunteer')}
+                inputProps={{
+                  volunteer: 'volunteer',
+                }}
+              >
+                <MenuItem value="">
+                  <em>No One</em>
+                </MenuItem>
+                {this.props.state.volunteer.volunteer.map( volunteer => (
+                  <MenuItem value={volunteer.id}>{volunteer.first_name} {volunteer.last_name}</MenuItem>
+                ))}
+              </Select>
+        
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={this.handleClose} color="primary">
+              Cancel
+            </Button>
+            <Button onClick={() => this.handleClose('create')} color="primary">
+              Assign Volunteer
+            </Button>
+          </DialogActions>
+        </Dialog>
 
-  </DialogContent>
-  <DialogActions>
-    <Button onClick={this.handleClose} color="primary">
-      Cancel
-    </Button>
-    <Button onClick={() => this.handleClose('create')} color="primary">
-      Assign Volunteer
-    </Button>
-  </DialogActions>
-</Dialog>
+      }     
   </div>
     )
   }
 }
 
-AssignVolunteerButton.propTypes = {
+RemoveVolunteer.propTypes = {
   classes: PropTypes.object.isRequired,
 };
 
@@ -142,4 +145,4 @@ const mapStateToProps = state => ({
     state
   });
 
-export default withStyles(styles)(connect(mapStateToProps)(AssignVolunteerButton));
+export default withStyles(styles)(connect(mapStateToProps)(RemoveVolunteer));
