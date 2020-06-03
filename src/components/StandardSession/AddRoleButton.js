@@ -84,9 +84,9 @@ return (
   <Dialog
   open={this.state.open}
   onClose={this.handleClose}
-  aria-labelledby="form-dialog-title"
+  aria-labelledby="add-role"
 >
-  <DialogTitle id="form-dialog-title">Add Role</DialogTitle>
+  <DialogTitle id="add-role">Add Role</DialogTitle>
   <DialogContent>
     <DialogContentText>
      Choose a job title to add to this lesson

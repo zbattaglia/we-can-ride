@@ -16,7 +16,12 @@ function* createSession(action) {
   yield axios.post('session/new', action.payload);
   yield put({type: 'FETCH_SESSIONS'});
 }
-
+function* publishSession(action) {
+  //action.payload looks like {session_id: 6}
+  console.log('publish session', action.payload);
+  //send the session Id to the server and 
+  yield axios.put(`/session/edit/${action.payload.session_id}`);
+}
 function* fetchSessionLessons(action) {
 try {
   const response = yield axios.get(`/session/lessons/${action.payload.session_id}`);
@@ -70,6 +75,7 @@ function* shiftSaga() {
   yield takeLatest('FETCH_SESSIONS', fetchSessions);
   yield takeLatest('FETCH_SESSION_LESSONS', fetchSessionLessons);
   yield takeLatest('CREATE_SESSION', createSession);
+  yield takeLatest('PUBLISH_SESSION', publishSession);
 
 };
 
