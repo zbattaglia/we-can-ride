@@ -19,8 +19,10 @@ function* createSession(action) {
 function* publishSession(action) {
   //action.payload looks like {session_id: 6}
   console.log('publish session', action.payload);
-  //send the session Id to the server and 
+  //send the session Id to the server and create a bunch of shifts
   yield axios.put(`/session/edit/${action.payload.session_id}`);
+  yield put({ type: 'FETCH_SESSION_LESSONS', payload: action.payload});
+
 }
 function* fetchSessionLessons(action) {
 try {
