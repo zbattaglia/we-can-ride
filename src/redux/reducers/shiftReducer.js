@@ -1,13 +1,13 @@
 import { combineReducers } from 'redux';
 
 const fourWeeksShifts = (state = [], action) => {
-    switch (action.type) {
-      case 'SET_FOUR_WEEKS_SHIFTS':
-        return action.payload;
-      default:
-        return state;
-    }
-  };
+  switch (action.type) {
+    case 'SET_FOUR_WEEKS_SHIFTS':
+      return action.payload;
+    default:
+      return state;
+  }
+};
 const myShifts = (state = [], action) => {
   switch (action.type) {
     case 'SET_MY_SHIFTS':
@@ -15,8 +15,19 @@ const myShifts = (state = [], action) => {
     default:
       return state;
   }
-};  
-  export default combineReducers({
-    fourWeeksShifts,
-    myShifts
-  });
+};
+
+const allShifts = (state = [], action) => {
+  switch (action.type) {
+    case 'SET_ALL_SHIFTS':
+      return action.payload;
+    default:
+      return state;
+  }
+};
+
+export default combineReducers({
+  fourWeeksShifts,
+  myShifts,
+  allShifts,
+});

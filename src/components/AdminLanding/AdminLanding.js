@@ -4,69 +4,29 @@ import dayGridPlugin from '@fullcalendar/daygrid'
 import timeGridPlugin from '@fullcalendar/timegrid'
 import interactionPlugin from '@fullcalendar/interaction' // needed for dayClick
 import listPlugin from '@fullcalendar/list';
+import { connect } from 'react-redux';
 
 import './AdminLanding.css'
 
-export default class AdminLanding extends React.Component {
+class AdminLanding extends React.Component {
 
   calendarComponentRef = React.createRef()
   state = {
     calendarWeekends: true,
     calendarEvents: {
-      events: [ // initial event data
-      { title: 'LEADER: Mary M. WALKERS: Rina W. - Kris Z.', start: '2020-05-25T10:00:00', color: 'red' },
-      { title: 'Your Shift', start: '2020-05-25T11:00:00' },
-      { title: 'Your Shift', start: '2020-05-25T12:30:00' },
-      { title: 'Your Shift', start: '2020-05-25T13:30:00' },
-      { title: 'Your Shift', start: '2020-05-25T14:45:00', color: 'red' },
-      { title: 'Your Shift', start: '2020-05-25T17:00:00' },
-      { title: 'Your Shift', start: '2020-05-25T18:15:00' },
-      { title: 'Your Shift', start: '2020-05-25T19:15:00', color: 'red' },
-      { title: 'Your Shift', start: '2020-05-25T20:15:00' },
-
-      { title: 'Your Shift', start: '2020-05-26T10:00:00' },
-      { title: 'Your Shift', start: '2020-05-26T11:00:00' },
-      { title: 'Your Shift', start: '2020-05-26T12:30:00', color: 'red' },
-      { title: 'Your Shift', start: '2020-05-26T13:30:00' },
-      { title: 'Your Shift', start: '2020-05-26T14:45:00' },
-      { title: 'Your Shift', start: '2020-05-26T17:00:00', color: 'red' },
-      { title: 'Your Shift', start: '2020-05-26T18:15:00' },
-      { title: 'Your Shift', start: '2020-05-26T19:15:00' },
-      { title: 'Your Shift', start: '2020-05-26T20:15:00' },
-
-      { title: 'Your Shift', start: '2020-05-27T10:00:00' },
-      { title: 'Your Shift', start: '2020-05-27T11:00:00' },
-      { title: 'Your Shift', start: '2020-05-27T12:30:00' },
-      { title: 'Your Shift', start: '2020-05-27T13:30:00' },
-      { title: 'Your Shift', start: '2020-05-27T14:45:00' },
-      { title: 'Your Shift', start: '2020-05-27T17:00:00' },
-      { title: 'Your Shift', start: '2020-05-27T18:15:00' },
-      { title: 'Your Shift', start: '2020-05-27T19:15:00' },
-      { title: 'Your Shift', start: '2020-05-27T20:15:00' },
-
-      { title: 'Your Shift', start: '2020-05-28T10:00:00' },
-      { title: 'Your Shift', start: '2020-05-28T11:00:00' },
-      { title: 'Your Shift', start: '2020-05-28T12:30:00' },
-      { title: 'Your Shift', start: '2020-05-28T13:30:00' },
-      { title: 'Your Shift', start: '2020-05-28T14:45:00' },
-      { title: 'Your Shift', start: '2020-05-28T17:00:00', color: 'red' },
-      { title: 'Your Shift', start: '2020-05-28T18:15:00' },
-      { title: 'Your Shift', start: '2020-05-28T19:15:00' },
-      { title: 'Your Shift', start: '2020-05-28T20:15:00', color: 'red' },
-
-      { title: 'Your Shift', start: '2020-05-29T10:00:00' },
-      { title: 'Your Shift', start: '2020-05-29T11:00:00' },
-      { title: 'Your Shift', start: '2020-05-29T12:30:00' },
-      { title: 'Your Shift', start: '2020-05-29T13:30:00' },
-      { title: 'Your Shift', start: '2020-05-29T14:45:00' },
-      { title: 'Your Shift', start: '2020-05-29T17:00:00' },
-      { title: 'Your Shift', start: '2020-05-29T18:15:00', color: 'red' },
-      { title: 'Your Shift', start: '2020-05-29T19:15:00' },
-      { title: 'Your Shift', start: '2020-05-29T20:15:00' },
-      ],
+      events: [],
       color: 'green',
       textColor: 'white',
     },
+  }
+
+  componentDidMount(){
+    this.props.dispatch({type: 'FETCH_ALL_SHIFTS'});
+    this.setState({
+      calendarEvents: {
+        events: this.eventConstructor(this.props.allShifts),
+      }
+    });
   }
 
   render() {
@@ -74,7 +34,8 @@ export default class AdminLanding extends React.Component {
       <div className='demo-app'>
         <div className='demo-app-top'>
           <button onClick={ this.toggleWeekends }>toggle weekends</button>&nbsp;
-          <button onClick={ this.gotoPast }>go to a date in the past</button>&nbsp;
+          <button onClick={ this.gotoPast }>Test</button>&nbsp;
+          {JSON.stringify(this.props.allShifts)}
         </div>
         <div className='demo-app-calendar'>
           <FullCalendar
@@ -124,4 +85,25 @@ export default class AdminLanding extends React.Component {
     console.log('Clicked on', info.event);
   }
 
+  eventConstructor = (eventsArray) => {
+    let parsedEvents = [];
+    for(let event of eventsArray){
+      if(event.assigned_user === null || event.user_wants_to_trade){
+        let obj = {title: 'Open spot(s)', start:event.date, color: 'red'}
+        parsedEvents.push(obj);
+      }
+      else{
+        let obj = {title: event.assigned_user, start:event.date}
+        parsedEvents.push(obj);
+      }
+    }
+    return parsedEvents;
+  }
+
 }
+
+const mapStateToProps = state => ({
+  allShifts: state.shift.allShifts,
+});
+
+export default connect(mapStateToProps)(AdminLanding);
