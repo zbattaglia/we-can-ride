@@ -43,6 +43,18 @@ router.get('/fourweeks', rejectUnauthenticated, (req, res) => {
         })
 });
 
+router.get(`/all`, rejectUnauthenticated, (req, res) => {
+    const sqlText = `SELECT * FROM "shift";`;
+    pool.query(sqlText)
+    .then( (response) => {
+        res.send( response.rows );
+    })
+    .catch( (error) => {
+        console.log( 'Error getting all shifts', error );
+        res.sendStatus( 500 );
+    });
+});
+
 /**
  * POST route template
  */
