@@ -35,10 +35,14 @@ const styles = theme => ({
   selectEmpty: {
     marginTop: theme.spacing(2),
   },
-  slot: {
+  lesson: {
     margin: theme.spacing(1),
     backgroundColor: theme.palette.primary.light, 
     width: '200px'
+  },
+  slot: {
+    margin: theme.spacing(1),
+    backgroundColor: '#EEEEEE',
   },
   paper: {
     padding: theme.spacing(2),
@@ -47,6 +51,11 @@ const styles = theme => ({
   },
   day: {
     color: theme.palette.secondary,
+  },
+  deleteX: {
+    color: theme.palette.text.secondary,
+    display: 'inline-block',
+    alignItems: 'right',
   }
 });
 
@@ -103,15 +112,19 @@ class StandardSession extends Component {
     return (
       <>
         <h1>Standard Session</h1>
+        {JSON.stringify(this.state)}
+        {JSON.stringify(this.props.state.user)}
         <Grid container>
           <Grid item>
-            {/**this is the button to add new lessons, visible when the session isn't published */}
-            {this.state.session.ready_to_publish === true
-            ?
-            <div>can't add lessons to a published session right now</div>
-            :  
-            <AddLessonButton session_id={this.state.session.id}/>
-            }
+            {/**this is the button to add new lessons, visible when the session isn't published, also not
+             * visible to non admins
+             */}
+             {(this.props.state.user.type_of_user === 'admin') 
+              &&
+              (this.state.session.ready_to_publish === false)
+              &&
+              <AddLessonButton session_id={this.state.session.id}/>
+             }
           </Grid>
           <Grid item>
             {/**here's the place to select a session from all the sessions in the database */}
@@ -134,12 +147,16 @@ class StandardSession extends Component {
           </Grid>
           <Grid item>
             {/**here's the button to create a new session */}
+            {(this.props.state.user.type_of_user === 'admin') && 
             <CreateSessionButton/>
+            }
+
           </Grid>
         </Grid>
         
-
-        This is a {this.state.session.length_in_weeks && this.state.session.length_in_weeks.days} day long session
+            {this.state.session.length_in_weeks 
+            &&
+            <>This is a {this.state.session.length_in_weeks.days/7} week long session</>}
         <Grid 
           container
           className={classes.root}
@@ -160,36 +177,68 @@ class StandardSession extends Component {
                 {this.props.state.session.slots.lessons && this.props.state.session.slots.lessons.map( lesson => (
                   <>
                   {(lesson.weekday === day.number) && 
-                  <Box className={classes.slot} key={lesson.id}>
+                  <Box className={classes.lesson} key={lesson.id}>
                     <Box>
                       {lesson.start_of_lesson} - {lesson.end_of_lesson}
                       {/**here's where we get the information about each lesson */}
                       {day.reducer && day.reducer.map( slot => (
                         <>
                         {(slot.lesson_id === lesson.lesson_id) &&
-                        <Box id={slot.lesson_id}>
-                          {slot.title}:
+                        <Box id={slot.lesson_id} className={classes.slot}>
+                          <Box>
+                          <Grid container
+                            direction="row"
+                            justify="flex-start"
+                            alignItems="flex-start"
+                            spacing={24}
+                          >
+
+                            <Grid item xs>
+                            {slot.title}:
+                            </Grid>
+                            <Grid justify='right' item s>
+                            {(this.props.state.user.type_of_user === 'admin')
+                            &&
+                            (this.state.session.ready_to_publish === false)
+                            &&
+                            <DeleteRole session_id={this.state.session.id} slot_id={slot.slot_id}/>
+                            }
+                            </Grid>
+                          </Grid>
+
+
+                          </Box>
                           {slot.expected_user == null
                           ?
                           <Box>
-
+                            {(this.props.state.user.type_of_user === 'admin')
+                            &&
+                            (this.state.session.ready_to_publish === false)
+                            &&
                             <AssignVolunteerButton session_id={this.state.session.id} slot_id={slot.slot_id}/>
-                            <DeleteRole session_id={this.state.session.id} slot_id={slot.slot_id}/>
+                            
+                            }
                           </Box>
                           :
                           <Box id={slot.expected_user}>
                             {slot.first_name} {slot.last_name}
-                            <DeleteRole slot_id={slot.slot_id}/>
+                            {/** TODO here's where to put the remove/replace volunteer component */}
                            </Box>
                           }
                         </Box>
                         }
                         </>
                       ))}
+                      {(this.props.state.user.type_of_user === 'admin')
+                      &&
+                      (this.state.session.ready_to_publish === false)
+                      &&
+                      <>
                       {/**here's the button to add a role */}
                       <AddRoleButton lesson_id={lesson.lesson_id} session_id={this.state.session.id}/>
                       {/**here's the button to delete a lesson */}
                       <DeleteLessonButton lesson_id={lesson.lesson_id} session_id={this.state.session.id} />
+                      </>}
                     </Box>
                   </Box>}
                   </>
