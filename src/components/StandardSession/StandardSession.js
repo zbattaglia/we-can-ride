@@ -16,11 +16,10 @@ import AddLessonButton from './AddLessonButton';
 import AssignVolunteerButton from './AssignVolunteerButton';
 import AddRoleButton from './AddRoleButton';
 import DeleteLessonButton from './DeleteLessonButton';
-import PublishSesssionButton from './PublishSessionButton';
-
-
+import RemoveVolunteer from './RemoveVolunteer';
 import DeleteRole from './DeleteRole';
 import PublishSessionButton from './PublishSessionButton';
+
 
 const styles = theme => ({
   root: {
@@ -215,15 +214,21 @@ class StandardSession extends Component {
                             &&
                             (this.state.session.ready_to_publish === false)
                             &&
-                            <AssignVolunteerButton session_id={this.state.session.id} slot_id={slot.slot_id}/>
+                            <AssignVolunteerButton  name='Assign A Volunteer' session_id={this.state.session.id} slot_id={slot.slot_id}/>
                             
                             }
                           </Box>
                           :
                           <Box id={slot.expected_user}>
                             {slot.first_name} {slot.last_name}
-                            {/** TODO here's where to put the remove/replace volunteer component */}
-                           </Box>
+                            {(this.props.state.user.type_of_user === 'admin')
+                            &&
+                            (this.state.session.ready_to_publish === false)
+                            &&
+                            <AssignVolunteerButton  name='Remove A Volunteer' session_id={this.state.session.id} slot_id={slot.slot_id}/>
+                            
+                            }
+                          </Box>
                           }
                         </Box>
                         }
