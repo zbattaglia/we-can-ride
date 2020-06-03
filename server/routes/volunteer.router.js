@@ -64,14 +64,21 @@ router.put( '/:selectedId', rejectUnauthenticated, async(req, res) => {
     const email = req.body.email;
     const birthday = req.body.birthday;
     const time_available = [];
+    const userskills = [];
     // loop over the req.body and create an array of avalabilities to insert in database.
     for ( let availability in req.body ) {
         if( req.body[ availability ] === true ) {
             time_available.push( availability );
         }
     }
+    for ( let skills in req.body ) {
+        if( req.body[ skills ] === true ) {
+            userskills.push( skills );
+        }
+    }
     console.log( `Updating user with id ${req.params.selectedId}`, id, first_name, last_name, phone, email, birthday );
     console.log( 'Updating selected user on server', req.body, time_available );
+    console.log('updating skills', userskills);
     const connection = await pool.connect();
 
     try {

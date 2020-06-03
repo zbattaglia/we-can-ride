@@ -1,3 +1,5 @@
+//TODO fix query
+
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
 
@@ -77,6 +79,10 @@ class EditVolunteer extends Component {
     pmFriday: '',
     amSaturday: '',
     pmSaturday: '',
+    sidewalker: '',
+    leader: '',
+    barn_aid: '',
+    feeder: '',
   }
 
   // detects a change on an input field and updates the state accordingly
@@ -105,6 +111,9 @@ class EditVolunteer extends Component {
       let newState = {};
       for ( let userAvailability of this.props.state.volunteer.selectedVolunteer.availability ) {
         newState[userAvailability] = true;
+      }
+      for ( let userSkill of this.props.state.volunteer.selectedVolunteer.skill ) {
+        newState[userSkill] = true;
       }
       this.setState({
         ...this.state,
@@ -174,6 +183,56 @@ class EditVolunteer extends Component {
           </div>
           </form>
           {/* TABLE BELOW */}
+          
+          <Table  className={classes.table}>
+              <TableHead>
+                <TableRow>
+                  <TableCell className={classes.tableTitle} colSpan={7}>
+                    Edit Role
+                  </TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                  <TableRow>
+                    <TableCell>
+                    Sidewalker
+                        <Checkbox
+                          checked={this.state.sidewalker}
+                          onChange={this.handleCheckboxChangeFor( 'sidewalker')}
+                          value="sidewalker"
+                        />
+                      
+                    </TableCell>
+                    <TableCell>
+                    Leader
+                        <Checkbox
+                          checked={this.state.leader}
+                          onChange={this.handleCheckboxChangeFor('leader')}
+                          value="leader"
+                        />
+                      
+                    </TableCell>
+                    <TableCell>
+                    Barn aid
+                        <Checkbox
+                          checked={this.state.barn_aid}
+                          onChange={this.handleCheckboxChangeFor('barn_aid')}
+                          value="barn_aid"
+                        />
+                      
+                    </TableCell>
+                    <TableCell>
+                    Feeder
+                        <Checkbox
+                          checked={this.state.feeder}
+                          onChange={this.handleCheckboxChangeFor('feeder')}
+                          value="feeder"
+                        />
+                      
+                    </TableCell>
+                  </TableRow>
+              </TableBody>
+            </Table>
             <Table  className={classes.table}>
               <TableHead>
                 <TableRow>
