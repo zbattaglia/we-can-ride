@@ -1,13 +1,11 @@
 // module to send email links protected with web token's
 const nodemailer = require('nodemailer');
 
-module.exports = sendEmailLink = ( emailInfo) => {
+module.exports = sendRegistraionLink = ( emailInfo) => {
     // get email parameters from emailInfo
     const toAddress = emailInfo.email;
-    const recipient = emailInfo.name;
-    const id = emailInfo.id;
-    const token = emailInfo.newToken;
-    console.log( `Sending email to user ${recipient}, id = ${id}, at email address ${toAddress} with token ${token}` );
+    const token = emailInfo.token;
+    console.log( `Sending email to user ${toAddress} with token ${token}` );
 
 
     // transporter designates the email service for the We Can Ride account
@@ -25,13 +23,12 @@ module.exports = sendEmailLink = ( emailInfo) => {
     const mailOptions = {
         from: `${process.env.EMAIL}`,
         to: `${toAddress}`,
-        subject: `You got a message`,
-        html: `<p>Hi ${recipient}, You are receiving this email because a request was made to reset your volunteer
-                account password with We Can Ride. To reset your password click the link below.</p> <br />
-                <a href="http://localhost:3000/#/reset/${id}/${token}">RESET PASSWORD</a><br />
-                <p>If you still have trouble with your account pleaser contact the volunteer coordinator.<br />
-                volunteers@wecanride.org<br />
-                952-934-0057</p>`
+        subject: `Become a volunteer`,
+        html: `<p>You have been sent a link to register as a volunteer with We Can Ride. To register
+                <a href="http://localhost:3000/#/register/${token}">Click Here</a></p><br />
+                <p>If you have any questions regarding this email please contact We Can Ride.<br />
+                Email: volunteers@wecanride.org<br />
+                Phone: 952-934-0057</p>`
     };
 
     // .sendMail uses the transporter and specified mail options to attempt to send an email.
@@ -45,4 +42,4 @@ module.exports = sendEmailLink = ( emailInfo) => {
         }
     })
 
-}; // end sendEmailLink
+}; // end sendRegistrationLink

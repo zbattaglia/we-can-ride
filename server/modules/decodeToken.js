@@ -1,5 +1,5 @@
 // module for decoding webtokens
-const jwt = require( 'jsonwebtoken' );
+const jwt = require( 'jwt-simple' );
 
 module.exports = decodeToken = ( tokenInfo ) => {
     // extract components from tokenInfo
@@ -8,15 +8,19 @@ module.exports = decodeToken = ( tokenInfo ) => {
     const token = tokenInfo.token;
     const key = tokenInfo.key;
     console.log( 'Decoding token', userId, token, key );
-    // create decoded token using token passed in params and current password as key
-    const decodedToken = jwt.decode( token, key );
 
-    console.log( 'Decoded token successfully', decodedToken );
-    // verify that token was successfully decoded AND is not expired
-    if( decodedToken.userId === userId && Date.now() <= decodedToken.exp * 1000 ) {
-        return userId;
+    // try to decode token, if successful check that decoded token is not expired
+    // if not, return userId to allow access to reset password page
+    try {
+        const decodedToken = jwt.decode( token, key );
+        // console.log( 'decoded token successfully', decodedToken );
+        if ( Date.now() <= decodedToken.exp * 1000 ) {
+            return userId;
+        }
     }
-    else {
+    catch(error) {
+        // if error, return false
+        console.log( 'error decoding token', error );
         return false;
     }
 }

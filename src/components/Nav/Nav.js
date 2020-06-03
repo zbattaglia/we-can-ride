@@ -14,7 +14,7 @@ const Nav = (props) => (
         {/* Show this link if they are logged in or not,
         but call this link 'Home' if they are logged in,
         and call this link 'Login / Register' if they are not */}
-        {!props.user.id && 'Login / Register'}
+        {!props.user.id && 'Login'}
       </Link>
       {/* If a user is logged in, show the Log Out button*/}
       {props.user.id && (
