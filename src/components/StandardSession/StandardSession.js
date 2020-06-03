@@ -103,15 +103,20 @@ class StandardSession extends Component {
     return (
       <>
         <h1>Standard Session</h1>
+        {JSON.stringify(this.state)}
+        {JSON.stringify(this.props.state.user)}
         <Grid container>
           <Grid item>
-            {/**this is the button to add new lessons, visible when the session isn't published */}
-            {this.state.session.ready_to_publish === true
-            ?
-            <div>can't add lessons to a published session right now</div>
-            :  
-            <AddLessonButton session_id={this.state.session.id}/>
-            }
+            {/**this is the button to add new lessons, visible when the session isn't published, also not
+             * visible to non admins
+             */}
+             {(this.props.state.user.type_of_user === 'admin') ??
+              this.state.session.ready_to_publish === true
+              ?
+              <div>can't add lessons to a published session right now</div>
+              :  
+              <AddLessonButton session_id={this.state.session.id}/>
+             }
           </Grid>
           <Grid item>
             {/**here's the place to select a session from all the sessions in the database */}
