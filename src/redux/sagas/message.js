@@ -37,10 +37,21 @@ function* replyToMessage(action) {
   }
 }
 
+function* sendMessage(action) {
+  console.log( 'In send message saga', action.payload );
+  try {
+    axios.post( '/message/request', action.payload )
+  }
+  catch(error) {
+    console.log( 'Error sending message', error );
+  }
+}
+
 function* messageSaga() {
   yield takeLatest('FETCH_MESSAGE', fetchMessage);
   yield takeLatest('DELETE_MESSAGE', deleteMessage);
   yield takeLatest('REPLY_TO_MESSAGE', replyToMessage);
+  yield takeLatest('SEND_MESSAGE', sendMessage);
 }
 
 export default messageSaga;

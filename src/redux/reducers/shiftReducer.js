@@ -16,7 +16,17 @@ const myShifts = (state = [], action) => {
       return state;
   }
 };  
+
+const tradeShift = (state = '', action) => {
+  switch (action.type) {
+    case 'SHIFT_TO_TRADE':
+      return action.payload;
+    default:
+      return state;
+  }
+}
   export default combineReducers({
     fourWeeksShifts,
-    myShifts
+    myShifts,
+    tradeShift,
   });

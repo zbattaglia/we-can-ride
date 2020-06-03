@@ -8,6 +8,8 @@ import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
+import  moment  from 'moment';
+
 
 class MyShifts extends Component {
 
@@ -15,6 +17,12 @@ class MyShifts extends Component {
     this.props.dispatch({type: 'FETCH_USER'});
     this.props.dispatch({type: 'FETCH_MY_SHIFTS', payload: {user_id:this.props.state.user.id}});
   }
+
+  handleClick = ( event, shiftId ) => {
+    console.log( 'Got click to give up shift with id', shiftId)
+    this.props.dispatch( { type: 'SHIFT_TO_TRADE', payload: shiftId } );
+    this.props.history.push( '/findasub' );
+  };
 
   render() {
     return (
@@ -37,19 +45,25 @@ class MyShifts extends Component {
               <TableCell>
                Role 
               </TableCell>
+              <TableCell>
+                Action
+              </TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
             {this.props.state.shift.myShifts.map( (row) =>(
               <TableRow key={row.id}>
                 <TableCell>
-                  {row.date}
+                  {moment(row.date).format('dddd, MMMM Do, YYYY')}
                 </TableCell>
                 <TableCell>
                   {row.time_to_arrive}
                 </TableCell>
                 <TableCell>
                   {row.role}
+                </TableCell>
+                <TableCell>
+                  <button onClick={ (event) => this.handleClick( event, row.id ) }>Give Up</button>
                 </TableCell>
               </TableRow>
             ))}
