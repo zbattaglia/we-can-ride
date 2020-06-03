@@ -8,8 +8,8 @@ import React from 'react';
 const AboutPage = () => (
   <div>
     <div>
-      <p>
-        This about page is for anyone to read!
+      <p className="about">
+      It is the mission of We Can Ride, Inc. to improve the lives of individuals with disabilities or special needs through equine assisted activities and therapy.
       </p>
     </div>
   </div>

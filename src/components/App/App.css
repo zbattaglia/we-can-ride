@@ -9,7 +9,7 @@ body {
 }
 
 form {
-    background-color: #dbd5d5;
+    background-color: #f5f1f1;
     width: 30%;
     height: 250px;
     margin: 20px auto;
@@ -23,19 +23,17 @@ input {
 }
 
 .log-in, .log-out, .register {
-  background-color: #00acb0;
+  background-color: #72e42b;
   border-radius: 4px;
-  color: #f8f8f8;
+  color: black;
   min-height: 50px;
   min-width: 100px;
   outline:0;
   cursor: pointer;
-  position: absolute;
-  top: 300px;
 }
 
 .log-in:hover, .log-out:hover, .register:hover {
-  background-color: #008183;
+  background-color: #5fc91d;
 }
 
 /* This line makes the "Register" and "Login" buttons look like links */
@@ -52,4 +50,10 @@ input {
 
 .content {
     margin-left: 11%;
+}
+
+.about {
+    text-align: center;
+    font-size: 20px;
+    font-weight: 400;
 }
