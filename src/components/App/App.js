@@ -34,8 +34,9 @@ import './App.css';
 
 class App extends Component {
   componentDidMount () {
-    this.props.dispatch({type: 'FETCH_USER'})
-    this.props.dispatch({type: 'FETCH_VOLUNTEERS'})
+    this.props.dispatch({type: 'FETCH_USER'});
+    this.props.dispatch({type: 'FETCH_VOLUNTEERS'});
+    this.props.dispatch({type: 'FETCH_ALL_SHIFTS'});
   }
 
   render() {

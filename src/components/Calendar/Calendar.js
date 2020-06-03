@@ -1,13 +1,13 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import CalendarGrid from '../CalendarGrid/CalendarGrid';
-import {connect} from 'react-redux';
+import { connect } from 'react-redux';
 
 
 class Calendar extends Component {
 
-  componentDidMount () {
-    this.props.dispatch({type: 'FETCH_USER'})
-    this.props.dispatch({type: 'FETCH_FOUR_WEEKS_SHIFTS'});
+  componentDidMount() {
+    this.props.dispatch({ type: 'FETCH_USER' })
+    this.props.dispatch({ type: 'FETCH_MY_SHIFTS', payload: this.props.state.user.id });
   }
 
   render() {
@@ -25,7 +25,7 @@ class Calendar extends Component {
 }
 
 const mapStateToProps = state => ({
-    state
-  });
+  state
+});
 
 export default connect(mapStateToProps)(Calendar);

@@ -24,6 +24,7 @@ function* fetchMyShifts(action) {
   }
 };
 
+
 function* giveUpShift(action) {
   try {
     yield axios.put( `/shift/${action.payload}` );
@@ -34,10 +35,22 @@ function* giveUpShift(action) {
   }
 }
 
+function* fetchAllShifts(action) {
+  console.log( 'In fetchShift Saga', action.payload );
+try {
+  const response = yield axios.get(`/shift/all`);
+  yield put({ type: 'SET_ALL_SHIFTS', payload: response.data });
+
+} catch (error) {
+  console.log('Error in fetching all shifts', error);
+}
+};
+
 function* shiftSaga() {
   yield takeLatest('FETCH_FOUR_WEEKS_SHIFTS', fetchFourWeeksShifts);
   yield takeLatest('FETCH_MY_SHIFTS', fetchMyShifts);
   yield takeLatest( 'SHIFT_TO_TRADE', giveUpShift )
+  yield takeLatest('FETCH_ALL_SHIFTS', fetchAllShifts);
 };
 
 export default shiftSaga;

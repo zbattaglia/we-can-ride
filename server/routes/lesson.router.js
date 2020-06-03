@@ -126,7 +126,8 @@ router.post('/create', rejectUnauthenticated, async (req, res, next) => {
 router.post('/assign', rejectUnauthenticated, async (req, res, next) => {
   console.log('In assign volunteer with:', req.body);
   const connection = await pool.connect();
-  const volunteer_id = req.body.volunteer_id;
+  let volunteer_id = req.body.volunteer_id;
+  if(volunteer_id === ""){volunteer_id = null};
   const slot_id = req.body.slot_id
   try {
     await connection.query(`BEGIN`);
