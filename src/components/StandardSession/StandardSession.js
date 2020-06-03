@@ -110,11 +110,10 @@ class StandardSession extends Component {
             {/**this is the button to add new lessons, visible when the session isn't published, also not
              * visible to non admins
              */}
-             {(this.props.state.user.type_of_user === 'admin') ??
-              this.state.session.ready_to_publish === true
-              ?
-              <div>can't add lessons to a published session right now</div>
-              :  
+             {(this.props.state.user.type_of_user === 'admin') 
+              &&
+              (this.state.session.ready_to_publish === false)
+              &&
               <AddLessonButton session_id={this.state.session.id}/>
              }
           </Grid>
@@ -139,12 +138,16 @@ class StandardSession extends Component {
           </Grid>
           <Grid item>
             {/**here's the button to create a new session */}
+            {(this.props.state.user.type_of_user === 'admin') && 
             <CreateSessionButton/>
+            }
+
           </Grid>
         </Grid>
         
-
-        This is a {this.state.session.length_in_weeks && this.state.session.length_in_weeks.days} day long session
+            {this.state.session.length_in_weeks 
+            &&
+            <>This is a {this.state.session.length_in_weeks.days/7} week long session</>}
         <Grid 
           container
           className={classes.root}
