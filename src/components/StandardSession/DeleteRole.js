@@ -45,11 +45,6 @@ const styles = theme => ({
 class DeleteRole extends Component {
     
 
- componentDidMount() {
-     //go get the lessons with this lesson id
-     this.props.dispatch({type: 'FETCH_SESSION_LESSONS', payload: {lesson_id: this.props.lesson_id}});
-   
- }
 
  handleClick = () => {
    console.log('slot id of role to remove', this.props.slot_id);

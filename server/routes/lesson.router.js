@@ -77,7 +77,7 @@ router.post('/create', rejectUnauthenticated, async (req, res, next) => {
     const createSlotQuery = `INSERT INTO "slot"("lesson_id", "skill_needed") 
     VALUES($1, 1), ($1, 1), ($1, 2);`;
     const lesson_id = await connection.query(createLessonQuery, 
-      [req.body.session_id, req.body.start_time, req.body.day, req.body.client, req.body.duration] );
+      [req.body.session_id, req.body.start_time, req.body.day, req.body.client, `${req.body.duration} minutes`] );
     const response = await connection.query(createSlotQuery, [lesson_id.rows[0].lesson_id]);
     await connection.query(`COMMIT`);
     res.send({session_id});

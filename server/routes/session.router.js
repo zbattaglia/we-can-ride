@@ -61,9 +61,58 @@ router.post('/new', rejectUnauthenticated, (req, res) => {
   });
 });
 
-router.put('/edit/:session_id', async (req, res, next) => {
+router.put('/edit/:session_id', rejectUnauthenticated, async (req, res, next) => {
   console.log('in the publish session router', req.params.session_id);
-  res.sendStatus(200);
-})
+  const connection = await pool.connect();
+  const session_id = req.params.session_id;
+  try{
+    connection.query('BEGIN');
+    const sessionQuery = `UPDATE "session" 
+    SET "ready_to_publish"=TRUE WHERE "id"=$1 RETURNING "id", "start_date", "ready_to_publish", "session_type", "length_in_weeks", EXTRACT(DOW FROM "start_date") AS "weekday";
+    `;
+    const sessionResponse = await connection.query(sessionQuery, [session_id]);
+  
+    const sessionWeekday = sessionResponse.rows[0].weekday;
+    const sessionStartDate = sessionResponse.rows[0].start_date.toLocaleDateString();
+    const sessionLengthWeeks =(sessionResponse.rows[0].length_in_weeks.days)/7
+    await console.log('sessionResponse', sessionResponse.rows[0], 'start', sessionStartDate, 'length', sessionLengthWeeks, 'weekday', sessionWeekday);
+
+
+    //get the lessons
+    const slotQuery = `SELECT *, EXTRACT(DOW FROM "day_of_week") AS "weekday" FROM "lesson" LEFT JOIN "slot" ON "slot"."lesson_id" = "lesson"."id" WHERE "session_id" = $1`;
+    const slotResponse = await connection.query(slotQuery, [session_id]);
+    await console.log(slotResponse.rows);
+    //loop through the lesson response and for each lesson slot, create shifts based on how long the 
+      //so this session starts on a weekday 4... so I should make 35/7 shifts, and I should do it starting
+      //with the 
+
+    for(let i=0; i<slotResponse.rows.length; i++){
+    //for each slot, make some shifts
+    console.log(slotResponse.rows[i].id);
+      //decide how many days past the session start date to start making shifts
+    let dayDifference = slotResponse.rows[i].weekday - sessionWeekday;
+    if(dayDifference<0){dayDifference = dayDifference + 7}; 
+      for(let j=0; j<sessionLengthWeeks; j++){
+        //make a shift for each week of the session
+        console.log('date to send', sessionStartDate, dayDifference);
+        //TODO sanitize this query!!!
+        const addShiftQuery = `INSERT INTO "shift"("slot_id", "assigned_user", "date") 
+        VALUES($1, $2, INTERVAL '${dayDifference} days' + DATE '${sessionStartDate}');`;
+        await connection.query(addShiftQuery, [slotResponse.rows[i].id, slotResponse.rows[i].expected_user]);
+        dayDifference = dayDifference + 7;
+      }
+    }
+    await connection.query(`COMMIT`);
+    res.sendStatus(200);
+  }catch (error){
+    console.log( `Error on create slots for lesson`, error)
+    await connection.query(`ROLLBACK`);
+    res.sendStatus(500);
+  }finally{
+    connection.release();
+  }
+  //TODO:  flip the session to ready to publihs
+  //TODO make the shifts based on the session length
+});
 
 module.exports = router;
