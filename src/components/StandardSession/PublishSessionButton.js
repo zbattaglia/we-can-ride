@@ -90,6 +90,7 @@ return (
     <Button onClick={this.handleClose} color="primary">
       Cancel
     </Button>
+    {/**to do -- on the click of this button it doesn't actually change state of the component up, so it doesn't know  */}
     <Button onClick={() => this.handleClose('publish')} color="primary">
       Publish Session
     </Button>

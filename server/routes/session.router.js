@@ -2,7 +2,7 @@ const express = require('express');
 const pool = require('../modules/pool');
 const router = express.Router();
 const { rejectUnauthenticated } = require('../modules/authentication-middleware');
-
+const moment = require('moment');
 
 /**
  * GET route template
@@ -94,11 +94,11 @@ router.put('/edit/:session_id', rejectUnauthenticated, async (req, res, next) =>
     if(dayDifference<0){dayDifference = dayDifference + 7}; 
       for(let j=0; j<sessionLengthWeeks; j++){
         //make a shift for each week of the session
-        console.log('date to send', sessionStartDate, dayDifference);
-        //TODO sanitize this query!!!
+        console.log('date to send', sessionStartDate, dayDifference, moment(`${sessionStartDate}`).add(`${dayDifference}`, 'day').format('L'));
+        let dateToSend = moment(`${sessionStartDate}`).add(`${dayDifference}`, 'day').format('L');
         const addShiftQuery = `INSERT INTO "shift"("slot_id", "assigned_user", "date") 
-        VALUES($1, $2, INTERVAL '${dayDifference} days' + DATE '${sessionStartDate}');`;
-        await connection.query(addShiftQuery, [slotResponse.rows[i].id, slotResponse.rows[i].expected_user]);
+        VALUES($1, $2, $3);`;
+        await connection.query(addShiftQuery, [slotResponse.rows[i].id, slotResponse.rows[i].expected_user, dateToSend]);
         dayDifference = dayDifference + 7;
       }
     }

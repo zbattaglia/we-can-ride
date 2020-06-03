@@ -91,7 +91,7 @@ return (
     <DialogContentText>
      Choose a job title to add to this lesson
     </DialogContentText>
-    {JSON.stringify(this.state)}
+{/*     {JSON.stringify(this.state)} */}
     <Select
             value={this.state.role}
             onChange={this.handleChange}
