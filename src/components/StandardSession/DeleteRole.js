@@ -36,7 +36,10 @@ const styles = theme => ({
     display: 'inline-block'
   },
   pointer: {
-    cursor: 'default'
+    cursor: 'default',
+    justify:'flex-start',
+    alignItems: 'flex-start',
+    
   },
 });
 
@@ -54,12 +57,12 @@ class DeleteRole extends Component {
     const { classes } = this.props;
    
 return (
-    <div className={classes.pointer} onClick={this.handleClick}>
+    <Box className={classes.pointer} onClick={this.handleClick}>
       <h4>
         X
       </h4>
      
-    </div>
+    </Box>
     )
   }
 }
