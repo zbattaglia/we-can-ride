@@ -99,4 +99,45 @@ router.delete('/:messageId', rejectUnauthenticated, (req, res) => {
         })
 })
 
+// POST route to send message to request another user take's a shift
+router.post('/request', rejectUnauthenticated, async (req, res) => {
+    // extract paramaters from request
+    const senderId = req.user.id;
+    const email = req.body.email;
+    const recipient = req.body.first_name + ' ' + req.body.last_name[0];
+    const shiftId = req.body.shift.id;
+    const date = req.body.shift.date;
+    const time = req.body.shift.time_to_arrive;
+    const role = req.body.shift.role;
+
+    const message = `Hi ${recipient}! Are you able to take my ${role} shift on ${date} at ${time}?`
+
+    console.log( `${senderId} is sending message to ${recipient} at email ${email} for ${role} on ${date} at ${time} with id ${shiftId}` );
+    console.log( message )
+    
+    // gets name of volunteer sending message
+    const sqlTextOne = `SELECT "user"."first_name", "user"."last_name" FROM "user" WHERE "id" = $1;`;
+    // gets id of user message is being sent to
+    const sqlTextTwo = `SELECT "user"."id" FROM "user" WHERE "email" = $1;`;
+    // Inserts message into selected users "inbox on database"
+    const sqlTextThree = `INSERT INTO "message" ("sender", "recipient", "message", "sent")
+                            VALUES ($1, $2, $3, 'Now()');`;
+    try {
+        let response = await pool.query( sqlTextOne, [ senderId ] )
+        const senderName = response.rows[0].first_name + ' ' + response.rows[0].last_name[0];
+        console.log( 'request sent from', senderName );
+        response = await pool.query( sqlTextTwo, [ email ] )
+        const recipientId = response.rows[0].id;
+        console.log( 'Recipient has id of', recipientId );
+        await pool.query( sqlTextThree, [ senderId, recipientId, message ] );
+        await sendEmail( { email, first_name: req.body.first_name, message } );
+        res.sendStatus( 200 );
+    }
+    catch(error) {
+        console.log( 'Error sending request to take shift message', error );
+        res.sendStatus( 500 );
+    }
+
+})
+
 module.exports = router;

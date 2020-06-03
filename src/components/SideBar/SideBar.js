@@ -25,11 +25,6 @@ const SideBar = (props) => (
                     Sub Page
                 </Link>
             </li>
-            <li>
-                <Link className="side-link" to="/findasub">
-                    Find A Sub
-                </Link>
-            </li>
                 <Link className="side-link" to="/inbox">
                   Inbox
                 </Link>

@@ -15,6 +15,14 @@ const myShifts = (state = [], action) => {
     default:
       return state;
   }
+};  
+
+const tradeShift = (state = '', action) => {
+  switch (action.type) {
+    case 'SHIFT_TO_TRADE':
+    default:
+      return state;
+  }
 };
 
 const allShifts = (state = [], action) => {
@@ -24,10 +32,10 @@ const allShifts = (state = [], action) => {
     default:
       return state;
   }
-};
-
-export default combineReducers({
-  fourWeeksShifts,
-  myShifts,
-  allShifts,
-});
+}
+  export default combineReducers({
+    fourWeeksShifts,
+    myShifts,
+    tradeShift,
+     allShifts,
+  });
