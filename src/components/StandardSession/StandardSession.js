@@ -245,6 +245,13 @@ class StandardSession extends Component {
                             <AssignVolunteerButton  name='Assign A Volunteer' session_id={this.state.session.id} slot_id={slot.slot_id}/>
                             
                             }
+                            {(this.props.state.user.type_of_user === 'volunteer')
+                            &&
+                            (this.state.session.ready_to_publish === false)
+                            &&
+                            <AssignVolunteerButton  name='Sign Up' user_id={this.props.state.user.id} session_id={this.state.session.id} slot_id={slot.slot_id}/>
+                            
+                            }
                           </Box>
                           :
                           <Box id={slot.expected_user}>
