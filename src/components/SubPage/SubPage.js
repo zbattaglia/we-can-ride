@@ -46,15 +46,16 @@ class SubPage extends Component {
   };
 
   handleClick = ( event, shiftId ) => {
-    console.log( 'Got a click on shift with id', shiftId );
+    // console.log( 'Got a click on shift with id', shiftId );
+    this.props.dispatch( { type: 'TAKE_SUB_SHIFT', payload: shiftId } );
   };
 
   render() {
     const { classes } = this.props
     return (
       <>
-        <h1 className="title">Sub Opportunities</h1>
-          <Paper className={classes.root} id="sub-table">
+          <h2 id="title">Sub Opportunities</h2>
+          <Paper className={classes.root} id="sub-table-container">
               <Table className={classes.table}>
                 <TableHead>
                   <TableRow>

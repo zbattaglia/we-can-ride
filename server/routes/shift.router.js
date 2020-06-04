@@ -92,7 +92,7 @@ router.get( '/sub', (req, res) => {
                     LEFT JOIN "user" AS "eu" ON "expected_user" = "eu"."id"
                     LEFT JOIN "user" AS "au" ON "assigned_user" = "au"."id"
                     LEFT JOIN "skill" ON "skill_needed" = "skill"."id"
-                    WHERE "assigned_user" IS NULL
+                    WHERE "assigned_user" IS NULL OR "user_wants_to_trade" IS TRUE
                     ORDER BY "date";`
 
     pool.query( sqlText )
@@ -104,6 +104,27 @@ router.get( '/sub', (req, res) => {
             console.log( "Error getting sub shifts", error );
             res.sendStatus( error );
         })
-})
+});
+
+// PUT route to update sub table when volunteer takes an open shift
+router.put( '/sub/shift', rejectUnauthenticated, (req, res) => {
+    const userId = req.user.id;
+    const shiftId = req.body.shiftId;
+    console.log( `Adding user with id ${userId} to shift with id ${shiftId}` );
+
+    // query to update userId on shift table at appropriate shift id, reset user wants to trade since this has been picked up
+    const sqlText = `UPDATE "shift" SET "assigned_user" = $1, "user_wants_to_trade" = FALSE
+                    WHERE "shift"."id" = $2;`;
+
+    pool.query( sqlText, [ userId, shiftId ] )
+        .then( (response) => {
+            console.log( 'Successfully added user to shift table' );
+            res.sendStatus( 200 );
+        })
+        .catch( (error) => {
+            console.log( 'Error adding user to shift table', error );
+            res.sendStatus( 500 );
+        });
+}); //end PUT route
 
 module.exports = router;

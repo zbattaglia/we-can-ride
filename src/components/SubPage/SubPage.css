@@ -1,4 +1,4 @@
-.title {
+#title {
     text-align: center;
 }
 
@@ -8,14 +8,14 @@
     font-weight: bold;
 }
 
-#sub-table {
-    width: 50%;
+#sub-table-container {
     margin: auto;
 }
 
 #what-when {
     text-align: center;
     font-weight: bold;
+    width: 85%;
 }
 
 .signup-button {

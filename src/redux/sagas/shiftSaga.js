@@ -58,12 +58,25 @@ function* fetchSubShifts(action) {
   }
 }
 
+// saga will be fired when volunteer takes an open sub shift
+function* updateSubShift(action) {
+  console.log( 'In update sub shiftsaga  with shift id', action.payload );
+  try {
+    yield axios.put( '/shift/sub/shift', { shiftId: action.payload } );
+    yield put( { type: 'FETCH_SUB_SHIFTS' } );
+  }
+  catch(error) {
+    console.log( 'Error updating sub shifts', error );
+  }
+}
+
 function* shiftSaga() {
   yield takeLatest('FETCH_FOUR_WEEKS_SHIFTS', fetchFourWeeksShifts);
   yield takeLatest('FETCH_MY_SHIFTS', fetchMyShifts);
   yield takeLatest( 'SHIFT_TO_TRADE', giveUpShift )
   yield takeLatest('FETCH_ALL_SHIFTS', fetchAllShifts);
   yield takeLatest('FETCH_SUB_SHIFTS', fetchSubShifts);
+  yield takeLatest('TAKE_SUB_SHIFT', updateSubShift);
 };
 
 export default shiftSaga;
