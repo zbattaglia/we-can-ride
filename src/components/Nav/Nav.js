@@ -6,6 +6,7 @@ import './Nav.css';
 
 const Nav = (props) => (
   <div className="nav">
+    <img className="icon" src="./horse.png" alt="horse"></img>
     <Link to="/calendar">
       <h2 className="nav-title">We Can Ride</h2>
     </Link>
