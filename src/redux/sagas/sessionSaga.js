@@ -24,8 +24,7 @@ function* showSession(action) {
 function* createSession(action) {
   yield axios.post('session/new', action.payload);
   yield put({type: 'FETCH_SESSIONS'});
-  yield put({type: 'FETCH_SESSION_LESSON', payload: action.payload});
-  
+
 }
 function* publishSession(action) {
   //action.payload looks like {session_id: 6}
