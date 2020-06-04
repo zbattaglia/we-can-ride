@@ -71,10 +71,18 @@ class AssignVolunteerButton extends Component {
   handleClose = (blob) => {
     if(blob === 'create'){
       if(this.props.user_id){
-        this.props.dispatch({ type: 'ASSIGN_VOLUNTEER', 
-        payload: {volunteer_id: this.props.user_id, 
-                  session_id: this.props.session_id,
-                  slot_id: this.props.slot_id}});
+        if(this.props.name === 'Remove Yourself'){
+          this.props.dispatch({ type: 'ASSIGN_VOLUNTEER', 
+          payload: {volunteer_id: '', 
+                    session_id: this.props.session_id,
+                    slot_id: this.props.slot_id}});
+        } else{
+          this.props.dispatch({ type: 'ASSIGN_VOLUNTEER', 
+          payload: {volunteer_id: this.props.user_id, 
+                    session_id: this.props.session_id,
+                    slot_id: this.props.slot_id}});
+        }
+
       }
       else{
         this.props.dispatch({ type: 'ASSIGN_VOLUNTEER', 
@@ -112,7 +120,7 @@ return (
     ?
     <>
     <DialogContentText>
-      You are accepting this role for the whole session
+      You are {(this.props.name === 'Remove Yourself')?<>removing yourself from</>:<>accepting</> } this role for the whole session
     </DialogContentText>
     </>
     :
