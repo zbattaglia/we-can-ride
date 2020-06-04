@@ -8,7 +8,9 @@ const moment = require('moment');
  * GET route template
  */
 router.get(`/all`, rejectUnauthenticated, (req, res) => {
-    const sqlText = `SELECT * FROM "session" ORDER BY "id" DESC;`;
+  console.log('getting all the sessions, the current user is', req.user);
+  let sqlText = `SELECT * FROM "session" WHERE "let_volunteer_view" = TRUE ORDER BY "id" DESC;`;
+  if(req.user.type_of_user === 'admin') sqlText = `SELECT * FROM "session" ORDER BY "id" DESC;`;
     pool.query(sqlText).then( (response) => {
         res.send( response.rows );
     }).catch( (error) => {
@@ -61,6 +63,23 @@ router.post('/new', rejectUnauthenticated, (req, res) => {
   });
 });
 
+router.put('/view', rejectUnauthenticated, (req, res) => {
+  console.log('in server on session volunteer view', req.body);
+  //req.body looks like { session_id: 13, let_volunteer_view: false }
+  let sqlText = `UPDATE "session" 
+  SET "let_volunteer_view"=$2 
+  WHERE "id"=$1;
+  `;
+  pool.query(sqlText, [req.body.session_id, req.body.let_volunteer_view]).then(response => {
+    res.sendStatus(200);
+  }).catch(error => {
+    console.log('error in changing if volunteer can view', error);
+    res.sendStatus(500);
+  });
+});
+
+
+
 router.put('/edit/:session_id', rejectUnauthenticated, async (req, res, next) => {
   console.log('in the publish session router', req.params.session_id);
   const connection = await pool.connect();
@@ -68,7 +87,7 @@ router.put('/edit/:session_id', rejectUnauthenticated, async (req, res, next) =>
   try{
     connection.query('BEGIN');
     const sessionQuery = `UPDATE "session" 
-    SET "ready_to_publish"=TRUE WHERE "id"=$1 RETURNING "id", "start_date", "ready_to_publish", "session_type", "length_in_weeks", EXTRACT(DOW FROM "start_date") AS "weekday";
+    SET "ready_to_publish"=TRUE, "let_volunteer_view"=FALSE WHERE "id"=$1 RETURNING "id", "start_date", "ready_to_publish", "session_type", "length_in_weeks", EXTRACT(DOW FROM "start_date") AS "weekday";
     `;
     const sessionResponse = await connection.query(sessionQuery, [session_id]);
   

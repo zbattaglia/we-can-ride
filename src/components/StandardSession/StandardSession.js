@@ -16,6 +16,7 @@ import AddRoleButton from './AddRoleButton';
 import DeleteLessonButton from './DeleteLessonButton';
 import DeleteRole from './DeleteRole';
 import PublishSessionButton from './PublishSessionButton';
+import LetVolunteersViewButton from './LetVolunteersViewButton';
 
 
 const styles = theme => ({
@@ -79,15 +80,29 @@ class StandardSession extends Component {
         session: this.props.state.session.allSessions[0]
       })
     }
+    //if we picked a different session, fetch the lessons that are associated with that session
+    if(prevState.session.id !== this.state.session.id){
+      console.log('get teh lessons again!');
+      this.props.dispatch({ type: 'FETCH_SESSION_LESSONS', payload: {session_id: this.state.session.id}})
+    }
     //if we just added/deleted a session, set the top session in the reducer as the current session
     if (prevProps.state.session.allSessions.length !== this.props.state.session.allSessions.length){
       this.setState({
         session: this.props.state.session.allSessions[0]
-      })
+      });
     }
-    //if we picked a different session, fetch the lessons that are associated with that session
-    if(prevState.session !== this.state.session){
-      this.props.dispatch({ type: 'FETCH_SESSION_LESSONS', payload: {session_id: this.state.session.id}})
+        //if we didn't create or delete a shift, please show the session you were showing before
+        else if((prevProps.state.session.allSessions !== this.props.state.session.allSessions && this.state.session.id)){
+          //find the object with the id of this.state.session.id and set that session to be the id.
+          let tempSession = this.props.state.session.allSessions.find(x => x.id === this.state.session.id);
+           console.log('update',JSON.stringify(this.props.state.session.allSessions.find(x => x.id === this.state.session.id)));
+          this.setState({
+            session: tempSession
+          });
+
+    //if we just updated a session, keep showing that one
+
+      
     }
   }
 
@@ -152,7 +167,27 @@ class StandardSession extends Component {
         
             {this.state.session.length_in_weeks 
             &&
-            <>This is a {this.state.session.length_in_weeks.days/7} week long session</>}
+            <Box>This is a {this.state.session.length_in_weeks.days/7} week long session</Box>}
+            {(this.props.state.user.type_of_user === 'admin') 
+            &&
+            <Box>
+            {this.state.session.let_volunteer_view
+              
+              &&
+              this.state.session.let_volunteer_view
+              ?
+              <Box>Volunteers can see this session</Box>
+              :
+              <Box>Volunteers can't see this session</Box>
+              }   
+              </Box>
+            }
+            {(this.props.state.user.type_of_user === 'admin')
+            &&
+            <LetVolunteersViewButton allow={this.state.session.let_volunteer_view} session_id={this.state.session.id}/>
+            }
+
+            
         <Grid 
           container
           className={classes.root}
@@ -214,6 +249,13 @@ class StandardSession extends Component {
                             <AssignVolunteerButton  name='Assign A Volunteer' session_id={this.state.session.id} slot_id={slot.slot_id}/>
                             
                             }
+                            {(this.props.state.user.type_of_user === 'volunteer')
+                            &&
+                            (this.state.session.ready_to_publish === false)
+                            &&
+                            <AssignVolunteerButton  name='Sign Up' user_id={this.props.state.user.id} session_id={this.state.session.id} slot_id={slot.slot_id}/>
+                            
+                            }
                           </Box>
                           :
                           <Box id={slot.expected_user}>
@@ -223,7 +265,14 @@ class StandardSession extends Component {
                             (this.state.session.ready_to_publish === false)
                             &&
                             <AssignVolunteerButton  name='Remove A Volunteer' session_id={this.state.session.id} slot_id={slot.slot_id}/>
-                            
+                            }
+                            {(this.props.state.user.type_of_user === 'volunteer')
+                            &&
+                            (this.state.session.ready_to_publish === false)
+                            &&
+                            (this.props.state.user.id === slot.expected_user)
+                            &&
+                            <AssignVolunteerButton  name='Remove Yourself' user_id={this.props.state.user.id} session_id={this.state.session.id} slot_id={slot.slot_id}/>
                             }
                           </Box>
                           }

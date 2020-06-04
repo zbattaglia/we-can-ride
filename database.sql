@@ -41,7 +41,8 @@ CREATE TABLE "session" (
     "start_date" DATE,
     "length_in_weeks" INTERVAL,
     "ready_to_publish" BOOLEAN,
-    "session_type" VARCHAR(50)
+    "session_type" VARCHAR(50),
+    "let_volunteer_view" BOOLEAN
 );
 --Create lessons table
 CREATE TABLE "lesson" (

@@ -70,13 +70,28 @@ class AssignVolunteerButton extends Component {
 
   handleClose = (blob) => {
     if(blob === 'create'){
+      if(this.props.user_id){
+        if(this.props.name === 'Remove Yourself'){
+          this.props.dispatch({ type: 'ASSIGN_VOLUNTEER', 
+          payload: {volunteer_id: '', 
+                    session_id: this.props.session_id,
+                    slot_id: this.props.slot_id}});
+        } else{
+          this.props.dispatch({ type: 'ASSIGN_VOLUNTEER', 
+          payload: {volunteer_id: this.props.user_id, 
+                    session_id: this.props.session_id,
+                    slot_id: this.props.slot_id}});
+        }
 
-      // console.log(`Sending assigned volunteer with session id: ${this.props.session_id}, slot id: ${this.props.slot_id}, user id: ${this.state.volunteer}`);
-      this.props.dispatch({ type: 'ASSIGN_VOLUNTEER', 
-                            payload: {volunteer_id: this.state.volunteer, 
-                                      session_id: this.props.session_id,
-                                      slot_id: this.props.slot_id}});
+      }
+      else{
+        this.props.dispatch({ type: 'ASSIGN_VOLUNTEER', 
+        payload: {volunteer_id: this.state.volunteer, 
+                  session_id: this.props.session_id,
+                  slot_id: this.props.slot_id}});
 
+      }
+   
 
     }
     this.setState({ open: false });
@@ -101,23 +116,35 @@ return (
 >
 <DialogTitle id="assign-volunteer">{this.props.name}</DialogTitle>
   <DialogContent>
+    {this.props.user_id
+    ?
+    <>
     <DialogContentText>
-      Choose which volunteer will be taking this role.
+      You are {(this.props.name === 'Remove Yourself')?<>removing yourself from</>:<>accepting</> } this role for the whole session
     </DialogContentText>
-      <Select
-        value={this.state.volunteer}
-        onChange={this.handleInputChangeFor('volunteer')}
-        inputProps={{
-          volunteer: 'volunteer',
-        }}
-      >
-        <MenuItem value="">
-          <em>None</em>
-        </MenuItem>
-        {this.props.state.volunteer.volunteer.map( volunteer => (
-          <MenuItem value={volunteer.id}>{volunteer.first_name} {volunteer.last_name}</MenuItem>
-        ))}
-      </Select>
+    </>
+    :
+    <>
+    <DialogContentText>
+    Choose which volunteer will be taking this role.
+  </DialogContentText>
+    <Select
+      value={this.state.volunteer}
+      onChange={this.handleInputChangeFor('volunteer')}
+      inputProps={{
+        volunteer: 'volunteer',
+      }}
+    >
+      <MenuItem value="">
+        <em>None</em>
+      </MenuItem>
+      {this.props.state.volunteer.volunteer.map( volunteer => (
+        <MenuItem value={volunteer.id}>{volunteer.first_name} {volunteer.last_name}</MenuItem>
+      ))}
+    </Select>
+    </>
+    }
+
 
   </DialogContent>
   <DialogActions>
@@ -125,7 +152,12 @@ return (
       Cancel
     </Button>
     <Button onClick={() => this.handleClose('create')} color="primary">
-      Assign Volunteer
+      {this.props.user_id
+      ?
+      <>Accept Role</>
+      :
+      <>Assign Volunteer</>
+      }
     </Button>
   </DialogActions>
 </Dialog>

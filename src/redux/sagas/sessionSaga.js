@@ -12,16 +12,26 @@ function* fetchSessions() {
   }
 };
 
+function* showSession(action) {
+ console.log('in show session saga', action.payload);
+ //payload looks like {session_id: 13, let_volunteer_view: false}
+ const session_id = action.payload.session_id
+ yield axios.put('/session/view', action.payload);
+ yield put({type: 'FETCH_SESSIONS'});
+
+}
+
 function* createSession(action) {
   yield axios.post('session/new', action.payload);
   yield put({type: 'FETCH_SESSIONS'});
+
 }
 function* publishSession(action) {
   //action.payload looks like {session_id: 6}
   console.log('publish session', action.payload);
   //send the session Id to the server and create a bunch of shifts
   yield axios.put(`/session/edit/${action.payload.session_id}`);
-  yield put({ type: 'FETCH_SESSION_LESSONS', payload: action.payload});
+  yield put({type: 'FETCH_SESSIONS'});
 
 }
 function* fetchSessionLessons(action) {
@@ -78,6 +88,7 @@ function* shiftSaga() {
   yield takeLatest('FETCH_SESSION_LESSONS', fetchSessionLessons);
   yield takeLatest('CREATE_SESSION', createSession);
   yield takeLatest('PUBLISH_SESSION', publishSession);
+  yield takeLatest('SHOW_SESSION', showSession);
 
 };
 
