@@ -68,7 +68,7 @@ router.put('/edit/:session_id', rejectUnauthenticated, async (req, res, next) =>
   try{
     connection.query('BEGIN');
     const sessionQuery = `UPDATE "session" 
-    SET "ready_to_publish"=TRUE WHERE "id"=$1 RETURNING "id", "start_date", "ready_to_publish", "session_type", "length_in_weeks", EXTRACT(DOW FROM "start_date") AS "weekday";
+    SET "ready_to_publish"=TRUE, "let_volunteer_view"=FALSE WHERE "id"=$1 RETURNING "id", "start_date", "ready_to_publish", "session_type", "length_in_weeks", EXTRACT(DOW FROM "start_date") AS "weekday";
     `;
     const sessionResponse = await connection.query(sessionQuery, [session_id]);
   

@@ -153,6 +153,14 @@ class StandardSession extends Component {
             {this.state.session.length_in_weeks 
             &&
             <>This is a {this.state.session.length_in_weeks.days/7} week long session</>}
+            {this.state.session.let_volunteer_view
+            &&
+            this.state.session.let_volunteer_view
+            ?
+            <>Volunteers can see this session</>
+            :
+            <>Volunteers can't see this session</>
+            }
         <Grid 
           container
           className={classes.root}
