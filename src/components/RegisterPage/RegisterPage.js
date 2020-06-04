@@ -83,6 +83,7 @@ class RegisterPage extends Component {
           lastName: this.state.lastName,
           phoneNumber: this.state.phoneNumber,
           birthday: this.state.birthday,
+          type_of_user: 'volunteer',
           amSunday: this.state.amSunday,
           pmSunday: this.state.pmSunday,
           amMonday: this.state.amMonday,
@@ -99,8 +100,9 @@ class RegisterPage extends Component {
           pmSaturday: this.state.pmSaturday
         },
       });
+      this.props.history.push( '/' );
     } else {
-      this.props.dispatch({ type: 'REGISTRATION_INPUT_ERROR' });
+      this.props.history.push({ type: 'REGISTRATION_INPUT_ERROR' });
     }
   }; // end registerUser
 
