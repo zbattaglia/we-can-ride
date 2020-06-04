@@ -266,6 +266,8 @@ class StandardSession extends Component {
                             &&
                             (this.state.session.ready_to_publish === false)
                             &&
+                            (this.props.state.user.id === slot.expected_user)
+                            &&
                             <AssignVolunteerButton  name='Remove Yourself' user_id={this.props.state.user.id} session_id={this.state.session.id} slot_id={slot.slot_id}/>
                             }
                           </Box>
