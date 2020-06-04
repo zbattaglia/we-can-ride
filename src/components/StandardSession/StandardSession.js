@@ -35,7 +35,7 @@ const styles = theme => ({
   lesson: {
     margin: theme.spacing(1),
     backgroundColor: theme.palette.primary.light, 
-    width: '200px'
+    width: '200px',
   },
   slot: {
     margin: theme.spacing(1),
@@ -48,6 +48,8 @@ const styles = theme => ({
   },
   day: {
     color: theme.palette.secondary,
+    display: 'flex',
+    alignItems: 'flex-start',
   },
   deleteX: {
     color: theme.palette.text.secondary,

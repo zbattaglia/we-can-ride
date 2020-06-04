@@ -38,9 +38,19 @@ opacity: 0.7;
 }
 
 .nav-link:hover {
-background-color: #bcc2b8;
+color: blue;
 }
 
 .nav-right {
 float: right;
+}
+
+.icon {
+  float: left;
+  height: 90px;
+  margin-left: 25px;
+}
+
+#top {
+  vertical-align: top;
 }
