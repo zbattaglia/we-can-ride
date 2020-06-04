@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import TableCell from '@material-ui/core/TableCell';
 import TableRow from '@material-ui/core/TableRow';
-import Delete_forever from '@material-ui/icons/DeleteForever';
+import DeleteForever from '@material-ui/icons/DeleteForever';
 import Reply from '@material-ui/icons/Reply';
 import Check from '@material-ui/icons/Check';
 import Clear from '@material-ui/icons/Clear';
@@ -108,7 +108,7 @@ class InboxList extends Component {
                 }
                 <CustomTooltip title="Delete">
                     <IconButton aria-label="Delete" onClick={ (event) => this.handleClick( message.id, 'delete' )}>
-                        <Delete_forever  className="action"/>
+                        <DeleteForever  className="action"/>
                     </IconButton>
                 </CustomTooltip>
             </CustomTableCell>

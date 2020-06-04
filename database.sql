@@ -73,7 +73,8 @@ CREATE TABLE "message" (
 	"id" SERIAL PRIMARY KEY,
 	"sender" INT REFERENCES "user",
 	"recipient" INT REFERENCES "user",
-	"message" VARCHAR
+	"message" VARCHAR,
+    "sent" DATE
 );
 
 --INSERT skills
