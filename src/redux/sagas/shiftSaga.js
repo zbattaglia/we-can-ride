@@ -37,20 +37,33 @@ function* giveUpShift(action) {
 
 function* fetchAllShifts(action) {
   console.log( 'In fetchShift Saga', action.payload );
-try {
-  const response = yield axios.get(`/shift/all`);
-  yield put({ type: 'SET_ALL_SHIFTS', payload: response.data });
+  try {
+    const response = yield axios.get(`/shift/all`);
+    yield put({ type: 'SET_ALL_SHIFTS', payload: response.data });
 
-} catch (error) {
-  console.log('Error in fetching all shifts', error);
-}
+  } catch (error) {
+    console.log('Error in fetching all shifts', error);
+  }
 };
+
+// saga get's all shifts that are open for subs
+function* fetchSubShifts(action) {
+  try {
+    const response = yield axios.get( '/shift/sub' );
+    // console.log( `Got sub shifts back in saga`, response.data )
+    yield put( { type: 'SET_SUB_SHIFTS', payload: response.data } );
+  }
+  catch(error) {
+    console.log( 'Error getting open sub shifts' );
+  }
+}
 
 function* shiftSaga() {
   yield takeLatest('FETCH_FOUR_WEEKS_SHIFTS', fetchFourWeeksShifts);
   yield takeLatest('FETCH_MY_SHIFTS', fetchMyShifts);
   yield takeLatest( 'SHIFT_TO_TRADE', giveUpShift )
   yield takeLatest('FETCH_ALL_SHIFTS', fetchAllShifts);
+  yield takeLatest('FETCH_SUB_SHIFTS', fetchSubShifts);
 };
 
 export default shiftSaga;
