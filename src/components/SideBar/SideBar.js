@@ -21,6 +21,11 @@ const SideBar = (props) => (
                 </Link>
             </li>
             <li>
+              <Link className="side-link" to="/standardsession">
+                Standard Session
+              </Link>
+            </li>
+            <li>
                 <Link className="side-link" to="/subpage">
                     Sub Page
                 </Link>

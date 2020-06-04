@@ -172,6 +172,7 @@ class StandardSession extends Component {
             &&
             <Box>
             {this.state.session.let_volunteer_view
+              
               &&
               this.state.session.let_volunteer_view
               ?
@@ -181,9 +182,12 @@ class StandardSession extends Component {
               }   
               </Box>
             }
-
-
+            {(this.props.state.user.type_of_user === 'admin')
+            &&
             <LetVolunteersViewButton allow={this.state.session.let_volunteer_view} session_id={this.state.session.id}/>
+            }
+
+            
         <Grid 
           container
           className={classes.root}
