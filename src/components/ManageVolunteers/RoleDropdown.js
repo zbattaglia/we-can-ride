@@ -62,29 +62,9 @@ class RoleDropdown extends React.Component {
     console.log('in handleCheckboxChangeFor', this.state)
   }
 
-  // componentDidUpdate( prevProps, prevState ){
-  //   console.log('in first if statement')
-
-  //     if(this.props.state.volunteer.userRoles && prevProps.state.volunteer.userRoles !== this.props.state.volunteer.userRoles) {
-  //       console.log('in second if statement')
-  //       let newState = {};
-  //       for(const user of this.props.state.volunteer.userRoles) {
-  //         if(user.id === this.props.user_id) {
-  //     for ( let userSkill of user.skill ) {
-  //       newState[userSkill] = true;
-  //     }
-  //   }
-  //     }
-  //     this.setState({
-  //       ...this.state,
-        
-  //       ...newState,
-  //     })
-    
-  //   }
-  // };
-  
-
+  componentDidMount() {
+    this.props.dispatch ({ type: "GET_USER_ROLES"})
+  }
 
   render() {
     return (
@@ -93,8 +73,8 @@ class RoleDropdown extends React.Component {
             <>
             {(this.props.user_id === name.user_id) && 
                           <ul key={name.id}>
-                          <li>
-                          {name.title}
+                          <li style={{listStyle: "none"}}>
+                          {name.title.replace( '_', ' ' )}
                           </li>
                         </ul> 
                         }
