@@ -125,8 +125,8 @@ class StandardSession extends Component {
     return (
       <>
         <h1>Standard Session</h1>
-        {JSON.stringify(this.state)}
-        {JSON.stringify(this.props.state.user)}
+        {/* {JSON.stringify(this.state)}
+        {JSON.stringify(this.props.state.user)} */}
         <Grid container>
           <Grid item>
             {/**this is the button to add new lessons, visible when the session isn't published, also not
@@ -197,14 +197,14 @@ class StandardSession extends Component {
           direction='row'
           justify='flex-start'
           alignItems='stretch'
-          style={{minHeight: '100vh'
-        }}
+        //   style={{minHeight: '100vh'
+        // }}
           
         >
-          <Grid item xs={12} className={classes.day}>
+          <Grid item xs={12} Aligner className={classes.day}>
             {/**here we make the weekdays */}
             {weekdays.map( day => (
-              <Paper className={classes.paper}>
+              <Paper Aligner-item Aligner-item--top className={classes.paper}>
                 {day.name}
                 {/**here's where we get the lessons in a day */}
                 {this.props.state.session.slots.lessons && this.props.state.session.slots.lessons.map( lesson => (
