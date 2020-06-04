@@ -3,6 +3,8 @@ const pool = require('../modules/pool');
 const router = express.Router();
 const { rejectUnauthenticated } = require('../modules/authentication-middleware');
 
+const moment = require('moment');
+
 // import emailer to be able to pass messages sent internally in the app by email
 const sendEmail = require('../modules/emailer');
 
@@ -106,7 +108,7 @@ router.post('/request', rejectUnauthenticated, async (req, res) => {
     const email = req.body.email;
     const recipient = req.body.first_name + ' ' + req.body.last_name[0];
     const shiftId = req.body.shift.id;
-    const date = req.body.shift.date;
+    const date = moment(req.body.shift.date).format('dddd, MMMM Do, YYYY');
     const time = req.body.shift.time_to_arrive;
     const role = req.body.shift.role;
 

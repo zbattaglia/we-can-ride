@@ -9,6 +9,7 @@ import Check from '@material-ui/icons/Check';
 import Clear from '@material-ui/icons/Clear';
 import IconButton from '@material-ui/core/IconButton';
 import Tooltip from '@material-ui/core/Tooltip';
+import moment from 'moment';
 
 import './InboxList.css';
 
@@ -79,7 +80,7 @@ class InboxList extends Component {
                 {message.first_name} {message.last_name}
             </CustomTableCell>
             <CustomTableCell>
-                {message.sent}
+                {moment(message.sent).format('dddd, MMMM Do, YYYY')}
             </CustomTableCell>
             <CustomTableCell>
                 {message.message}
