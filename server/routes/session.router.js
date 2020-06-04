@@ -8,7 +8,9 @@ const moment = require('moment');
  * GET route template
  */
 router.get(`/all`, rejectUnauthenticated, (req, res) => {
-    const sqlText = `SELECT * FROM "session" ORDER BY "id" DESC;`;
+  console.log('getting all the sessions, the current user is', req.user);
+  let sqlText = `SELECT * FROM "session" WHERE "let_volunteer_view" = TRUE ORDER BY "id" DESC;`;
+  if(req.user.type_of_user === 'admin') sqlText = `SELECT * FROM "session" ORDER BY "id" DESC;`;
     pool.query(sqlText).then( (response) => {
         res.send( response.rows );
     }).catch( (error) => {

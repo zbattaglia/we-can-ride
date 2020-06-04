@@ -168,15 +168,21 @@ class StandardSession extends Component {
             {this.state.session.length_in_weeks 
             &&
             <Box>This is a {this.state.session.length_in_weeks.days/7} week long session</Box>}
-
-            {this.state.session.let_volunteer_view
+            {(this.props.state.user.type_of_user === 'admin') 
             &&
-            this.state.session.let_volunteer_view
-            ?
-            <Box>Volunteers can see this session</Box>
-            :
-            <Box>Volunteers can't see this session</Box>
+            <Box>
+            {this.state.session.let_volunteer_view
+              &&
+              this.state.session.let_volunteer_view
+              ?
+              <Box>Volunteers can see this session</Box>
+              :
+              <Box>Volunteers can't see this session</Box>
+              }   
+              </Box>
             }
+
+
             <LetVolunteersViewButton allow={this.state.session.let_volunteer_view} session_id={this.state.session.id}/>
         <Grid 
           container
