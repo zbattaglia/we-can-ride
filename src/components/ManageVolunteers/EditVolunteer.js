@@ -17,7 +17,7 @@ const styles = theme => ({
   container: {
     display: 'flex',
     flexWrap: 'wrap',
-    backgroundColor: 'whitesmoke',
+    // backgroundColor: 'whitesmoke',
     width: '80%',
   },
   textField: {
@@ -37,6 +37,7 @@ const styles = theme => ({
   },
   button: {
     margin: theme.spacing.unit,
+    marginBottom: 30
   },
   tableTitle: {
     textAlign: 'center',
@@ -48,11 +49,11 @@ const styles = theme => ({
     textAlign: 'center',
   },
   table: {
-    backgroundColor: 'whitesmoke',
+    // backgroundColor: 'whitesmoke',
     width: '83%',
     marginLeft: 'auto',
     marginRight: 'auto',
-  }
+  },
 });
 
 class EditVolunteer extends Component {
@@ -141,6 +142,7 @@ class EditVolunteer extends Component {
     const { classes } = this.props;
     return (
       <>
+
         <form className={classes.container}>
           <h2 className={classes.title}>Edit Volunteer Information</h2>
           <div className={classes.formContent}>
