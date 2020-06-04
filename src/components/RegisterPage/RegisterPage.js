@@ -39,6 +39,9 @@ const styles = theme => ({
     margin: theme.spacing.unit,
     minWidth: 120,
   },
+  input: {
+    marginBottom: 30
+  }
 });
 
 class RegisterPage extends Component {
