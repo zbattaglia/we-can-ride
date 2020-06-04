@@ -140,7 +140,6 @@ class EditVolunteer extends Component {
     const { classes } = this.props;
     return (
       <>
-
         <form className={classes.container}>
           <h2 className={classes.title}>Edit Volunteer Information</h2>
           <div className={classes.formContent}>
@@ -360,6 +359,7 @@ class EditVolunteer extends Component {
           >
             UPDATE
           </Button>
+
           </div>
           </form>
       </>
