@@ -180,8 +180,6 @@ class EditVolunteer extends Component {
             value={this.state.birthday}
             onChange={ (event) => this.handleChange( event, 'birthday')}
           />
-          </div>
-          </form>
           {/* TABLE BELOW */}
           
           <Table  className={classes.table}>
@@ -362,6 +360,8 @@ class EditVolunteer extends Component {
           >
             UPDATE
           </Button>
+          </div>
+          </form>
       </>
     )
   }

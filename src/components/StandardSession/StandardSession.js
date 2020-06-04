@@ -108,8 +108,8 @@ class StandardSession extends Component {
     return (
       <>
         <h1>Standard Session</h1>
-        {JSON.stringify(this.state)}
-        {JSON.stringify(this.props.state.user)}
+        {/* {JSON.stringify(this.state)}
+        {JSON.stringify(this.props.state.user)} */}
         <Grid container>
           <Grid item>
             {/**this is the button to add new lessons, visible when the session isn't published, also not
