@@ -34,9 +34,20 @@ const allShifts = (state = [], action) => {
       return state;
   }
 }
+
+const subShifts = (state = [], action) => {
+  switch (action.type) {
+    case 'SET_SUB_SHIFTS':
+      return action.payload;
+    default:
+      return state;
+  }
+}
+
   export default combineReducers({
     fourWeeksShifts,
     myShifts,
     tradeShift,
-     allShifts,
+    allShifts,
+    subShifts,
   });

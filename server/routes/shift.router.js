@@ -82,4 +82,28 @@ router.put( '/:shiftId', (req, res) => {
         })
 })
 
+// GET route to get all shifts with open shifts for sub
+router.get( '/sub', (req, res) => {
+    // console.log( 'Getting sub shifts on server' );
+
+    const sqlText = `SELECT "shift"."id", "date", "start_of_lesson", ("start_of_lesson" + "length_of_lesson") AS "end_of_lesson", "skill"."title", "eu"."first_name" AS "expected_first_name", "au"."first_name" AS "assigned_first_name", LEFT("au"."last_name", 1) AS "assigned_user_last_initial", "expected_user", "assigned_user", "client" FROM "shift" 
+                    JOIN "slot" ON "shift"."slot_id" = "slot"."id"
+                    JOIN "lesson" ON "slot"."lesson_id" = "lesson"."id"
+                    LEFT JOIN "user" AS "eu" ON "expected_user" = "eu"."id"
+                    LEFT JOIN "user" AS "au" ON "assigned_user" = "au"."id"
+                    LEFT JOIN "skill" ON "skill_needed" = "skill"."id"
+                    WHERE "assigned_user" IS NULL
+                    ORDER BY "date";`
+
+    pool.query( sqlText )
+        .then( (response) => {
+            // console.log( 'Got sub shifts on server', response.rows );
+            res.send( response.rows );
+        })
+        .catch( (error) => {
+            console.log( "Error getting sub shifts", error );
+            res.sendStatus( error );
+        })
+})
+
 module.exports = router;
