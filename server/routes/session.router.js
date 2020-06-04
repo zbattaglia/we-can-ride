@@ -61,6 +61,23 @@ router.post('/new', rejectUnauthenticated, (req, res) => {
   });
 });
 
+router.put('/view', rejectUnauthenticated, (req, res) => {
+  console.log('in server on session volunteer view', req.body);
+  //req.body looks like { session_id: 13, let_volunteer_view: false }
+  let sqlText = `UPDATE "session" 
+  SET "let_volunteer_view"=$2 
+  WHERE "id"=$1;
+  `;
+  pool.query(sqlText, [req.body.session_id, req.body.let_volunteer_view]).then(response => {
+    res.sendStatus(200);
+  }).catch(error => {
+    console.log('error in changing if volunteer can view', error);
+    res.sendStatus(500);
+  });
+});
+
+
+
 router.put('/edit/:session_id', rejectUnauthenticated, async (req, res, next) => {
   console.log('in the publish session router', req.params.session_id);
   const connection = await pool.connect();
