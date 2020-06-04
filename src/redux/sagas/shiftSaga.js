@@ -27,8 +27,8 @@ function* fetchMyShifts(action) {
 
 function* giveUpShift(action) {
   try {
-    yield axios.put( `/shift/${action.payload}` );
-    yield put( { type: 'FETCH_MY_SHIFTS' } );
+    yield axios.put( `/shift/${action.payload}` )
+    yield put( { type: 'SET_TRADE_SHIFT', payload: action.payload } );
   }
   catch(error) {
     console.log( 'Error giving up shift', error );

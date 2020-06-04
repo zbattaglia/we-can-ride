@@ -19,7 +19,8 @@ const myShifts = (state = [], action) => {
 
 const tradeShift = (state = '', action) => {
   switch (action.type) {
-    case 'SHIFT_TO_TRADE':
+    case 'SET_TRADE_SHIFT':
+      return action.payload;
     default:
       return state;
   }

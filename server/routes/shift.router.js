@@ -8,6 +8,7 @@ const { rejectUnauthenticated } = require('../modules/authentication-middleware'
  * GET route template
  */
 router.get(`/myshift/:user_id`, rejectUnauthenticated, (req, res) => {
+    // console.log( `Finding shifts for user with id ${req.user.id}`)
     const sqlText = `SELECT "shift"."id", "date", ("start_of_lesson" - INTERVAL '15 minutes') AS "time_to_arrive", 
     "title" AS "role" FROM "shift"
     JOIN "slot" ON "shift"."slot_id" = "slot"."id"
@@ -15,10 +16,10 @@ router.get(`/myshift/:user_id`, rejectUnauthenticated, (req, res) => {
     JOIN "skill" ON "skill_needed" = "skill"."id"
     WHERE "assigned_user" = $1
     ORDER BY "date" ASC;`;
-    pool.query(sqlText, [req.params.user_id]).then( (response) => {
+    pool.query(sqlText, [Number( req.user.id )]).then( (response) => {
         res.send( response.rows );
     }).catch( (error) => {
-        console.log( 'Error getting all shifts', error );
+        console.log( 'Error getting current users shifts', error );
         res.sendStatus( 500 );
     });
 });
@@ -38,7 +39,7 @@ router.get('/fourweeks', rejectUnauthenticated, (req, res) => {
             res.send( response.rows );
         })
         .catch( (error) => {
-            console.log( 'Error getting all shifts', error );
+            console.log( 'Error getting fourweeks shifts', error );
             res.sendStatus( 500 );
         })
 });

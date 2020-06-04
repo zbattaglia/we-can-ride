@@ -24,8 +24,9 @@ module.exports = sendEmail = ( emailInfo) => {
     const mailOptions = {
         from: `${process.env.EMAIL}`,
         to: `${toAddress}`,
-        subject: `You got a message`,
-        html: `<p>Hey ${recipient}! You got a message in We Can Ride!</p> <br /><p>${message}</p>`
+        subject: `You got a request in We Can Ride`,
+        html: `<p>Hey ${recipient}! You got a request to trade a We Can Ride volunteer shift!</p> <br /><p>${message}</p>
+                <br />To reply to this message or take the shift please log into your volunteer account.`
     };
 
     // .sendMail uses the transporter and specified mail options to attempt to send an email.

@@ -12,13 +12,20 @@ import './FindASub.css';
 class FindASub extends Component {
 
   state = {
-    shift: {},
+    shift: '',
   }
 
   componentDidMount () {
     this.props.dispatch({type: 'FETCH_VOLUNTEERS'})
-    this.getShift( this.props.state.shift.tradeShift );
+    this.props.dispatch( {type: 'FETCH_MY_SHIFTS' } )
   }
+
+  componentDidUpdate( prevProps, prevState ) {
+    if( ( this.state.shift == '' ) && this.props.state.shift.tradeShift ) {
+      this.getShift( this.props.state.shift.tradeShift );
+    }
+  }
+
   // find shift that was selected on the previous shift page
   getShift( tradeShiftId ) {
     console.log( 'looking for shift with id', tradeShiftId )
@@ -46,7 +53,7 @@ class FindASub extends Component {
       <>
         <h1>Find a sub for {this.state.shift.role} on  {this.formatDate( this.state.shift.date )} at {this.state.shift.time_to_arrive}</h1>
         <p>this is the page where you can find a sub</p>
-        {JSON.stringify( this.props.state.volunteer ) };
+        {JSON.stringify( this.props.state.myShifts ) };
         <ul>
           {this.props.state.volunteer.volunteer.map( (sub) => 
           <li key={sub.id} className="sub-list-item" value={sub.email}>

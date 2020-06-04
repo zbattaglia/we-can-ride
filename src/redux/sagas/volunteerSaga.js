@@ -30,7 +30,7 @@ function* updateSelectedVolunteer(action) {
   console.log( `In updateVolunteer saga`, action.payload );
 
   try{
-    axios.put( `/volunteer/${action.payload.id}`, action.payload );
+    yield axios.put( `/volunteer/${action.payload.id}`, action.payload );
 
     yield put( { type: 'FETCH_VOLUNTEERS' } );
   }
