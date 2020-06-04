@@ -84,21 +84,22 @@ class StandardSession extends Component {
     if (prevProps.state.session.allSessions.length !== this.props.state.session.allSessions.length){
       this.setState({
         session: this.props.state.session.allSessions[0]
-      })
+      });
     }
+        //if we didn't create or delete a shift, please show the shift you were showing before
+        else if((prevProps.state.session.allSessions !== this.props.state.session.allSessions && this.state.session.id)){
+          //find the object with the id of this.state.session.id and set that session to be the id.
+          let tempSession = this.props.state.session.allSessions.find(x => x.id === this.state.session.id);
+           console.log('update',JSON.stringify(this.props.state.session.allSessions.find(x => x.id === this.state.session.id)));
+          this.setState({
+            session: tempSession
+          });
     //if we picked a different session, fetch the lessons that are associated with that session
     if(prevState.session !== this.state.session){
       this.props.dispatch({ type: 'FETCH_SESSION_LESSONS', payload: {session_id: this.state.session.id}})
     }
     //if we just updated a session, keep showing that one
-    //TODO technically this doesn't work correctly when a new session is created - it might be nice to automatically show that shift...
-    if((prevProps.state.session.allSessions !== this.props.state.session.allSessions && this.state.session.id)){
-      //find the object with the id of this.state.session.id and set that session to be the id.
-      let tempSession = this.props.state.session.allSessions.find(x => x.id === this.state.session.id);
-       console.log('update',JSON.stringify(this.props.state.session.allSessions.find(x => x.id === this.state.session.id)));
-      this.setState({
-        session: tempSession
-      });
+
       
     }
   }
