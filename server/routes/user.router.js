@@ -51,13 +51,14 @@ router.post('/register', async (req, res, next) => {
     await connection.query(`BEGIN`);
     
     // User information
-    const insertSQL = `INSERT INTO "user" (email, password, first_name, last_name, phone, birthday) 
-                       VALUES ($1, $2, $3, $4, $5, $6) RETURNING id;`; 
+    const insertSQL = `INSERT INTO "user" (email, password, first_name, last_name, phone, birthday, type_of_user) 
+                       VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING id;`; 
                       
     // UserId is used to reference user_availability
     const userId = await connection.query(insertSQL, 
                                           [username, password, req.body.firstName, 
-                                          req.body.lastName, req.body.phoneNumber, req.body.birthday]);
+                                          req.body.lastName, req.body.phoneNumber, req.body.birthday, 
+                                          req.body.type_of_user]);
 
     // console.log(`user id:`, userId)
     const sqlTextThree = `SELECT "id" FROM "availability" WHERE "availability"."time_available" = $1;`;
