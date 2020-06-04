@@ -63,15 +63,18 @@ router.put( '/:selectedId', rejectUnauthenticated, async(req, res) => {
     const phone = req.body.phone;
     const email = req.body.email;
     const birthday = req.body.birthday;
-    const time_available = [];
-    // loop over the req.body and create an array of avalabilities to insert in database.
-    for ( let availability in req.body ) {
-        if( req.body[ availability ] === true ) {
-            time_available.push( availability );
-        }
-    }
+    const availability_skills = [];
+
+    // loop over the req.body and create an array of avalabilities and skills to insert in database.
+    for ( let availability_skill in req.body ) {
+        if( req.body[ availability_skill ] === true ) {
+            availability_skills.push( availability_skill );
+        };
+    };
+
     console.log( `Updating user with id ${req.params.selectedId}`, id, first_name, last_name, phone, email, birthday );
-    console.log( 'Updating selected user on server', req.body, time_available );
+    console.log( 'Updating selected user`s skills and availabilities on server ', req.body, availability_skills );
+
     const connection = await pool.connect();
 
     try {
@@ -86,13 +89,28 @@ router.put( '/:selectedId', rejectUnauthenticated, async(req, res) => {
         const sqlTextThree = `SELECT "id" FROM "availability" WHERE "availability"."time_available" = $1;`;
         // fourth query inserts user.id and availability id from third query into user_availability
         const sqlTextFour = `INSERT INTO "user_availability" ("user_id", "availability_id") VALUES ($1, $2);`;
+        // fifth query get's id of specific skill to insert into user_skill table
+        const sqlTextFive = `SELECT "id" FROM "skill" WHERE "skill"."title" = $1;`;
+        // sixth query inserts user.id and skill.id from fifth query into user_skill
+        const sqlTextSix = `INSERT INTO "user_skill" ("user_id", "skill_id") VALUES ($1, $2);`;
+        // seventh sequel text deletes all current user_skill (comes after second sqlText)
+        const sqlTextSeven = `DELETE FROM "user_skill" WHERE "user_skill"."user_id" = $1;`
 
         // run SQL transaction's
         await connection.query( sqlTextOne, [ first_name, last_name, phone, email, birthday, id ] );
         await connection.query( sqlTextTwo, [ id ] );
-        for( const availability of time_available ) {
-            let response = await connection.query( sqlTextThree, [ availability ] );
-            await connection.query( sqlTextFour, [ id, response.rows[0].id ] );
+        await connection.query( sqlTextSeven, [ id ] );
+        for( const availability_skill of availability_skills ) {
+            let response = await connection.query( sqlTextThree, [ availability_skill ] );
+            if( response.rows[0] !== undefined ) {
+                await connection.query( sqlTextFour, [ id, response.rows[0].id ] );
+            }
+            else {
+                let skillResponse = await connection.query( sqlTextFive, [ availability_skill ] );
+                if( skillResponse.rows[0] !== undefined ) {
+                    await connection.query( sqlTextSix, [ id, skillResponse.rows[0].id ] );
+                }
+            }
         }
         await connection.query( 'COMMIT;' );
         res.sendStatus( 200 );

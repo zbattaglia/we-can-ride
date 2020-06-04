@@ -9,109 +9,85 @@ import Select from '@material-ui/core/Select';
 import Checkbox from '@material-ui/core/Checkbox';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import Chip from '@material-ui/core/Chip';
 
 const styles = theme => ({
-    root: {
-      display: 'flex',
-      flexWrap: 'wrap',
-    },
-    formControl: {
-      margin: theme.spacing.unit,
-      minWidth: 120,
-      maxWidth: 300,
-    },
-    chips: {
-      display: 'flex',
-      flexWrap: 'wrap',
-    },
-    chip: {
-      margin: theme.spacing.unit / 4,
-    },
-    noLabel: {
-      marginTop: theme.spacing.unit * 3,
-    },
-  });
-  
-  const ITEM_HEIGHT = 48;
-  const ITEM_PADDING_TOP = 8;
-  const MenuProps = {
-    PaperProps: {
-      style: {
-        maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
-        width: 250,
-      },
-    },
-  };
-  
-  const names = [
-    'sidewalker',
-    'leader',
-    'barn aid',
-    'feeder',
-  ];  
+  root: {
+    display: 'flex',
+    flexWrap: 'wrap',
+  },
+  formControl: {
+    margin: theme.spacing.unit,
+    minWidth: 120,
+    maxWidth: 300,
+  },
+  chips: {
+    display: 'flex',
+    flexWrap: 'wrap',
+  },
+  chip: {
+    margin: theme.spacing.unit / 4,
+  },
+  noLabel: {
+    marginTop: theme.spacing.unit * 3,
+  },
+});
 
-  class RoleDropdown extends React.Component {
-    state = {
-        name: [],
-      };
-    
-      
+const ITEM_HEIGHT = 48;
+const ITEM_PADDING_TOP = 8;
+const MenuProps = {
+  PaperProps: {
+    style: {
+      maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
+      width: 250,
+    },
+  },
+};
 
 
-      handleChange = event => {
-        this.setState({ name: event.target.value });
-        console.log('In handleChange', event.target.value);
-      };
-    
-      handleChangeMultiple = event => {
-        const { options } = event.target;
-        const value = [];
-        for (let i = 0, l = options.length; i < l; i += 1) {
-          if (options[i].selected) {
-            value.push(options[i].value);
-          }
-        }
-        this.setState({
-          name: value,
-        });
-      };
-    
-      render() {
-        const { classes } = this.props;
-        return (
-          <div className={classes.root}>
-            <FormControl className={classes.formControl}>
-          <InputLabel htmlFor="select-multiple-checkbox">Role</InputLabel>
-          <Select
-            multiple
-            value={this.state.name}
-            onChange={this.handleChange}
-            input={<Input id="select-multiple-checkbox" />}
-            renderValue={selected => selected.join(', ')}
-            MenuProps={MenuProps}
-          >
-            {this.props.state.volunteer.userRoles.map(name => (
-              <>
-              {(this.props.user_id === name.user_id) && 
-                            <MenuItem key={name.id} value={name.title}>
-                            <Checkbox checked={this.state.name.indexOf(name.title) > -1} />
-                            <ListItemText primary={name.title} />
-                          </MenuItem> }
- 
-              </>
-              
-            ))}
-          </Select>
-        </FormControl>
-            </div>
-        )
-    }
+class RoleDropdown extends React.Component {
+  state = {
+    sidewalker: '',
+    leader: '',
+    barn_aid: '',
+    feeder: '',
+  }
+
+
+
+
+  handleCheckboxChangeFor = property => (event) => {
+    this.setState({
+      [property]: event.target.checked,
+    });
+    console.log('in handleCheckboxChangeFor', this.state)
+  }
+
+  componentDidMount() {
+    this.props.dispatch ({ type: "GET_USER_ROLES"})
+  }
+
+  render() {
+    return (
+        <div>
+          {this.props.state.volunteer.userRoles.map(name => (
+            <>
+            {(this.props.user_id === name.user_id) && 
+                          <ul key={name.id}>
+                          <li style={{listStyle: "none"}}>
+                          {name.title.replace( '_', ' ' )}
+                          </li>
+                        </ul> 
+                        }
+            </>
+          ))}
+          </div>
+      )
+  }
 }
 
 const mapStateToProps = state => ({
-    state,
-    classes: PropTypes.object.isRequired,
+  state,
+  classes: PropTypes.object.isRequired,
 });
 
 export default connect(mapStateToProps)(withStyles(styles, { withTheme: true })(RoleDropdown));

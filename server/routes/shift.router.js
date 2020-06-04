@@ -8,13 +8,13 @@ const { rejectUnauthenticated } = require('../modules/authentication-middleware'
  * GET route template
  */
 router.get(`/myshift/:user_id`, rejectUnauthenticated, (req, res) => {
-    const sqlText = `SELECT "date", ("start_of_lesson" - INTERVAL '15 minutes') AS "time_to_arrive", 
+    const sqlText = `SELECT "shift"."id", "date", ("start_of_lesson" - INTERVAL '15 minutes') AS "time_to_arrive", 
     "title" AS "role" FROM "shift"
     JOIN "slot" ON "shift"."slot_id" = "slot"."id"
     JOIN "lesson" ON "slot"."lesson_id" = "lesson"."id"
     JOIN "skill" ON "skill_needed" = "skill"."id"
     WHERE "assigned_user" = $1
-    ;`;
+    ORDER BY "date" ASC;`;
     pool.query(sqlText, [req.params.user_id]).then( (response) => {
         res.send( response.rows );
     }).catch( (error) => {
@@ -43,11 +43,42 @@ router.get('/fourweeks', rejectUnauthenticated, (req, res) => {
         })
 });
 
+router.get(`/all`, rejectUnauthenticated, (req, res) => {
+    const sqlText = `SELECT * FROM "shift";`;
+    pool.query(sqlText)
+    .then( (response) => {
+        res.send( response.rows );
+    })
+    .catch( (error) => {
+        console.log( 'Error getting all shifts', error );
+        res.sendStatus( 500 );
+    });
+});
+
 /**
  * POST route template
  */
 router.post('/', rejectUnauthenticated, (req, res) => {
 
 });
+
+// PUT route to update a shift when a volunteer is trying to give up
+router.put( '/:shiftId', (req, res) => {
+    const shiftId = req.params.shiftId;
+    // console.log( 'Got shiftId in server', shiftId );
+    const sqlText = `UPDATE "shift"
+                    SET "user_wants_to_trade" = $1
+                    WHERE "shift"."id" = $2;`;
+
+    pool.query( sqlText, [ true, shiftId ] )
+        .then( (response) => {
+            console.log( 'Successfully updated shift availability' );
+            res.sendStatus( 200 );
+        })
+        .catch( (error) => {
+            console.log( 'Error updaing shift availability', error );
+            res.sendStatus( 500 );
+        })
+})
 
 module.exports = router;
