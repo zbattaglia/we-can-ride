@@ -65,7 +65,7 @@ try {
             break;
         }
   }
-  let object = {saturday, sunday, monday, tuesday, wednesday, thursday, friday, saturday, lessons}
+  let object = {saturday, sunday, monday, tuesday, wednesday, thursday, friday, lessons}
   yield put({ type: 'SET_SESSION_LESSONS', payload: object });
 
 } catch (error) {
