@@ -16,6 +16,7 @@ import AddRoleButton from './AddRoleButton';
 import DeleteLessonButton from './DeleteLessonButton';
 import DeleteRole from './DeleteRole';
 import PublishSessionButton from './PublishSessionButton';
+import LetVolunteersViewButton from './LetVolunteersViewButton';
 
 
 const styles = theme => ({
@@ -161,6 +162,7 @@ class StandardSession extends Component {
             :
             <>Volunteers can't see this session</>
             }
+            <LetVolunteersViewButton allow={this.state.session.let_volunteer_view} session_id={this.state.session.id}/>
         <Grid 
           container
           className={classes.root}
