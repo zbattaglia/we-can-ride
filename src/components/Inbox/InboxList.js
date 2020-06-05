@@ -36,7 +36,7 @@ const CustomTableCell = withStyles(theme => ({
   const styles = theme => ({
     root: {
       width: '100%',
-      marginTop: theme.spacing.unit * 3,
+      marginTop: theme.spacing(3),
       overflowX: 'auto',
     },
     table: {
@@ -49,8 +49,8 @@ const CustomTableCell = withStyles(theme => ({
     },
     absolute: {
         position: 'absolute',
-        bottom: theme.spacing.unit * 2,
-        right: theme.spacing.unit * 3,
+        bottom: theme.spacing(2),
+        right: theme.spacing(3),
     },
     from: {
       textAlign: 'center',

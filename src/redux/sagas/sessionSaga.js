@@ -15,7 +15,6 @@ function* fetchSessions() {
 function* showSession(action) {
  console.log('in show session saga', action.payload);
  //payload looks like {session_id: 13, let_volunteer_view: false}
- const session_id = action.payload.session_id
  yield axios.put('/session/view', action.payload);
  yield put({type: 'FETCH_SESSIONS'});
 

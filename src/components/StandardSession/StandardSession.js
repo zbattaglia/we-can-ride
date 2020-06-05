@@ -80,7 +80,7 @@ class StandardSession extends Component {
   }
   componentDidUpdate (prevProps, prevState) {
     //if the page just loaded, set the top session in the reducer as the current session
-    if ((this.state.session == '') && this.props.state.session.allSessions[0]){
+    if ((this.state.session === '') && this.props.state.session.allSessions[0]){
       this.setState({
         session: this.props.state.session.allSessions[0]
       })
@@ -204,10 +204,10 @@ class StandardSession extends Component {
         // }}
           
         >
-          <Grid item xs={12} Aligner className={classes.day}>
+          <Grid item xs={12} className={classes.day}>
             {/**here we make the weekdays */}
             {weekdays.map( day => (
-              <Paper Aligner-item Aligner-item--top className={classes.paper}>
+              <Paper key={day.number} className={classes.paper}>
                 {day.name}
                 {/**here's where we get the lessons in a day */}
                 {this.props.state.session.slots.lessons && this.props.state.session.slots.lessons.map( lesson => (
