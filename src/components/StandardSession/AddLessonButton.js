@@ -144,21 +144,21 @@ class AddLessonButton extends Component {
   validate = propertyName => (event) => {
     console.log('blur', propertyName);
     if(propertyName === 'start_timeError'){
-      if(!this.state.length){
+      if(!this.state.start_time){
         this.setState({
           [propertyName]: 'you need to select a start time'
         });
       }
     }
     if(propertyName === 'dayError'){
-      if(!this.state.date){
+      if(!this.state.day){
         this.setState({
           [propertyName]: 'you need to select a day of the week'
         });
       }
     }
     if(propertyName === 'durationError'){
-      if(!this.state.date){
+      if(!this.state.duration){
         this.setState({
           [propertyName]: 'you need choose how long the lesson will be'
         });
@@ -203,7 +203,6 @@ return (
 
 
      */}
-     {JSON.stringify(this.state)}
       <Select
         value={this.state.day}
         onChange={this.handleInputChangeFor('day')}
