@@ -76,15 +76,10 @@ class EditProfile extends Component {
       pmFriday: '',
       amSaturday: '',
       pmSaturday: '',
-      sidewalker: '',
-      leader: '',
-      barn_aid: '',
-      feeder: '',
     }
 
   componentDidMount () {
-    this.props.dispatch({type: 'FETCH_USER'})
-    this.props.dispatch( { type: 'FETCH_SELECTED_VOLUNTEER', payload: this.props.state.user.id } );
+    this.props.dispatch( {type: 'FETCH_SELECTED_VOLUNTEER', payload: this.props.state.user.id } )
   }
   // detects a change on an input field and updates the state accordingly
   handleChange = ( event, propName ) => {
@@ -106,42 +101,29 @@ class EditProfile extends Component {
   // the field will be reset when the user completely deletes the information)
   // else, fetch the selected volunteer again.
   componentDidUpdate( prevProps, prevState ){
-    if( this.state.first_name === '' && prevState.first_name === '' && this.props.state.volunteer.selectedVolunteer ) {
-      // create a new temporary state. then loop over array of selectedUser availabilities and create a key-value pair in the new state
-      // spread this new object in setState to default check boxes of days the user is available to be checked
-      let newState = {};
-      for ( let userAvailability of this.props.state.volunteer.selectedVolunteer.availability ) {
-        newState[userAvailability] = true;
-      }
-      for ( let userSkill of this.props.state.volunteer.selectedVolunteer.skill ) {
-        newState[userSkill] = true;
-      }
-      this.setState({
-        ...this.state,
-        first_name: this.props.state.volunteer.selectedVolunteer.first_name,
-        last_name: this.props.state.volunteer.selectedVolunteer.last_name,
-        phone: this.props.state.volunteer.selectedVolunteer.phone,
-        email: this.props.state.volunteer.selectedVolunteer.email,
-        birthday: this.props.state.volunteer.selectedVolunteer.birthday,
-        id: this.props.state.volunteer.selectedVolunteer.id,
-        ...newState,
+    console.log( 'In update', this.props.state.volunteer.selectedVolunteer )
+    
+      if( prevProps.state.volunteer.selectedVolunteer !== this.props.state.volunteer.selectedVolunteer ) {
+        let newState = {};
+        for ( let userAvailability of this.props.state.volunteer.selectedVolunteer.availability ) {
+          newState[userAvailability] = true;
+        }
+        this.setState({
+          ...this.state,
+          first_name: this.props.state.volunteer.selectedVolunteer.first_name,
+          last_name: this.props.state.volunteer.selectedVolunteer.last_name,
+          phone: this.props.state.volunteer.selectedVolunteer.phone,
+          email: this.props.state.volunteer.selectedVolunteer.email,
+          birthday: this.props.state.volunteer.selectedVolunteer.birthday,
+          id: this.props.state.volunteer.selectedVolunteer.id,
+          ...newState,
       })
-      if(prevState !== this.state) {
-        this.props.dispatch( { type: 'FETCH_SELECTED_VOLUNTEER', payload: this.props.volunteer.selectedVolunteer.id } );
-      }
     }
   };
 
   handleClick = () => {
     // console.log( 'Got a Click', this.state );
     this.props.dispatch( { type: 'UPDATE_SELECTED_VOLUNTEER', payload: this.state } );
-    if( this.props.state.user.type_of_user === 'admin' ) {
-      this.props.history.push( '/managevolunteers');
-    }
-    else {
-      this.props.dispatch({ type: 'FETCH_USER' })
-      this.props.dispatch( { type: 'FETCH_SELECTED_VOLUNTEER', payload: this.props.state.user.id } );
-    }
   }
 
   render() {
@@ -190,60 +172,11 @@ class EditProfile extends Component {
           </div>
           </form>
           {/* TABLE BELOW */}
-          
-          <Table  className={classes.table}>
-              <TableHead>
-                <TableRow>
-                  <TableCell className={classes.tableTitle} colSpan={7}>
-                    Edit Role
-                  </TableCell>
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                  <TableRow>
-                    <TableCell>
-                    Sidewalker
-                        <Checkbox
-                          checked={this.state.sidewalker}
-                          onChange={this.handleCheckboxChangeFor( 'sidewalker')}
-                          value="sidewalker"
-                        />
-                      
-                    </TableCell>
-                    <TableCell>
-                    Leader
-                        <Checkbox
-                          checked={this.state.leader}
-                          onChange={this.handleCheckboxChangeFor('leader')}
-                          value="leader"
-                        />
-                      
-                    </TableCell>
-                    <TableCell>
-                    Barn aid
-                        <Checkbox
-                          checked={this.state.barn_aid}
-                          onChange={this.handleCheckboxChangeFor('barn_aid')}
-                          value="barn_aid"
-                        />
-                      
-                    </TableCell>
-                    <TableCell>
-                    Feeder
-                        <Checkbox
-                          checked={this.state.feeder}
-                          onChange={this.handleCheckboxChangeFor('feeder')}
-                          value="feeder"
-                        />
-                      
-                    </TableCell>
-                  </TableRow>
-              </TableBody>
-            </Table>
             <Table  className={classes.table}>
               <TableHead>
                 <TableRow>
                   <TableCell className={classes.tableTitle} colSpan={7}>
+                    {JSON.stringify(this.state)}
                     Edit Availability
                   </TableCell>
                 </TableRow>

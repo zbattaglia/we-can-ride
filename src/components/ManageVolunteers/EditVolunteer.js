@@ -190,7 +190,27 @@ class EditVolunteer extends Component {
                 </TableRow>
               </TableHead>
               <TableBody>
-                  <TableRow>
+              </TableBody>
+            </Table>
+            <Table  className={classes.table}>
+              <TableHead>
+                <TableRow>
+                  <TableCell className={classes.tableTitle} colSpan={7}>
+                    Edit Availability
+                  </TableCell>
+                </TableRow>
+                <TableRow>
+                  <TableCell  className={classes.columnTitle}>Sunday</TableCell>
+                  <TableCell  className={classes.columnTitle}>Monday</TableCell>
+                  <TableCell  className={classes.columnTitle}>Tuesday</TableCell>
+                  <TableCell  className={classes.columnTitle}>Wednesday</TableCell>
+                  <TableCell  className={classes.columnTitle}>Thursday</TableCell>
+                  <TableCell  className={classes.columnTitle}>Friday</TableCell>
+                  <TableCell  className={classes.columnTitle}>Saturday</TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+              <TableRow>
                     <TableCell>
                     Sidewalker
                         <Checkbox
@@ -228,26 +248,6 @@ class EditVolunteer extends Component {
                       
                     </TableCell>
                   </TableRow>
-              </TableBody>
-            </Table>
-            <Table  className={classes.table}>
-              <TableHead>
-                <TableRow>
-                  <TableCell className={classes.tableTitle} colSpan={7}>
-                    Edit Availability
-                  </TableCell>
-                </TableRow>
-                <TableRow>
-                  <TableCell  className={classes.columnTitle}>Sunday</TableCell>
-                  <TableCell  className={classes.columnTitle}>Monday</TableCell>
-                  <TableCell  className={classes.columnTitle}>Tuesday</TableCell>
-                  <TableCell  className={classes.columnTitle}>Wednesday</TableCell>
-                  <TableCell  className={classes.columnTitle}>Thursday</TableCell>
-                  <TableCell  className={classes.columnTitle}>Friday</TableCell>
-                  <TableCell  className={classes.columnTitle}>Saturday</TableCell>
-                </TableRow>
-              </TableHead>
-              <TableBody>
                   <TableRow>
                     <TableCell>
                       AM
