@@ -219,7 +219,7 @@ return (
           <em>None</em>
         </MenuItem>
         {weekdays.map( weekday => (
-          <MenuItem value={weekday.sqlDate}>{weekday.day}</MenuItem>
+          <MenuItem key={weekday.day} value={weekday.sqlDate}>{weekday.day}</MenuItem>
         ))}
       </Select>
       {this.state.dayError

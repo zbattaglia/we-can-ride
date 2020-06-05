@@ -19,7 +19,6 @@ const volunteer = (state = [], action) => {
   };
 
   const userRoles = (state = [], action ) => {
-    console.log('userRoles', action.payload)
     switch ( action.type ) {
       case 'SET_USER_ROLES':
         return action.payload;
