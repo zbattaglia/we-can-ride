@@ -77,7 +77,7 @@ class StandardSession extends Component {
   }
   componentDidUpdate (prevProps, prevState) {
     //if the page just loaded, set the top session in the reducer as the current session
-    if ((this.state.session == '') && this.props.state.session.allSessions[0]){
+    if ((this.state.session === '') && this.props.state.session.allSessions[0]){
       this.setState({
         session: this.props.state.session.allSessions[0]
       })

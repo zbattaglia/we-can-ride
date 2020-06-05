@@ -40,7 +40,7 @@ function* replyToMessage(action) {
 function* sendMessage(action) {
   console.log( 'In send message saga', action.payload );
   try {
-    axios.post( '/message/request', action.payload )
+   yield axios.post( '/message/request', action.payload )
   }
   catch(error) {
     console.log( 'Error sending message', error );
