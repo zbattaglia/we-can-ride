@@ -45,8 +45,8 @@ const styles = theme => ({
     flexWrap: 'wrap',
   },
   textField: {
-    marginLeft: theme.spacing.unit,
-    marginRight: theme.spacing.unit,
+    marginLeft: theme.spacing(1),
+    marginRight: theme.spacing(1),
     width: 200,
   },
   paper: {
@@ -204,6 +204,8 @@ return (
 
      */}
       <Select
+        label='day'
+        required
         value={this.state.day}
         onChange={this.handleInputChangeFor('day')}
         onBlur={this.validate('dayError')}
@@ -232,6 +234,7 @@ return (
       />
 
 <TextField
+      required
       label='Lesson Length in Minutes'
       type='number'
       InputLabelProps={{
@@ -245,7 +248,8 @@ return (
       &&
       <Box className={classes.warning}>{this.state.durationError}</Box>
       }
-           <TextField
+      <TextField
+        required
         id="time"
         label="Lesson Start Time"
         type="time"

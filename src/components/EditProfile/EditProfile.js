@@ -19,7 +19,7 @@ const styles = theme => ({
     width: '80%',
   },
   textField: {
-    margin: theme.spacing.unit,
+    margin: theme.spacing(1),
     width: '48%',
   },
   title: {
@@ -34,7 +34,7 @@ const styles = theme => ({
     textAlign: 'center',
   },
   button: {
-    margin: theme.spacing.unit,
+    margin: theme.spacing(1),
   },
   tableTitle: {
     textAlign: 'center',
