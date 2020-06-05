@@ -84,7 +84,7 @@ class StandardSession extends Component {
     }
     //if we picked a different session, fetch the lessons that are associated with that session
     if(prevState.session.id !== this.state.session.id){
-      console.log('get teh lessons again!');
+      console.log('get the lessons again!');
       this.props.dispatch({ type: 'FETCH_SESSION_LESSONS', payload: {session_id: this.state.session.id}})
     }
     //if we just added/deleted a session, set the top session in the reducer as the current session
