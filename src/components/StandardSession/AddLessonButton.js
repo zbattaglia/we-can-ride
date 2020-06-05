@@ -53,6 +53,9 @@ const styles = theme => ({
     padding: theme.spacing(2),
     color: theme.palette.text.secondary,
     display: 'inline-block'
+  },
+  warning: {
+    color: 'red'
   }
 });
 
@@ -60,10 +63,14 @@ const styles = theme => ({
 class AddLessonButton extends Component {
   state = {
     open: false,
-    start_time: '',
-    day: '',
-    duration: '',
-    client: '',
+    start_time: null,
+    day: null,
+    duration: null,
+    client: null,
+    createError: null,
+    start_timeError: null,
+    dayError: null,
+    durationError: null,
   };
 
   handleClickOpen = () => {
@@ -72,10 +79,47 @@ class AddLessonButton extends Component {
 
   handleClose = (blob) => {
     if(blob === 'create'){
-      console.log('send the state to the server', this.state, this.props.session_id);
-      this.props.dispatch({ type: 'CREATE_LESSON', payload: {client: this.state.client, day: this.state.day, duration: this.state.duration, start_time: this.state.start_time, session_id: this.props.session_id}});
+      if(this.state.start_time && this.state.day && this.state.duration){
+        this.props.dispatch({ 
+          type: 'CREATE_LESSON', payload: {
+            client: this.state.client, 
+            day: this.state.day, 
+            duration: this.state.duration, 
+            start_time: this.state.start_time, 
+            session_id: this.props.session_id
+          }
+        });
+        //setstate
+        this.setState({
+          open: false,
+          start_time: null,
+          day: null,
+          duration: null,
+          client: null,
+          createError: null,
+          start_timeError: null,
+          dayError: null,
+          durationError: null,
+        });
+      }else{
+        this.setState({
+          createError: 'Please fill out all information before creating a lesson'
+        });
+      } 
+    }else{
+      //setState
+      this.setState({
+        open: false,
+        start_time: null,
+        day: null,
+        duration: null,
+        client: null,
+        createError: null,
+        start_timeError: null,
+        dayError: null,
+        durationError: null,
+      });
     }
-    this.setState({ open: false });
   };
 
   handleInputChangeFor = propertyName => (event) => {
@@ -88,6 +132,38 @@ class AddLessonButton extends Component {
     this.setState({
       [propertyName]: event.target.checked,
     });
+  };
+
+  clearError = propertyName => (event) => {
+    this.setState({
+      [propertyName]: null,
+      createError: null,
+    })
+  }
+
+  validate = propertyName => (event) => {
+    console.log('blur', propertyName);
+    if(propertyName === 'start_timeError'){
+      if(!this.state.length){
+        this.setState({
+          [propertyName]: 'you need to select a start time'
+        });
+      }
+    }
+    if(propertyName === 'dayError'){
+      if(!this.state.date){
+        this.setState({
+          [propertyName]: 'you need to select a day of the week'
+        });
+      }
+    }
+    if(propertyName === 'durationError'){
+      if(!this.state.date){
+        this.setState({
+          [propertyName]: 'you need choose how long the lesson will be'
+        });
+      }
+    }
   };
 
 
@@ -115,6 +191,10 @@ return (
   <DialogContent>
     <DialogContentText>
       Create a new lesson
+      {this.state.createError
+              &&
+              <Box className={classes.warning}>{this.state.createError}</Box>
+              }
     </DialogContentText>
     {/**we need a day of the week select that maps over an array of days with associated 
      * days in 1996, as well as a time picker and a picker for the interval - another time picker?!
@@ -127,18 +207,25 @@ return (
       <Select
         value={this.state.day}
         onChange={this.handleInputChangeFor('day')}
+        onBlur={this.validate('dayError')}
+        onFocus={this.clearError('dayError')}
         inputProps={{
           name: 'day',
           id: 'day',
         }}
       >
-        <MenuItem value="">
+        <MenuItem value={null}>
           <em>None</em>
         </MenuItem>
         {weekdays.map( weekday => (
           <MenuItem value={weekday.sqlDate}>{weekday.day}</MenuItem>
         ))}
       </Select>
+      {this.state.dayError
+      &&
+      <Box className={classes.warning}>{this.state.dayError}</Box>
+      }
+
       <TextField
         label='Client'
         type='text'
@@ -152,13 +239,21 @@ return (
         shrink: true,
       }}
       onChange={this.handleInputChangeFor('duration')}
+      onBlur={this.validate('durationError')}
+      onFocus={this.clearError('durationError')}
      />
+           {this.state.durationError
+      &&
+      <Box className={classes.warning}>{this.state.durationError}</Box>
+      }
            <TextField
         id="time"
         label="Lesson Start Time"
         type="time"
         value={this.state.start_time}
         onChange={this.handleInputChangeFor('start_time')}
+        onBlur={this.validate('start_timeError')}
+        onFocus={this.clearError('start_timeError')}
         className={classes.textField}
         InputLabelProps={{
           shrink: true,
@@ -167,6 +262,10 @@ return (
           step: 300, // 5 min
         }}
       />
+            {this.state.start_timeError
+      &&
+      <Box className={classes.warning}>{this.state.start_timeError}</Box>
+      }
 
 
 
