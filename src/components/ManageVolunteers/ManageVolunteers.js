@@ -61,7 +61,7 @@ class ManageVolunteers extends Component {
                 <CustomTableCell id="name">
                   Name
                 </CustomTableCell>
-                <CustomTableCell id="Age">
+                <CustomTableCell id="age">
                   Age
                 </CustomTableCell>
                 <CustomTableCell id="hours">
@@ -70,7 +70,7 @@ class ManageVolunteers extends Component {
                 <CustomTableCell id="role">
                   Role
                 </CustomTableCell>
-                <CustomTableCell id="actions">
+                <CustomTableCell id="action">
                   Actions
                 </CustomTableCell>
               </TableRow>

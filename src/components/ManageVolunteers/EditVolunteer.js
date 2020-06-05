@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
-
+import moment from 'moment';
 import { withStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
@@ -15,7 +15,7 @@ const styles = theme => ({
   container: {
     display: 'flex',
     flexWrap: 'wrap',
-    // backgroundColor: 'whitesmoke',
+    backgroundColor: 'whitesmoke',
     width: '80%',
   },
   textField: {
@@ -35,7 +35,6 @@ const styles = theme => ({
   },
   button: {
     margin: theme.spacing.unit,
-    marginBottom: 30
   },
   tableTitle: {
     textAlign: 'center',
@@ -47,11 +46,11 @@ const styles = theme => ({
     textAlign: 'center',
   },
   table: {
-    // backgroundColor: 'whitesmoke',
+    backgroundColor: 'whitesmoke',
     width: '83%',
     marginLeft: 'auto',
     marginRight: 'auto',
-  },
+  }
 });
 
 class EditVolunteer extends Component {
@@ -120,7 +119,7 @@ class EditVolunteer extends Component {
         last_name: this.props.state.volunteer.selectedVolunteer.last_name,
         phone: this.props.state.volunteer.selectedVolunteer.phone,
         email: this.props.state.volunteer.selectedVolunteer.email,
-        birthday: this.props.state.volunteer.selectedVolunteer.birthday,
+        birthday: moment(this.props.state.volunteer.selectedVolunteer.birthday).format('MMMM Do YYYY'),
         id: this.props.state.volunteer.selectedVolunteer.id,
         ...newState,
       })
@@ -173,12 +172,13 @@ class EditVolunteer extends Component {
             value="*******"
           />
           <TextField
-            type="date"
             label="Birthday"
             className={classes.textField}
             value={this.state.birthday}
             onChange={ (event) => this.handleChange( event, 'birthday')}
           />
+          </div>
+          </form>
           {/* TABLE BELOW */}
           
           <Table  className={classes.table}>
@@ -190,27 +190,7 @@ class EditVolunteer extends Component {
                 </TableRow>
               </TableHead>
               <TableBody>
-              </TableBody>
-            </Table>
-            <Table  className={classes.table}>
-              <TableHead>
-                <TableRow>
-                  <TableCell className={classes.tableTitle} colSpan={7}>
-                    Edit Availability
-                  </TableCell>
-                </TableRow>
-                <TableRow>
-                  <TableCell  className={classes.columnTitle}>Sunday</TableCell>
-                  <TableCell  className={classes.columnTitle}>Monday</TableCell>
-                  <TableCell  className={classes.columnTitle}>Tuesday</TableCell>
-                  <TableCell  className={classes.columnTitle}>Wednesday</TableCell>
-                  <TableCell  className={classes.columnTitle}>Thursday</TableCell>
-                  <TableCell  className={classes.columnTitle}>Friday</TableCell>
-                  <TableCell  className={classes.columnTitle}>Saturday</TableCell>
-                </TableRow>
-              </TableHead>
-              <TableBody>
-              <TableRow>
+                  <TableRow>
                     <TableCell>
                     Sidewalker
                         <Checkbox
@@ -248,6 +228,26 @@ class EditVolunteer extends Component {
                       
                     </TableCell>
                   </TableRow>
+              </TableBody>
+            </Table>
+            <Table  className={classes.table}>
+              <TableHead>
+                <TableRow>
+                  <TableCell className={classes.tableTitle} colSpan={7}>
+                    Edit Availability
+                  </TableCell>
+                </TableRow>
+                <TableRow>
+                  <TableCell  className={classes.columnTitle}>Sunday</TableCell>
+                  <TableCell  className={classes.columnTitle}>Monday</TableCell>
+                  <TableCell  className={classes.columnTitle}>Tuesday</TableCell>
+                  <TableCell  className={classes.columnTitle}>Wednesday</TableCell>
+                  <TableCell  className={classes.columnTitle}>Thursday</TableCell>
+                  <TableCell  className={classes.columnTitle}>Friday</TableCell>
+                  <TableCell  className={classes.columnTitle}>Saturday</TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
                   <TableRow>
                     <TableCell>
                       AM
@@ -359,9 +359,6 @@ class EditVolunteer extends Component {
           >
             UPDATE
           </Button>
-
-          </div>
-          </form>
       </>
     )
   }

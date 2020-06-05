@@ -42,7 +42,7 @@ const SideBar = (props) => (
             :
             <>
               <Link className="side-link" to="/schedule">
-                Schedule
+                Calendar
               </Link>
               <Link className="side-link" to="/standardsession">
                 Standard Session

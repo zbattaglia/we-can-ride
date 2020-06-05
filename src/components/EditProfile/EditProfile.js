@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
-
+import moment from 'moment';
 import { withStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
@@ -114,7 +114,7 @@ class EditProfile extends Component {
           last_name: this.props.state.volunteer.selectedVolunteer.last_name,
           phone: this.props.state.volunteer.selectedVolunteer.phone,
           email: this.props.state.volunteer.selectedVolunteer.email,
-          birthday: this.props.state.volunteer.selectedVolunteer.birthday,
+          birthday: moment(this.props.state.volunteer.selectedVolunteer.birthday).format('MMMM Do YYYY'),
           id: this.props.state.volunteer.selectedVolunteer.id,
           ...newState,
       })
@@ -163,7 +163,6 @@ class EditProfile extends Component {
             value="*******"
           />
           <TextField
-            type="date"
             label="Birthday"
             className={classes.textField}
             value={this.state.birthday}
@@ -176,7 +175,6 @@ class EditProfile extends Component {
               <TableHead>
                 <TableRow>
                   <TableCell className={classes.tableTitle} colSpan={7}>
-                    {JSON.stringify(this.state)}
                     Edit Availability
                   </TableCell>
                 </TableRow>
