@@ -53,7 +53,7 @@ input {
 }
 
 .about {
-    text-align: center;
+    /* text-align: center; */
     font-size: 20px;
     font-weight: 400;
 }

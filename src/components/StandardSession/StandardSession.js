@@ -56,9 +56,15 @@ const styles = theme => ({
     display: 'inline-block',
     alignItems: 'right',
   },
+
   margin: {
     margin: theme.spacing.unit,
   },
+
+  title: {
+    textAlign: 'center',
+  }
+
 });
 
 
@@ -127,7 +133,7 @@ class StandardSession extends Component {
     ];
     return (
       <>
-        <h1>Standard Session</h1>
+        <h2 className={classes.title}>Standard Session</h2>
         {/* {JSON.stringify(this.state)}
         {JSON.stringify(this.props.state.user)} */}
         <Grid container>
