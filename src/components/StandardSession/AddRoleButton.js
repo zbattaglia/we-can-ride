@@ -40,7 +40,6 @@ const styles = theme => ({
     justifyContent: 'center',
     width: '200px',
     marginBottom: '7px',
-    height: '10px'
   },
 });
 
