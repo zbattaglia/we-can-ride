@@ -76,7 +76,7 @@ class ManageVolunteers extends Component {
               </TableRow>
             </TableHead>
             <TableBody>
-                <ManageVolunteersList />
+                <ManageVolunteersList history={this.props.history}/>
             </TableBody>
             </Table>
             </Paper>
