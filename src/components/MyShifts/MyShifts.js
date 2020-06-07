@@ -9,7 +9,6 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import moment from 'moment';
 
-import './MyShifts.css';
 
 const CustomTableCell = withStyles(theme => ({
   head: {
@@ -55,7 +54,7 @@ class MyShifts extends Component {
   render() {
     return (
       <>
-        <h2 id="myShifts-title">My Shifts</h2>
+        <h2 style={{textAlign: 'center'}}>My Shifts</h2>
         <Paper>
           <Table>
             <TableHead>
@@ -95,7 +94,7 @@ class MyShifts extends Component {
           </Table>
         </Paper>
 
-        <br/>
+        <h2 style={{textAlign: 'center'}}>Sessions I've signed up for</h2>
                 {/**here's where the slots I've signed up for show up(the ones that haven't started yet) */}
         <Paper>
           <Table>
