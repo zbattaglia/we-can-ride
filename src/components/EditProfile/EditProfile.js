@@ -141,24 +141,36 @@ class EditProfile extends Component {
             label="First Name"
             className={classes.textField}
             value={this.state.first_name}
+            InputLabelProps={{
+              shrink: true,
+            }}
             onChange={ (event) => this.handleChange( event, 'first_name')}
           />
           <TextField
             label="Last Name"
             className={classes.textField}
             value={this.state.last_name}
+            InputLabelProps={{
+              shrink: true,
+            }}
             onChange={ (event) => this.handleChange( event, 'last_name')}
           />
           <TextField
             label="Phone Number"
             className={classes.textField}
             value={this.state.phone}
+            InputLabelProps={{
+              shrink: true,
+            }}
             onChange={ (event) => this.handleChange( event, 'phone')}
           />
           <TextField
             label="Email"
             className={classes.textField}
             value={this.state.email}
+            InputLabelProps={{
+              shrink: true,
+            }}
             onChange={ (event) => this.handleChange( event, 'email')}
           />
           <TextField
@@ -170,6 +182,9 @@ class EditProfile extends Component {
             label="Birthday"
             className={classes.textField}
             value={this.state.birthday}
+            InputLabelProps={{
+              shrink: true,
+            }}
             onChange={ (event) => this.handleChange( event, 'birthday')}
           />
           </div>
