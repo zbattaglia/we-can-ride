@@ -11,7 +11,6 @@ class PasswordStrength extends React.Component {
     constructor() {
         super();
         this.state = {
-            
             allowedDispatch: false,
             backgroundColor: "#4285F4"
         }
