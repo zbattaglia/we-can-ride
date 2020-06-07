@@ -3,26 +3,39 @@
 }
 
 #name {
-    width: 30%;
+    width: 25%;
+    text-align: center;
+    font-weight: bold;
 }
 
 #age {
     width: 15%;
+    text-align: center;
+    font-weight: bold;
 }
 
 #hours {
     width: 14%;
+    text-align: center;
+    font-weight: bold;
 }
 
 #role {
-    width: 25%;
+    width: 30%;
+    text-align: center;
+    font-weight: bold;
 }
 
 #action {
     width: 15%;
+    text-align: center;
+    font-weight: bold;
 }
 
 #registration-content {
     width: 40%;
     padding: .5rem;
 }
+
+
+

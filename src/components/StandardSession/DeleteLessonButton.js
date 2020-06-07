@@ -16,8 +16,11 @@ const styles = theme => ({
     flexWrap: 'wrap',
     flexGrow: 1,
   },
-
-
+  button: {
+    display: 'flex',
+    justifyContent: 'center',
+    width: '200px',
+  },
 });
 
 
@@ -49,7 +52,7 @@ class DeleteLessonButton extends Component {
    
 return (
   <>
-  <Button color='secondary' variant='contained' onClick={this.handleClickOpen} >Delete a Lesson</Button>
+  <Button size="small" className={classes.button} color='secondary' variant='contained' onClick={this.handleClickOpen} >Delete a Lesson</Button>
   <Dialog
           open={this.state.open}
           onClose={this.handleClose}

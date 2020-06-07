@@ -34,7 +34,13 @@ const styles = theme => ({
     padding: theme.spacing(2),
     color: theme.palette.text.secondary,
     display: 'inline-block'
-  }
+  },
+  button: {
+    display: 'flex',
+    justifyContent: 'center',
+    width: '200px',
+    marginBottom: '7px',
+  },
 });
 
 
@@ -74,7 +80,7 @@ class AddRoleButton extends Component {
    
 return (
   <>
-  <Button color='secondary' variant='contained' onClick={this.handleClickOpen} >Add Role</Button>
+  <Button size="small" className={classes.button} color='secondary' variant='contained' onClick={this.handleClickOpen} >Add Role</Button>
   <Dialog
   open={this.state.open}
   onClose={this.handleClose}

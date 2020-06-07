@@ -23,6 +23,19 @@ const styles = theme => ({
   noLabel: {
     marginTop: theme.spacing(3),
   },
+  rolesListDiv: {
+    textAlign: 'center',
+    listStyle: 'none',
+    display: 'inline',
+  },
+  rolesListDiv2: {
+    listStyle: 'none',
+    display: 'inline',
+  },
+  rolesList: {
+    display: 'inline',
+    margin: '-15px',
+  },
 });
 
 const ITEM_HEIGHT = 48;
@@ -60,13 +73,14 @@ class RoleDropdown extends React.Component {
   }
 
   render() {
+    const { classes } = this.props;
     return (
-        <div>
+        <div className={classes.rolesListDiv}>
           {this.props.state.volunteer.userRoles.map(name => (
             <>
             {(this.props.user_id === name.user_id) && 
-                          <ul key={name.id}>
-                          <li style={{listStyle: "none"}}>
+                          <ul key={name.id} className={classes.rolesListDiv2}>
+                          <li className={classes.rolesList}>
                           {name.title.replace( '_', ' ' )}
                           </li>
                         </ul> 

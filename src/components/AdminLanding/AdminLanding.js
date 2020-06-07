@@ -23,11 +23,16 @@ class AdminLanding extends React.Component {
 
   componentDidMount(){
     this.props.dispatch({type: 'FETCH_ALL_SHIFTS'});
-    this.setState({
-      calendarEvents: {
-        events: this.eventConstructor(this.props.allShifts),
-      }
-    });
+
+  }
+  componentDidUpdate(prevProps, prevState){
+    if((this.props.allShifts.length >1) && prevProps.allShifts !== this.props.allShifts){
+      this.setState({
+        calendarEvents: {
+          events: this.eventConstructor(this.props.allShifts),
+        }
+      });
+    }
   }
 
   render() {
@@ -88,7 +93,7 @@ class AdminLanding extends React.Component {
   }
 
   eventConstructor = (eventsArray) => {
-    let parsedEvents = [];
+      let parsedEvents = [];
     for(let event of eventsArray){
       let dateSum = moment(event.date).add(event.start_of_lesson, 'h');
       let parseDate = new Date(dateSum);
@@ -119,7 +124,7 @@ class AdminLanding extends React.Component {
             break;
         }
       }
-      else{
+      else if(event.id){
         let parseName = event.first_name + ' ' + event.last_name[0];
         switch(event.title){
           case 'leader':
@@ -135,7 +140,8 @@ class AdminLanding extends React.Component {
       }
     }
     return parsedEvents;
-  }
+    }
+    
 
 }
 

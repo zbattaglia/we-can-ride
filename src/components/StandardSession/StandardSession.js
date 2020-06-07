@@ -55,7 +55,16 @@ const styles = theme => ({
     color: theme.palette.text.secondary,
     display: 'inline-block',
     alignItems: 'right',
+  },
+
+  margin: {
+    margin: theme.spacing.unit,
+  },
+
+  title: {
+    textAlign: 'center',
   }
+
 });
 
 
@@ -124,7 +133,7 @@ class StandardSession extends Component {
     ];
     return (
       <>
-        <h1>Standard Session</h1>
+        <h2 className={classes.title}>Standard Session</h2>
         {/* {JSON.stringify(this.state)}
         {JSON.stringify(this.props.state.user)} */}
         <Grid container>
@@ -266,7 +275,7 @@ class StandardSession extends Component {
                             &&
                             (this.state.session.ready_to_publish === false)
                             &&
-                            <AssignVolunteerButton  name='Remove A Volunteer' session_id={this.state.session.id} slot_id={slot.slot_id}/>
+                            <AssignVolunteerButton  name='Remove A Volunteer' session_id={this.state.session.id} slot_id={slot.slot_id} />
                             }
                             {(this.props.state.user.type_of_user === 'volunteer')
                             &&

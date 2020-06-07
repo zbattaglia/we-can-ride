@@ -33,6 +33,7 @@ function* updateSelectedVolunteer(action) {
     yield axios.put( `/volunteer/${action.payload.id}`, action.payload );
 
     yield put( { type: 'FETCH_VOLUNTEERS' } );
+    yield put( {type: 'FETCH_SELECTED_VOLUNTEER', payload: action.payload.id})
   }
   catch(error) {
     console.log( 'Error updating selected volunteer information', error );

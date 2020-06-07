@@ -97,7 +97,7 @@ class AssignVolunteerButton extends Component {
    
 return (
   <div>
-    <Button color='secondary' variant='contained' onClick={this.handleClickOpen} >{this.props.name}</Button>
+    <Button size="small" color='secondary' variant='contained' onClick={this.handleClickOpen} >{this.props.name}</Button>
     <Dialog
   open={this.state.open}
   onClose={this.handleClose}

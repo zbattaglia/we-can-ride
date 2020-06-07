@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
-
+import moment from 'moment';
 import { withStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
@@ -15,7 +15,7 @@ const styles = theme => ({
   container: {
     display: 'flex',
     flexWrap: 'wrap',
-    // backgroundColor: 'whitesmoke',
+    backgroundColor: 'whitesmoke',
     width: '80%',
   },
   textField: {
@@ -47,41 +47,41 @@ const styles = theme => ({
     textAlign: 'center',
   },
   table: {
-    // backgroundColor: 'whitesmoke',
+    backgroundColor: 'whitesmoke',
     width: '83%',
     marginLeft: 'auto',
     marginRight: 'auto',
-  },
+  }
 });
 
 class EditVolunteer extends Component {
 
   // initial state for the form fields
   state = {
-    first_name: '',
-    last_name: '',
-    phone: '',
-    email: '',
-    birthday: '',
-    id: '',
-    amSunday: '',
-    pmSunday: '',
-    amMonday: '',
-    pmMonday: '',
-    amTuesday: '',
-    pmTuesday: '',
-    amWednesday: '',
-    pmWednesday: '',
-    amThursday: '',
-    pmThursday: '',
-    amFriday: '',
-    pmFriday: '',
-    amSaturday: '',
-    pmSaturday: '',
-    sidewalker: '',
-    leader: '',
-    barn_aid: '',
-    feeder: '',
+    first_name: null,
+    last_name: null,
+    phone: null,
+    email: null,
+    birthday: null,
+    id: null,
+    amSunday: null,
+    pmSunday: null,
+    amMonday: null,
+    pmMonday: null,
+    amTuesday: null,
+    pmTuesday: null,
+    amWednesday: null,
+    pmWednesday: null,
+    amThursday: null,
+    pmThursday: null,
+    amFriday: null,
+    pmFriday: null,
+    amSaturday: null,
+    pmSaturday: null,
+    sidewalker: null,
+    leader: null,
+    barn_aid: null,
+    feeder: null,
   }
 
   // detects a change on an input field and updates the state accordingly
@@ -98,12 +98,41 @@ class EditVolunteer extends Component {
       [propertyName]: event.target.checked,
     });
   }
-
+  componentDidMount(){
+    this.props.dispatch( { type: 'FETCH_SELECTED_VOLUNTEER', payload: this.props.match.params.id } );
+  }
+  componentDidUpdate(prevProps, prevState){
+    //if we just got a volunteer from the database
+    if (prevProps.state.volunteer.selectedVolunteer !== this.props.state.volunteer.selectedVolunteer){
+      //set the state to match the volunteer
+      let newState = {};
+      if(this.props.state.volunteer.selectedVolunteer.availability[0]){
+        for ( let userAvailability of this.props.state.volunteer.selectedVolunteer.availability ) {
+          newState[userAvailability] = true;
+        }
+      }
+      if(this.props.state.volunteer.selectedVolunteer.skill[0]){
+        for ( let userSkill of this.props.state.volunteer.selectedVolunteer.skill ) {
+          newState[userSkill] = true;
+        }      
+      }
+      this.setState({
+        ...this.state,
+        first_name: this.props.state.volunteer.selectedVolunteer.first_name,
+        last_name: this.props.state.volunteer.selectedVolunteer.last_name,
+        phone: this.props.state.volunteer.selectedVolunteer.phone,
+        email: this.props.state.volunteer.selectedVolunteer.email,
+        birthday: moment(this.props.state.volunteer.selectedVolunteer.birthday).format('yyyy-MM-DD'),
+        id: this.props.state.volunteer.selectedVolunteer.id,
+        ...newState,
+      })
+    }
+  }
   // componentDidUpdate checks if the current state of first name is blank and if the selectedVolunteer has been set from the database
   // if so, set the initial state to the values of the selected volunteer. (have to check if thae prev.state was blank is well, or else
   // the field will be reset when the user completely deletes the information)
   // else, fetch the selected volunteer again.
-  componentDidUpdate( prevProps, prevState ){
+  /* componentDidUpdate( prevProps, prevState ){
     if( this.state.first_name === '' && prevState.first_name === '' && this.props.state.volunteer.selectedVolunteer ) {
       // create a new temporary state. then loop over array of selectedUser availabilities and create a key-value pair in the new state
       // spread this new object in setState to default check boxes of days the user is available to be checked
@@ -120,7 +149,7 @@ class EditVolunteer extends Component {
         last_name: this.props.state.volunteer.selectedVolunteer.last_name,
         phone: this.props.state.volunteer.selectedVolunteer.phone,
         email: this.props.state.volunteer.selectedVolunteer.email,
-        birthday: this.props.state.volunteer.selectedVolunteer.birthday,
+        birthday: moment(this.props.state.volunteer.selectedVolunteer.birthday).format('MMMM Do YYYY'),
         id: this.props.state.volunteer.selectedVolunteer.id,
         ...newState,
       })
@@ -128,18 +157,21 @@ class EditVolunteer extends Component {
         this.props.dispatch( { type: 'FETCH_SELECTED_VOLUNTEER', payload: this.props.volunteer.selectedVolunteer.id } );
       }
     }
-  };
+  }; */
 
   handleClick = () => {
     // console.log( 'Got a Click', this.state );
     this.props.dispatch( { type: 'UPDATE_SELECTED_VOLUNTEER', payload: this.state } );
     this.props.history.push( '/managevolunteers');
+  
   }
 
   render() {
     const { classes } = this.props;
     return (
       <>
+      {JSON.stringify(this.props.state.volunteer.selectedVolunteer)}
+      {JSON.stringify(this.state)}
         <form className={classes.container}>
           <h2 className={classes.title}>Edit Volunteer Information</h2>
           <div className={classes.formContent}>
@@ -148,37 +180,57 @@ class EditVolunteer extends Component {
             className={classes.textField}
             value={this.state.first_name}
             onChange={ (event) => this.handleChange( event, 'first_name')}
+            InputLabelProps={{
+              shrink: true,
+            }}
           />
           <TextField
             label="Last Name"
             className={classes.textField}
             value={this.state.last_name}
             onChange={ (event) => this.handleChange( event, 'last_name')}
+            InputLabelProps={{
+              shrink: true,
+            }}
           />
           <TextField
             label="Phone Number"
             className={classes.textField}
             value={this.state.phone}
             onChange={ (event) => this.handleChange( event, 'phone')}
+            InputLabelProps={{
+              shrink: true,
+            }}
           />
           <TextField
             label="Email"
             className={classes.textField}
             value={this.state.email}
             onChange={ (event) => this.handleChange( event, 'email')}
+            InputLabelProps={{
+              shrink: true,
+            }}
           />
           <TextField
             label="Password"
             className={classes.textField}
             value="*******"
+            InputLabelProps={{
+              shrink: true,
+            }}
           />
           <TextField
-            type="date"
             label="Birthday"
+            type="date"
             className={classes.textField}
             value={this.state.birthday}
+            InputLabelProps={{
+              shrink: true,
+            }}
             onChange={ (event) => this.handleChange( event, 'birthday')}
           />
+          </div>
+          </form>
           {/* TABLE BELOW */}
           
           <Table  className={classes.table}>
@@ -190,27 +242,7 @@ class EditVolunteer extends Component {
                 </TableRow>
               </TableHead>
               <TableBody>
-              </TableBody>
-            </Table>
-            <Table  className={classes.table}>
-              <TableHead>
-                <TableRow>
-                  <TableCell className={classes.tableTitle} colSpan={7}>
-                    Edit Availability
-                  </TableCell>
-                </TableRow>
-                <TableRow>
-                  <TableCell  className={classes.columnTitle}>Sunday</TableCell>
-                  <TableCell  className={classes.columnTitle}>Monday</TableCell>
-                  <TableCell  className={classes.columnTitle}>Tuesday</TableCell>
-                  <TableCell  className={classes.columnTitle}>Wednesday</TableCell>
-                  <TableCell  className={classes.columnTitle}>Thursday</TableCell>
-                  <TableCell  className={classes.columnTitle}>Friday</TableCell>
-                  <TableCell  className={classes.columnTitle}>Saturday</TableCell>
-                </TableRow>
-              </TableHead>
-              <TableBody>
-              <TableRow>
+                  <TableRow>
                     <TableCell>
                     Sidewalker
                         <Checkbox
@@ -248,6 +280,26 @@ class EditVolunteer extends Component {
                       
                     </TableCell>
                   </TableRow>
+              </TableBody>
+            </Table>
+            <Table  className={classes.table}>
+              <TableHead>
+                <TableRow>
+                  <TableCell className={classes.tableTitle} colSpan={7}>
+                    Edit Availability
+                  </TableCell>
+                </TableRow>
+                <TableRow>
+                  <TableCell  className={classes.columnTitle}>Sunday</TableCell>
+                  <TableCell  className={classes.columnTitle}>Monday</TableCell>
+                  <TableCell  className={classes.columnTitle}>Tuesday</TableCell>
+                  <TableCell  className={classes.columnTitle}>Wednesday</TableCell>
+                  <TableCell  className={classes.columnTitle}>Thursday</TableCell>
+                  <TableCell  className={classes.columnTitle}>Friday</TableCell>
+                  <TableCell  className={classes.columnTitle}>Saturday</TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
                   <TableRow>
                     <TableCell>
                       AM
@@ -359,9 +411,6 @@ class EditVolunteer extends Component {
           >
             UPDATE
           </Button>
-
-          </div>
-          </form>
       </>
     )
   }

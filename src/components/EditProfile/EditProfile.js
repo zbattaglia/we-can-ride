@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
-
+import moment from 'moment';
 import { withStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
@@ -56,26 +56,26 @@ const styles = theme => ({
 class EditProfile extends Component {
     // initial state for the form fields
     state = {
-      first_name: '',
-      last_name: '',
-      phone: '',
-      email: '',
-      birthday: '',
-      id: '',
-      amSunday: '',
-      pmSunday: '',
-      amMonday: '',
-      pmMonday: '',
-      amTuesday: '',
-      pmTuesday: '',
-      amWednesday: '',
-      pmWednesday: '',
-      amThursday: '',
-      pmThursday: '',
-      amFriday: '',
-      pmFriday: '',
-      amSaturday: '',
-      pmSaturday: '',
+      first_name: null,
+      last_name: null,
+      phone: null,
+      email: null,
+      birthday: null,
+      id: null,
+      amSunday: null,
+      pmSunday: null,
+      amMonday: null,
+      pmMonday: null,
+      amTuesday: null,
+      pmTuesday: null,
+      amWednesday: null,
+      pmWednesday: null,
+      amThursday: null,
+      pmThursday: null,
+      amFriday: null,
+      pmFriday: null,
+      amSaturday: null,
+      pmSaturday: null,
     }
 
   componentDidMount () {
@@ -105,6 +105,10 @@ class EditProfile extends Component {
     
       if( prevProps.state.volunteer.selectedVolunteer !== this.props.state.volunteer.selectedVolunteer ) {
         let newState = {};
+        //if the user has availabilies, get them. if not, leave them all blank
+        if(this.props.state.volunteer.selectedVolunteer.availability[0]){
+
+        }
         for ( let userAvailability of this.props.state.volunteer.selectedVolunteer.availability ) {
           newState[userAvailability] = true;
         }
@@ -114,7 +118,7 @@ class EditProfile extends Component {
           last_name: this.props.state.volunteer.selectedVolunteer.last_name,
           phone: this.props.state.volunteer.selectedVolunteer.phone,
           email: this.props.state.volunteer.selectedVolunteer.email,
-          birthday: this.props.state.volunteer.selectedVolunteer.birthday,
+          birthday: moment(this.props.state.volunteer.selectedVolunteer.birthday).format('yyyy-MM-DD'),
           id: this.props.state.volunteer.selectedVolunteer.id,
           ...newState,
       })
@@ -137,24 +141,36 @@ class EditProfile extends Component {
             label="First Name"
             className={classes.textField}
             value={this.state.first_name}
+            InputLabelProps={{
+              shrink: true,
+            }}
             onChange={ (event) => this.handleChange( event, 'first_name')}
           />
           <TextField
             label="Last Name"
             className={classes.textField}
             value={this.state.last_name}
+            InputLabelProps={{
+              shrink: true,
+            }}
             onChange={ (event) => this.handleChange( event, 'last_name')}
           />
           <TextField
             label="Phone Number"
             className={classes.textField}
             value={this.state.phone}
+            InputLabelProps={{
+              shrink: true,
+            }}
             onChange={ (event) => this.handleChange( event, 'phone')}
           />
           <TextField
             label="Email"
             className={classes.textField}
             value={this.state.email}
+            InputLabelProps={{
+              shrink: true,
+            }}
             onChange={ (event) => this.handleChange( event, 'email')}
           />
           <TextField
@@ -163,10 +179,12 @@ class EditProfile extends Component {
             value="*******"
           />
           <TextField
-            type="date"
             label="Birthday"
             className={classes.textField}
             value={this.state.birthday}
+            InputLabelProps={{
+              shrink: true,
+            }}
             onChange={ (event) => this.handleChange( event, 'birthday')}
           />
           </div>
@@ -176,7 +194,9 @@ class EditProfile extends Component {
               <TableHead>
                 <TableRow>
                   <TableCell className={classes.tableTitle} colSpan={7}>
+
                     {/* {JSON.stringify(this.state)} */}
+
                     Edit Availability
                   </TableCell>
                 </TableRow>
