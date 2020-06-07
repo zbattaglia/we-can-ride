@@ -162,7 +162,8 @@ class EditVolunteer extends Component {
   handleClick = () => {
     // console.log( 'Got a Click', this.state );
     this.props.dispatch( { type: 'UPDATE_SELECTED_VOLUNTEER', payload: this.state } );
-    //this.props.history.push( '/managevolunteers');
+    this.props.history.push( '/managevolunteers');
+  
   }
 
   render() {
