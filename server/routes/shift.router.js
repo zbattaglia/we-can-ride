@@ -7,6 +7,23 @@ const { rejectUnauthenticated } = require('../modules/authentication-middleware'
 /**
  * GET route template
  */
+router.get(`/myslots/:user_id`, rejectUnauthenticated, (req, res) => {
+    console.log('in my slots router,', req.params);
+    //req.params is in the form { user_id: '8' }
+    const sqlText = `SELECT "slot"."id" AS "slot_id", 
+    "start_date" AS "session_start_date", "start_of_lesson", 
+    ("start_of_lesson" + "length_of_lesson") AS "end_of_lesson", INITCAP(to_char("day_of_week", 'day')) AS "weekday", "length_in_weeks", "skill"."title" FROM "slot" 
+    JOIN "lesson" ON "slot"."lesson_id" = "lesson"."id"
+    JOIN "session" ON "lesson"."session_id" = "session"."id"
+    JOIN "skill" ON "slot"."skill_needed" = "skill"."id"
+    WHERE "slot"."expected_user" = $1 AND "start_date" >= NOW();`;
+    pool.query(sqlText, [req.params.user_id]).then(response => {
+        res.send(response.rows);
+    }).catch( error => {
+        console.log('error in getting my slots', error);
+        res.sendStatus(500);
+    });
+})
 router.get(`/myshift/:user_id`, rejectUnauthenticated, (req, res) => {
     // console.log( `Finding shifts for user with id ${req.user.id}`)
     const sqlText = `SELECT "shift"."id", "date", ("start_of_lesson" - INTERVAL '15 minutes') AS "time_to_arrive", 

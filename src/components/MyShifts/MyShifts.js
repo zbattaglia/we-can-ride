@@ -42,6 +42,7 @@ class MyShifts extends Component {
   componentDidMount () {
     this.props.dispatch({type: 'FETCH_USER'});
     this.props.dispatch({type: 'FETCH_MY_SHIFTS', payload: {user_id:this.props.state.user.id}});
+    this.props.dispatch({type: 'FETCH_MY_SLOTS', payload: {user_id:this.props.state.user.id}});
   }
 
   handleClick = ( event, shiftId ) => {
@@ -49,6 +50,7 @@ class MyShifts extends Component {
     this.props.dispatch( { type: 'SHIFT_TO_TRADE', payload: shiftId } );
     this.props.history.push( '/findasub' );
   };
+
 
   render() {
     return (
@@ -86,6 +88,53 @@ class MyShifts extends Component {
                   </CustomTableCell >
                   <CustomTableCell >
                     <button onClick={ (event) => this.handleClick( event, row.id ) }>Give Up</button>
+                  </CustomTableCell >
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </Paper>
+
+        <br/>
+                {/**here's where the slots I've signed up for show up(the ones that haven't started yet) */}
+        <Paper>
+          <Table>
+            <TableHead>
+              <TableRow>
+                <CustomTableCell >
+                Session Start Date 
+                </CustomTableCell >
+                <CustomTableCell >
+                Weekday
+                </CustomTableCell >
+                <CustomTableCell >
+                Time
+                </CustomTableCell >
+                <CustomTableCell >
+                Session Length in Weeks
+                </CustomTableCell >
+                <CustomTableCell >
+                Role
+                </CustomTableCell >
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {this.props.state.shift.mySlots.map( (row) =>(
+                <TableRow key={row.id}>
+                  <CustomTableCell >
+                    {moment(row.session_start_date).format('dddd, MMMM Do, YYYY')}
+                  </CustomTableCell >
+                  <CustomTableCell >
+                    {row.weekday}
+                  </CustomTableCell >
+                  <CustomTableCell >
+                    {row.start_of_lesson} - {row.end_of_lesson}
+                  </CustomTableCell >
+                  <CustomTableCell >
+                    {row.length_in_weeks.days/7}
+                  </CustomTableCell >
+                  <CustomTableCell >
+                    {row.title}
                   </CustomTableCell >
                 </TableRow>
               ))}
