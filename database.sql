@@ -81,9 +81,9 @@ CREATE TABLE "message" (
 --INSERT skills
 INSERT INTO "skill"("id", "title") 
 VALUES
-(1, 'side walker'),
+(1, 'sidewalker'),
 (2, 'leader'),
-(3, 'barn aid'),
+(3, 'barn_aid'),
 (4, 'feeder') RETURNING "id", "title";
 --INSERT availabilities
 INSERT INTO "availability"("time_available") 
