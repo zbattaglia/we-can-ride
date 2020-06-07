@@ -47,7 +47,7 @@ class App extends Component {
           <div className="content">
             <Switch>
               {/* Visiting localhost:3000 will redirect to localhost:3000/home */}
-              <Redirect exact from="/" to="/calendar" />
+              <Redirect exact from="/" to="/inbox" />
               {/* Visiting localhost:3000/about will show the about page.
               This is a route anyone can see, no login necessary */}
               <Route
@@ -134,4 +134,8 @@ class App extends Component {
   )}
 }
 
-export default connect()(App);
+const mapStateToProps = state => ({
+  user: state.user
+});
+
+export default connect(mapStateToProps)(App);
