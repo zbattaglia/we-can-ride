@@ -114,10 +114,11 @@ class ManageVolunteersList extends Component {
         const { classes } = this.props
         return (
             <>
+                    {JSON.stringify(this.props.history)}
                 {this.props.state.volunteer.volunteer.map(volunteer => {
                     return <TableRow className={classes.row} key={volunteer.id}>
                         <CustomTableCell className="edit-link">
-                            <Link to="/editVolunteer" onClick={() => this.goToEditPage(volunteer.id)}>
+                            <Link onClick={() => this.props.history.push(`/editVolunteer/${volunteer.id}`)}>
                                 {volunteer.first_name} {volunteer.last_name}
                             </Link>
                         </CustomTableCell>
