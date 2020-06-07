@@ -238,7 +238,7 @@ class StandardSession extends Component {
                             <Grid item xs>
                             {slot.title}:
                             </Grid>
-                            <Grid justify='right' item s>
+                            <Grid justify='right' item>
                             {(this.props.state.user.type_of_user === 'admin')
                             &&
                             (this.state.session.ready_to_publish === false)

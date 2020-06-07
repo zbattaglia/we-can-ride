@@ -13,6 +13,11 @@ import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import PropTypes from 'prop-types';
 
+import Checkbox from '@material-ui/core/Checkbox';
+import Autocomplete from '@material-ui/lab/Autocomplete';
+
+
+
 
 
 const styles = theme => ({
@@ -95,6 +100,7 @@ class AssignVolunteerButton extends Component {
     this.setState({
       [propertyName]: event.target.value,
     });
+    console.log('state is:', this.state);
   };
 
   render() {
@@ -122,7 +128,16 @@ return (
     <DialogContentText>
     Choose which volunteer will be taking this role.
   </DialogContentText>
-    <Select
+  <Autocomplete
+      value={this.state.volunteer}
+      id="combo-box-demo"
+      options={this.props.state.volunteer.volunteer}
+      getOptionLabel={(option) => option.first_name}
+      style={{ width: 300 }}
+      onChange={this.handleInputChangeFor('volunteer')}
+      renderInput={(params) => <TextField {...params} label="none" variant="outlined" />}
+    />
+    {/* <Select
       value={this.state.volunteer}
       onChange={this.handleInputChangeFor('volunteer')}
       inputProps={{
@@ -135,7 +150,7 @@ return (
       {this.props.state.volunteer.volunteer.map( volunteer => (
         <MenuItem value={volunteer.id}>{volunteer.first_name} {volunteer.last_name}</MenuItem>
       ))}
-    </Select>
+    </Select> */}
     </>
     }
 
