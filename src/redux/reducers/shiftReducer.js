@@ -16,6 +16,14 @@ const myShifts = (state = [], action) => {
       return state;
   }
 };  
+const mySlots = (state = [], action) => {
+  switch (action.type) {
+    case 'SET_MY_SLOTS':
+      return action.payload;
+    default:
+      return state;
+  }
+};  
 
 const tradeShift = (state = '', action) => {
   switch (action.type) {
@@ -50,4 +58,5 @@ const subShifts = (state = [], action) => {
     tradeShift,
     allShifts,
     subShifts,
+    mySlots,
   });

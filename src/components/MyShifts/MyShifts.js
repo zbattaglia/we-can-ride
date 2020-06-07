@@ -9,7 +9,6 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import moment from 'moment';
 
-import './MyShifts.css';
 
 const CustomTableCell = withStyles(theme => ({
   head: {
@@ -65,6 +64,7 @@ class MyShifts extends Component {
   componentDidMount () {
     this.props.dispatch({type: 'FETCH_USER'});
     this.props.dispatch({type: 'FETCH_MY_SHIFTS', payload: {user_id:this.props.state.user.id}});
+    this.props.dispatch({type: 'FETCH_MY_SLOTS', payload: {user_id:this.props.state.user.id}});
   }
 
   handleClick = ( event, shiftId ) => {
@@ -73,12 +73,13 @@ class MyShifts extends Component {
     this.props.history.push( '/findasub' );
   };
 
+
   render() {
     const { classes } = this.props;
     return (
       <>
-        <h2 id="myShifts-title">My Shifts</h2>
-        <Paper className={classes.shiftTableContainer}>
+        <h2 style={{textAlign: 'center'}}>My Shifts</h2>
+        <Paper>
           <Table>
             <TableHead>
               <TableRow>
@@ -102,14 +103,61 @@ class MyShifts extends Component {
                   <CustomTableCell className={classes.tableCell}>
                     {moment(row.date).format('dddd, MMMM Do, YYYY')}
                   </CustomTableCell >
-                  <CustomTableCell className={classes.tableCell}>
-                    {row.time_to_arrive}
+                  <CustomTableCell >
+                  {moment(row.time_to_arrive, "HH:mm:ss").format('hh:mm a')}
                   </CustomTableCell >
                   <CustomTableCell className={classes.tableCell}>
                     {row.role}
                   </CustomTableCell >
                   <CustomTableCell className={classes.tableCell}>
                     <button onClick={ (event) => this.handleClick( event, row.id ) }>Give Up</button>
+                  </CustomTableCell >
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </Paper>
+
+        <h2 style={{textAlign: 'center'}}>Sessions I've signed up for</h2>
+                {/**here's where the slots I've signed up for show up(the ones that haven't started yet) */}
+        <Paper>
+          <Table>
+            <TableHead>
+              <TableRow>
+                <CustomTableCell >
+                Session Start Date 
+                </CustomTableCell >
+                <CustomTableCell >
+                Weekday
+                </CustomTableCell >
+                <CustomTableCell >
+                Time
+                </CustomTableCell >
+                <CustomTableCell >
+                Session Length in Weeks
+                </CustomTableCell >
+                <CustomTableCell >
+                Role
+                </CustomTableCell >
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {this.props.state.shift.mySlots.map( (row) =>(
+                <TableRow key={row.id}>
+                  <CustomTableCell >
+                    {moment(row.session_start_date).format('dddd, MMMM Do, YYYY')}
+                  </CustomTableCell >
+                  <CustomTableCell >
+                    {row.weekday}
+                  </CustomTableCell >
+                  <CustomTableCell >
+                    {moment(row.start_of_lesson, "HH:mm:ss").format('hh:mm a')} - {moment(row.end_of_lesson, "HH:mm:ss").format('hh:mm a')}
+                  </CustomTableCell >
+                  <CustomTableCell >
+                    {row.length_in_weeks.days/7}
+                  </CustomTableCell >
+                  <CustomTableCell >
+                    {row.title}
                   </CustomTableCell >
                 </TableRow>
               ))}
