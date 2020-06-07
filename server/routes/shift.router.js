@@ -7,6 +7,23 @@ const { rejectUnauthenticated } = require('../modules/authentication-middleware'
 /**
  * GET route template
  */
+router.get(`/myslots/:user_id`, rejectUnauthenticated, (req, res) => {
+    console.log('in my slots router,', req.params);
+    //req.params is in the form { user_id: '8' }
+    const sqlText = `SELECT "slot"."id" AS "slot_id", 
+    "start_date" AS "session_start_date", "start_of_lesson", 
+    ("start_of_lesson" + "length_of_lesson") AS "end_of_lesson", INITCAP(to_char("day_of_week", 'day')) AS "weekday", "length_in_weeks", "skill"."title" FROM "slot" 
+    JOIN "lesson" ON "slot"."lesson_id" = "lesson"."id"
+    JOIN "session" ON "lesson"."session_id" = "session"."id"
+    JOIN "skill" ON "slot"."skill_needed" = "skill"."id"
+    WHERE "slot"."expected_user" = $1 AND "start_date" >= NOW();`;
+    pool.query(sqlText, [req.params.user_id]).then(response => {
+        res.send(response.rows);
+    }).catch( error => {
+        console.log('error in getting my slots', error);
+        res.sendStatus(500);
+    });
+})
 router.get(`/myshift/:user_id`, rejectUnauthenticated, (req, res) => {
     // console.log( `Finding shifts for user with id ${req.user.id}`)
     const sqlText = `SELECT "shift"."id", "date", ("start_of_lesson" - INTERVAL '15 minutes') AS "time_to_arrive", 
@@ -45,7 +62,13 @@ router.get('/fourweeks', rejectUnauthenticated, (req, res) => {
 });
 
 router.get(`/all`, rejectUnauthenticated, (req, res) => {
-    const sqlText = `SELECT * FROM "shift";`;
+    const sqlText = `SELECT "shift"."date", "user"."first_name", "user"."last_name", "lesson"."start_of_lesson", 
+    "shift"."assigned_user", "shift"."user_wants_to_trade", "skill"."title" FROM "shift"
+    LEFT JOIN "user" ON "shift"."assigned_user" = "user"."id"
+    JOIN "slot" ON "shift"."slot_id" = "slot"."id"
+    JOIN "lesson" ON "slot"."lesson_id" = "lesson"."id"
+    JOIN "skill" ON "slot"."skill_needed" = "skill"."id"
+    ORDER BY "shift"."date";`;
     pool.query(sqlText)
     .then( (response) => {
         res.send( response.rows );

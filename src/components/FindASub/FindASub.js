@@ -21,7 +21,7 @@ class FindASub extends Component {
   }
 
   componentDidUpdate( prevProps, prevState ) {
-    if( ( this.state.shift == '' ) && this.props.state.shift.tradeShift ) {
+    if( ( this.state.shift === '' ) && this.props.state.shift.tradeShift ) {
       this.getShift( this.props.state.shift.tradeShift );
     }
   }

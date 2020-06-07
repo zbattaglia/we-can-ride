@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
-
+import moment from 'moment';
 import { withStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
@@ -19,7 +19,7 @@ const styles = theme => ({
     width: '80%',
   },
   textField: {
-    margin: theme.spacing.unit,
+    margin: theme.spacing(1),
     width: '48%',
   },
   title: {
@@ -34,7 +34,7 @@ const styles = theme => ({
     textAlign: 'center',
   },
   button: {
-    margin: theme.spacing.unit,
+    margin: theme.spacing(1),
   },
   tableTitle: {
     textAlign: 'center',
@@ -56,35 +56,30 @@ const styles = theme => ({
 class EditProfile extends Component {
     // initial state for the form fields
     state = {
-      first_name: '',
-      last_name: '',
-      phone: '',
-      email: '',
-      birthday: '',
-      id: '',
-      amSunday: '',
-      pmSunday: '',
-      amMonday: '',
-      pmMonday: '',
-      amTuesday: '',
-      pmTuesday: '',
-      amWednesday: '',
-      pmWednesday: '',
-      amThursday: '',
-      pmThursday: '',
-      amFriday: '',
-      pmFriday: '',
-      amSaturday: '',
-      pmSaturday: '',
-      sidewalker: '',
-      leader: '',
-      barn_aid: '',
-      feeder: '',
+      first_name: null,
+      last_name: null,
+      phone: null,
+      email: null,
+      birthday: null,
+      id: null,
+      amSunday: null,
+      pmSunday: null,
+      amMonday: null,
+      pmMonday: null,
+      amTuesday: null,
+      pmTuesday: null,
+      amWednesday: null,
+      pmWednesday: null,
+      amThursday: null,
+      pmThursday: null,
+      amFriday: null,
+      pmFriday: null,
+      amSaturday: null,
+      pmSaturday: null,
     }
 
   componentDidMount () {
-    this.props.dispatch({type: 'FETCH_USER'})
-    this.props.dispatch( { type: 'FETCH_SELECTED_VOLUNTEER', payload: this.props.state.user.id } );
+    this.props.dispatch( {type: 'FETCH_SELECTED_VOLUNTEER', payload: this.props.state.user.id } )
   }
   // detects a change on an input field and updates the state accordingly
   handleChange = ( event, propName ) => {
@@ -106,42 +101,33 @@ class EditProfile extends Component {
   // the field will be reset when the user completely deletes the information)
   // else, fetch the selected volunteer again.
   componentDidUpdate( prevProps, prevState ){
-    if( this.state.first_name === '' && prevState.first_name === '' && this.props.state.volunteer.selectedVolunteer ) {
-      // create a new temporary state. then loop over array of selectedUser availabilities and create a key-value pair in the new state
-      // spread this new object in setState to default check boxes of days the user is available to be checked
-      let newState = {};
-      for ( let userAvailability of this.props.state.volunteer.selectedVolunteer.availability ) {
-        newState[userAvailability] = true;
-      }
-      for ( let userSkill of this.props.state.volunteer.selectedVolunteer.skill ) {
-        newState[userSkill] = true;
-      }
-      this.setState({
-        ...this.state,
-        first_name: this.props.state.volunteer.selectedVolunteer.first_name,
-        last_name: this.props.state.volunteer.selectedVolunteer.last_name,
-        phone: this.props.state.volunteer.selectedVolunteer.phone,
-        email: this.props.state.volunteer.selectedVolunteer.email,
-        birthday: this.props.state.volunteer.selectedVolunteer.birthday,
-        id: this.props.state.volunteer.selectedVolunteer.id,
-        ...newState,
+    console.log( 'In update', this.props.state.volunteer.selectedVolunteer )
+    
+      if( prevProps.state.volunteer.selectedVolunteer !== this.props.state.volunteer.selectedVolunteer ) {
+        let newState = {};
+        //if the user has availabilies, get them. if not, leave them all blank
+        if(this.props.state.volunteer.selectedVolunteer.availability[0]){
+
+        }
+        for ( let userAvailability of this.props.state.volunteer.selectedVolunteer.availability ) {
+          newState[userAvailability] = true;
+        }
+        this.setState({
+          ...this.state,
+          first_name: this.props.state.volunteer.selectedVolunteer.first_name,
+          last_name: this.props.state.volunteer.selectedVolunteer.last_name,
+          phone: this.props.state.volunteer.selectedVolunteer.phone,
+          email: this.props.state.volunteer.selectedVolunteer.email,
+          birthday: moment(this.props.state.volunteer.selectedVolunteer.birthday).format('yyyy-MM-DD'),
+          id: this.props.state.volunteer.selectedVolunteer.id,
+          ...newState,
       })
-      if(prevState !== this.state) {
-        this.props.dispatch( { type: 'FETCH_SELECTED_VOLUNTEER', payload: this.props.volunteer.selectedVolunteer.id } );
-      }
     }
   };
 
   handleClick = () => {
     // console.log( 'Got a Click', this.state );
     this.props.dispatch( { type: 'UPDATE_SELECTED_VOLUNTEER', payload: this.state } );
-    if( this.props.state.user.type_of_user === 'admin' ) {
-      this.props.history.push( '/managevolunteers');
-    }
-    else {
-      this.props.dispatch({ type: 'FETCH_USER' })
-      this.props.dispatch( { type: 'FETCH_SELECTED_VOLUNTEER', payload: this.props.state.user.id } );
-    }
   }
 
   render() {
@@ -155,24 +141,36 @@ class EditProfile extends Component {
             label="First Name"
             className={classes.textField}
             value={this.state.first_name}
+            InputLabelProps={{
+              shrink: true,
+            }}
             onChange={ (event) => this.handleChange( event, 'first_name')}
           />
           <TextField
             label="Last Name"
             className={classes.textField}
             value={this.state.last_name}
+            InputLabelProps={{
+              shrink: true,
+            }}
             onChange={ (event) => this.handleChange( event, 'last_name')}
           />
           <TextField
             label="Phone Number"
             className={classes.textField}
             value={this.state.phone}
+            InputLabelProps={{
+              shrink: true,
+            }}
             onChange={ (event) => this.handleChange( event, 'phone')}
           />
           <TextField
             label="Email"
             className={classes.textField}
             value={this.state.email}
+            InputLabelProps={{
+              shrink: true,
+            }}
             onChange={ (event) => this.handleChange( event, 'email')}
           />
           <TextField
@@ -181,65 +179,17 @@ class EditProfile extends Component {
             value="*******"
           />
           <TextField
-            type="date"
             label="Birthday"
             className={classes.textField}
             value={this.state.birthday}
+            InputLabelProps={{
+              shrink: true,
+            }}
             onChange={ (event) => this.handleChange( event, 'birthday')}
           />
           </div>
           </form>
           {/* TABLE BELOW */}
-          
-          <Table  className={classes.table}>
-              <TableHead>
-                <TableRow>
-                  <TableCell className={classes.tableTitle} colSpan={7}>
-                    Edit Role
-                  </TableCell>
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                  <TableRow>
-                    <TableCell>
-                    Sidewalker
-                        <Checkbox
-                          checked={this.state.sidewalker}
-                          onChange={this.handleCheckboxChangeFor( 'sidewalker')}
-                          value="sidewalker"
-                        />
-                      
-                    </TableCell>
-                    <TableCell>
-                    Leader
-                        <Checkbox
-                          checked={this.state.leader}
-                          onChange={this.handleCheckboxChangeFor('leader')}
-                          value="leader"
-                        />
-                      
-                    </TableCell>
-                    <TableCell>
-                    Barn aid
-                        <Checkbox
-                          checked={this.state.barn_aid}
-                          onChange={this.handleCheckboxChangeFor('barn_aid')}
-                          value="barn_aid"
-                        />
-                      
-                    </TableCell>
-                    <TableCell>
-                    Feeder
-                        <Checkbox
-                          checked={this.state.feeder}
-                          onChange={this.handleCheckboxChangeFor('feeder')}
-                          value="feeder"
-                        />
-                      
-                    </TableCell>
-                  </TableRow>
-              </TableBody>
-            </Table>
             <Table  className={classes.table}>
               <TableHead>
                 <TableRow>

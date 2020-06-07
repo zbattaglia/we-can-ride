@@ -75,8 +75,6 @@ function* assignVolunteer(action) {
   console.log('In assignVolunteer saga with:', action.payload)
   // action.payload look like this: {volunteer: 1, session: 1, slot_id: 2}
   const session_id = action.payload.session_id;
-  const slot_id = action.payload.slot_id;
-  const user_id = action.payload.volunteer_id
   try{
     yield axios.post('lesson/assign', action.payload);
     yield put({ type: 'FETCH_SESSION_LESSONS', payload: {session_id}});

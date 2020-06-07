@@ -17,13 +17,14 @@ const CustomTableCell = withStyles(theme => ({
     },
     body: {
         fontsize: 14,
+        textAlign: 'center',
     }
 }))(TableCell)
 
 const styles = theme => ({
     root: {
         width: '100%',
-        marginTop: theme.spacing.unit * 3,
+        marginTop: theme.spacing(3),
         overflowX: 'auto',
     },
     table: {
@@ -36,8 +37,8 @@ const styles = theme => ({
     },
     absolute: {
         position: 'absolute',
-        bottom: theme.spacing.unit * 2,
-        right: theme.spacing.unit * 3,
+        bottom: theme.spacing(2),
+        right: theme.spacing(3),
     },
     formControl: {
         margin: theme.spacing(1),
@@ -93,10 +94,6 @@ class ManageVolunteersList extends Component {
         });
     };
 
-    goToEditPage = (id) => {
-        console.log('In goToEditPage', id)
-        this.props.dispatch( { type: 'FETCH_SELECTED_VOLUNTEER', payload: id } );
-    }
 
     disableVolunteer = (id) => {
         console.log('In disableVolunteer', id)
@@ -116,12 +113,12 @@ class ManageVolunteersList extends Component {
                 {this.props.state.volunteer.volunteer.map(volunteer => {
                     return <TableRow className={classes.row} key={volunteer.id}>
                         <CustomTableCell className="edit-link">
-                            <Link to="/editVolunteer" onClick={() => this.goToEditPage(volunteer.id)}>
+                            <Link onClick={() => this.props.history.push(`/editVolunteer/${volunteer.id}`)}>
                                 {volunteer.first_name} {volunteer.last_name}
                             </Link>
                         </CustomTableCell>
                         <CustomTableCell>
-                            {moment(volunteer.birthday).fromNow(true)}
+                        {moment().diff((volunteer.birthday), 'years',false)}
                         </CustomTableCell>
                         <CustomTableCell>
                             {/* {JSON.stringify(this.props.state.volunteer)} */}

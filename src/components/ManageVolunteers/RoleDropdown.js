@@ -1,12 +1,5 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { withStyles } from '@material-ui/core/styles';
-import Input from '@material-ui/core/Input';
-import InputLabel from '@material-ui/core/InputLabel';
-import MenuItem from '@material-ui/core/MenuItem';
-import FormControl from '@material-ui/core/FormControl';
-import ListItemText from '@material-ui/core/ListItemText';
-import Select from '@material-ui/core/Select';
-import Checkbox from '@material-ui/core/Checkbox';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 
@@ -16,7 +9,7 @@ const styles = theme => ({
     flexWrap: 'wrap',
   },
   formControl: {
-    margin: theme.spacing.unit,
+    margin: theme.spacing(1),
     minWidth: 120,
     maxWidth: 300,
   },
@@ -25,10 +18,23 @@ const styles = theme => ({
     flexWrap: 'wrap',
   },
   chip: {
-    margin: theme.spacing.unit / 4,
+    margin: theme.spacing(1/4),
   },
   noLabel: {
-    marginTop: theme.spacing.unit * 3,
+    marginTop: theme.spacing(3),
+  },
+  rolesListDiv: {
+    textAlign: 'center',
+    listStyle: 'none',
+    display: 'inline',
+  },
+  rolesListDiv2: {
+    listStyle: 'none',
+    display: 'inline',
+  },
+  rolesList: {
+    display: 'inline',
+    margin: '-15px',
   },
 });
 
@@ -67,13 +73,14 @@ class RoleDropdown extends React.Component {
   }
 
   render() {
+    const { classes } = this.props;
     return (
-        <div>
+        <div className={classes.rolesListDiv}>
           {this.props.state.volunteer.userRoles.map(name => (
             <>
             {(this.props.user_id === name.user_id) && 
-                          <ul key={name.id}>
-                          <li style={{listStyle: "none"}}>
+                          <ul key={name.id} className={classes.rolesListDiv2}>
+                          <li className={classes.rolesList}>
                           {name.title.replace( '_', ' ' )}
                           </li>
                         </ul> 

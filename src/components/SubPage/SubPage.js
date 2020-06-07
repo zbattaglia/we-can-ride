@@ -26,7 +26,7 @@ const CustomTableCell = withStyles(theme => ({
 const styles = theme => ({
   root: {
     width: '99%',
-    marginTop: theme.spacing.unit * 3,
+    marginTop: theme.spacing(3),
     overflowX: 'auto',
   },
   table: {
@@ -37,6 +37,10 @@ const styles = theme => ({
       backgroundColor: theme.palette.background.default,
     },
   },
+  shiftTableContainer: {
+    width: '60%',
+    margin: 'auto',
+  }
 });
 
 class SubPage extends Component {
@@ -55,7 +59,7 @@ class SubPage extends Component {
     return (
       <>
           <h2 id="title">Sub Opportunities</h2>
-          <Paper className={classes.root} id="sub-table-container">
+          <Paper className={classes.shiftTableContainer} id="sub-table-container">
               <Table className={classes.table}>
                 <TableHead>
                   <TableRow>
@@ -70,7 +74,7 @@ class SubPage extends Component {
                 <TableBody>
                 {this.props.state.shift.subShifts.map( (shift) => 
                   <TableRow key={shift.id}>
-                    <CustomTableCell>
+                    <CustomTableCell id="what-when-cell">
                     {shift.title}: {moment(shift.date).format('dddd, MMMM Do, YYYY')} at {shift.start_of_lesson}
                     </CustomTableCell>
                     <CustomTableCell className="signup-button-cell">

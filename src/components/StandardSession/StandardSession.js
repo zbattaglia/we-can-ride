@@ -55,7 +55,16 @@ const styles = theme => ({
     color: theme.palette.text.secondary,
     display: 'inline-block',
     alignItems: 'right',
+  },
+
+  margin: {
+    margin: theme.spacing.unit,
+  },
+
+  title: {
+    textAlign: 'center',
   }
+
 });
 
 
@@ -77,14 +86,14 @@ class StandardSession extends Component {
   }
   componentDidUpdate (prevProps, prevState) {
     //if the page just loaded, set the top session in the reducer as the current session
-    if ((this.state.session == '') && this.props.state.session.allSessions[0]){
+    if ((this.state.session === '') && this.props.state.session.allSessions[0]){
       this.setState({
         session: this.props.state.session.allSessions[0]
       })
     }
     //if we picked a different session, fetch the lessons that are associated with that session
     if(prevState.session.id !== this.state.session.id){
-      console.log('get teh lessons again!');
+      console.log('get the lessons again!');
       this.props.dispatch({ type: 'FETCH_SESSION_LESSONS', payload: {session_id: this.state.session.id}})
     }
     //if we just added/deleted a session, set the top session in the reducer as the current session
@@ -124,7 +133,7 @@ class StandardSession extends Component {
     ];
     return (
       <>
-        <h1>Standard Session</h1>
+        <h2 className={classes.title}>Standard Session</h2>
         {/* {JSON.stringify(this.state)}
         {JSON.stringify(this.props.state.user)} */}
         <Grid container>
@@ -201,10 +210,10 @@ class StandardSession extends Component {
         // }}
           
         >
-          <Grid item xs={12} Aligner className={classes.day}>
+          <Grid item xs={12} className={classes.day}>
             {/**here we make the weekdays */}
             {weekdays.map( day => (
-              <Paper Aligner-item Aligner-item--top className={classes.paper}>
+              <Paper key={day.number} className={classes.paper}>
                 {day.name}
                 {/**here's where we get the lessons in a day */}
                 {this.props.state.session.slots.lessons && this.props.state.session.slots.lessons.map( lesson => (
@@ -266,7 +275,7 @@ class StandardSession extends Component {
                             &&
                             (this.state.session.ready_to_publish === false)
                             &&
-                            <AssignVolunteerButton  name='Remove A Volunteer' session_id={this.state.session.id} slot_id={slot.slot_id}/>
+                            <AssignVolunteerButton  name='Remove A Volunteer' session_id={this.state.session.id} slot_id={slot.slot_id} />
                             }
                             {(this.props.state.user.type_of_user === 'volunteer')
                             &&

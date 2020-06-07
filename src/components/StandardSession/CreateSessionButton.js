@@ -3,14 +3,8 @@ import React, {Component} from 'react';
 import {connect} from 'react-redux';
 
 import { withStyles } from '@material-ui/core/styles';
-import InputLabel from '@material-ui/core/InputLabel';
-import MenuItem from '@material-ui/core/MenuItem';
-import Select from '@material-ui/core/Select';
-import  moment  from 'moment';
 import Button from '@material-ui/core/Button';
 import Box from '@material-ui/core/Box';
-import Grid from '@material-ui/core/Grid';
-import Paper from '@material-ui/core/Paper';
 import TextField from '@material-ui/core/TextField';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
@@ -44,10 +38,13 @@ const styles = theme => ({
     flexWrap: 'wrap',
   },
   textField: {
-    marginLeft: theme.spacing.unit,
-    marginRight: theme.spacing.unit,
+    marginLeft: theme.spacing(1),
+    marginRight: theme.spacing(1),
     width: 200,
   },
+  warning: {
+    color: 'red'
+  }
 });
 
 
@@ -58,9 +55,12 @@ class CreateSession extends Component {
     
   state = {
     open: false,
-    date: '',
+    date: null,
     yearlong: false,
-    length: '',
+    length: null,
+    createError: null,
+    dateError: null, 
+    lengthError: null,
   };
 
   
@@ -70,15 +70,67 @@ class CreateSession extends Component {
 
   handleClose = (blob) => {
     if(blob === 'create'){
-      this.props.dispatch({ type: 'CREATE_SESSION', payload: {date: this.state.date, yearlong: this.state.yearlong, length: this.state.length}});
+      if(this.state.date && this.state.length){
+        this.props.dispatch({ type: 'CREATE_SESSION', payload: {date: this.state.date, yearlong: this.state.yearlong, length: this.state.length}});
+        this.setState({ 
+          open: false,
+          date: null,
+          yearlong: false,
+          length: null,
+          createError: null,
+          dateError: null, 
+          lengthError: null,
+        })
+      } else{
+          this.setState({
+            createError: 'please fill out the information before attempting to submit the new sesion'
+          });
+        }
+     
+    } else{
+      this.setState({ 
+        open: false,
+        date: null,
+        yearlong: false,
+        length: null,
+        createError: null,
+        dateError: null, 
+        lengthError: null,
+      });
     }
-    this.setState({ open: false });
+
   };
 
   handleInputChangeFor = propertyName => (event) => {
     this.setState({
       [propertyName]: event.target.value,
     });
+  };
+  clearError = propertyName => (event) => {
+    console.log('focus', propertyName);
+    //on focus, clear the error from this input
+    this.setState({
+      [propertyName]: null,
+      createError: null,
+    })
+  }
+
+  validate = propertyName => (event) => {
+    console.log('blur', propertyName);
+    if(propertyName === 'lengthError'){
+      if(!this.state.length){
+        this.setState({
+          [propertyName]: 'you need to select how long the session is'
+        });
+      }
+    }
+    if(propertyName === 'dateError'){
+      if(!this.state.date){
+        this.setState({
+          [propertyName]: 'you need to select a start date'
+        });
+      }
+    }
   };
 
   handleCheckboxChangeFor = propertyName => (event) => {
@@ -106,6 +158,10 @@ return (
           <DialogContent>
             <DialogContentText>
               Create a new session
+              {this.state.createError
+              &&
+              <Box className={classes.warning}>{this.state.createError}</Box>
+              }
             </DialogContentText>
       <TextField
         id="date"
@@ -113,21 +169,33 @@ return (
         type="date"
         value={this.state.date}
         onChange={this.handleInputChangeFor('date')}
+        onBlur={this.validate('dateError')}
+        onFocus={this.clearError('dateError')}
         className={classes.textField}
         InputLabelProps={{
           shrink: true,
         }}
       />
+      {this.state.dateError
+      &&
+      <Box className={classes.warning}>{this.state.dateError}</Box>
+      }
       <TextField 
         id='length'
         label='Session length in weeks'
         type='number'
         value={this.state.length}
         onChange={this.handleInputChangeFor('length')}
+        onBlur={this.validate('lengthError')}
+        onFocus={this.clearError('lengthError')}
         InputLabelProps={{
           shrink: true,
         }}
       />
+      {this.state.lengthError
+      &&
+      <Box className={classes.warning}>{this.state.lengthError}</Box>
+      }
         yearlong?
       <Checkbox 
         id='yearlong'

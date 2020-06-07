@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
-import { withStyles } from '@material-ui/core/styles';
+import { withStyles, StylesProvider } from '@material-ui/core/styles';
 import TableCell from '@material-ui/core/TableCell';
 import TableRow from '@material-ui/core/TableRow';
 import DeleteForever from '@material-ui/icons/DeleteForever';
@@ -36,7 +36,7 @@ const CustomTableCell = withStyles(theme => ({
   const styles = theme => ({
     root: {
       width: '100%',
-      marginTop: theme.spacing.unit * 3,
+      marginTop: theme.spacing(3),
       overflowX: 'auto',
     },
     table: {
@@ -49,9 +49,19 @@ const CustomTableCell = withStyles(theme => ({
     },
     absolute: {
         position: 'absolute',
-        bottom: theme.spacing.unit * 2,
-        right: theme.spacing.unit * 3,
+        bottom: theme.spacing(2),
+        right: theme.spacing(3),
     },
+    from: {
+      textAlign: 'center',
+      textTransform: 'capitalize',
+    },
+    received: {
+      textAlign: 'center',
+    },
+    action: {
+      textAlign: 'center',
+    }
   });
 
 class InboxList extends Component {
@@ -76,16 +86,16 @@ class InboxList extends Component {
     <>
     {this.props.state.message.message.map(message => {
         return <TableRow className={classes.row} key={ message.id }>
-            <CustomTableCell>
+            <CustomTableCell className={classes.from}>
                 {message.first_name} {message.last_name}
             </CustomTableCell>
-            <CustomTableCell>
+            <CustomTableCell className={classes.received}>
                 {moment(message.sent).format('dddd, MMMM Do, YYYY')}
             </CustomTableCell>
-            <CustomTableCell>
+            <CustomTableCell className={classes.message}>
                 {message.message}
             </CustomTableCell>
-            <CustomTableCell>
+            <CustomTableCell className={classes.action}>
                 {/* if the user is a volunteer they should only be able to send an accept or decline message. If admin, should be able to custom reply */}
                 {this.props.state.user.type_of_user === 'volunteer' ?
                 <>

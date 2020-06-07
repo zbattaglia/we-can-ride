@@ -3,14 +3,7 @@ import React, {Component} from 'react';
 import {connect} from 'react-redux';
 
 import { withStyles } from '@material-ui/core/styles';
-import InputLabel from '@material-ui/core/InputLabel';
-import MenuItem from '@material-ui/core/MenuItem';
-import Select from '@material-ui/core/Select';
-import  moment  from 'moment';
-import Button from '@material-ui/core/Button';
 import Box from '@material-ui/core/Box';
-import Grid from '@material-ui/core/Grid';
-import Paper from '@material-ui/core/Paper';
 
 const styles = theme => ({
   root: {
@@ -39,7 +32,7 @@ const styles = theme => ({
     cursor: 'default',
     justify:'flex-start',
     alignItems: 'flex-start',
-    
+    height: '10px',
   },
 });
 
@@ -58,9 +51,9 @@ class DeleteRole extends Component {
    
 return (
     <Box className={classes.pointer} onClick={this.handleClick}>
-      <h4>
+      
         X
-      </h4>
+      
      
     </Box>
     )

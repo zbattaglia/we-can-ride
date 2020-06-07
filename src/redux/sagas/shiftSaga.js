@@ -24,6 +24,17 @@ function* fetchMyShifts(action) {
   }
 };
 
+function* fetchMySlots(action) {
+  //action.payload is in the form {user_id: 8}
+  try{
+    const response = yield axios.get(`/shift/myslots/${action.payload.user_id}`);
+    yield put({ type: 'SET_MY_SLOTS', payload: response.data});
+  }
+  catch (error) {
+    console.log('error in getting my slots', error);
+  }
+}
+
 
 function* giveUpShift(action) {
   try {
@@ -77,6 +88,7 @@ function* shiftSaga() {
   yield takeLatest('FETCH_ALL_SHIFTS', fetchAllShifts);
   yield takeLatest('FETCH_SUB_SHIFTS', fetchSubShifts);
   yield takeLatest('TAKE_SUB_SHIFT', updateSubShift);
+  yield takeLatest('FETCH_MY_SLOTS', fetchMySlots);
 };
 
 export default shiftSaga;
