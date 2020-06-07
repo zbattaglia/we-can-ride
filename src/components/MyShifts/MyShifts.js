@@ -34,6 +34,29 @@ const styles = theme => ({
       backgroundColor: theme.palette.background.default,
     },
   },
+  dateHeader: {
+    textAlign: 'center',
+    fontWeight: 'bold',
+  },
+  arrive: {
+    textAlign: 'center',
+    fontWeight: 'bold',
+  },
+  role: {
+    textAlign: 'center',
+    fontWeight: 'bold',
+  },
+  action: {
+    textAlign: 'center',
+    fontWeight: 'bold',
+  },
+  tableCell: {
+    textAlign: 'center',
+  },
+  shiftTableContainer: {
+    width: '60%',
+    margin: 'auto',
+  }
 });
 
 class MyShifts extends Component {
@@ -52,6 +75,7 @@ class MyShifts extends Component {
 
 
   render() {
+    const { classes } = this.props;
     return (
       <>
         <h2 style={{textAlign: 'center'}}>My Shifts</h2>
@@ -59,16 +83,16 @@ class MyShifts extends Component {
           <Table>
             <TableHead>
               <TableRow>
-                <CustomTableCell >
+                <CustomTableCell className={classes.dateHeader}>
                 Date 
                 </CustomTableCell >
-                <CustomTableCell >
+                <CustomTableCell className={classes.arrive}>
                 Time To Arrive 
                 </CustomTableCell >
-                <CustomTableCell >
+                <CustomTableCell className={classes.role}>
                 Role 
                 </CustomTableCell >
-                <CustomTableCell >
+                <CustomTableCell className={classes.action}>
                   Action
                 </CustomTableCell >
               </TableRow>
@@ -76,16 +100,16 @@ class MyShifts extends Component {
             <TableBody>
               {this.props.state.shift.myShifts.map( (row) =>(
                 <TableRow key={row.id}>
-                  <CustomTableCell >
+                  <CustomTableCell className={classes.tableCell}>
                     {moment(row.date).format('dddd, MMMM Do, YYYY')}
                   </CustomTableCell >
                   <CustomTableCell >
                   {moment(row.time_to_arrive, "HH:mm:ss").format('hh:mm a')}
                   </CustomTableCell >
-                  <CustomTableCell >
+                  <CustomTableCell className={classes.tableCell}>
                     {row.role}
                   </CustomTableCell >
-                  <CustomTableCell >
+                  <CustomTableCell className={classes.tableCell}>
                     <button onClick={ (event) => this.handleClick( event, row.id ) }>Give Up</button>
                   </CustomTableCell >
                 </TableRow>
