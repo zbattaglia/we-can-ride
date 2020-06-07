@@ -179,29 +179,44 @@ class EditVolunteer extends Component {
             className={classes.textField}
             value={this.state.first_name}
             onChange={ (event) => this.handleChange( event, 'first_name')}
+            InputLabelProps={{
+              shrink: true,
+            }}
           />
           <TextField
             label="Last Name"
             className={classes.textField}
             value={this.state.last_name}
             onChange={ (event) => this.handleChange( event, 'last_name')}
+            InputLabelProps={{
+              shrink: true,
+            }}
           />
           <TextField
             label="Phone Number"
             className={classes.textField}
             value={this.state.phone}
             onChange={ (event) => this.handleChange( event, 'phone')}
+            InputLabelProps={{
+              shrink: true,
+            }}
           />
           <TextField
             label="Email"
             className={classes.textField}
             value={this.state.email}
             onChange={ (event) => this.handleChange( event, 'email')}
+            InputLabelProps={{
+              shrink: true,
+            }}
           />
           <TextField
             label="Password"
             className={classes.textField}
             value="*******"
+            InputLabelProps={{
+              shrink: true,
+            }}
           />
           <TextField
             label="Birthday"
