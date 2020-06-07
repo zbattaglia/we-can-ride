@@ -94,10 +94,6 @@ class ManageVolunteersList extends Component {
         });
     };
 
-    goToEditPage = (id) => {
-        console.log('In goToEditPage', id)
-        this.props.dispatch( { type: 'FETCH_SELECTED_VOLUNTEER', payload: id } );
-    }
 
     disableVolunteer = (id) => {
         console.log('In disableVolunteer', id)
@@ -114,7 +110,6 @@ class ManageVolunteersList extends Component {
         const { classes } = this.props
         return (
             <>
-                    {JSON.stringify(this.props.history)}
                 {this.props.state.volunteer.volunteer.map(volunteer => {
                     return <TableRow className={classes.row} key={volunteer.id}>
                         <CustomTableCell className="edit-link">

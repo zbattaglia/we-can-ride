@@ -98,12 +98,14 @@ class EditVolunteer extends Component {
       [propertyName]: event.target.checked,
     });
   }
-
+  componentDidMount(){
+    this.props.dispatch( { type: 'FETCH_SELECTED_VOLUNTEER', payload: this.props.match.params.id } );
+  }
   // componentDidUpdate checks if the current state of first name is blank and if the selectedVolunteer has been set from the database
   // if so, set the initial state to the values of the selected volunteer. (have to check if thae prev.state was blank is well, or else
   // the field will be reset when the user completely deletes the information)
   // else, fetch the selected volunteer again.
-  componentDidUpdate( prevProps, prevState ){
+  /* componentDidUpdate( prevProps, prevState ){
     if( this.state.first_name === '' && prevState.first_name === '' && this.props.state.volunteer.selectedVolunteer ) {
       // create a new temporary state. then loop over array of selectedUser availabilities and create a key-value pair in the new state
       // spread this new object in setState to default check boxes of days the user is available to be checked
@@ -128,7 +130,7 @@ class EditVolunteer extends Component {
         this.props.dispatch( { type: 'FETCH_SELECTED_VOLUNTEER', payload: this.props.volunteer.selectedVolunteer.id } );
       }
     }
-  };
+  }; */
 
   handleClick = () => {
     // console.log( 'Got a Click', this.state );
