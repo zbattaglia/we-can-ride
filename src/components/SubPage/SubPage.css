@@ -13,9 +13,13 @@
 }
 
 #what-when {
-    text-align: center;
+    text-align: left;
     font-weight: bold;
     width: 85%;
+}
+
+#what-when-cell {
+    text-align: left;
 }
 
 .signup-button {
