@@ -81,7 +81,7 @@ class MyShifts extends Component {
                     {moment(row.date).format('dddd, MMMM Do, YYYY')}
                   </CustomTableCell >
                   <CustomTableCell >
-                    {row.time_to_arrive}
+                  {moment(row.time_to_arrive, "HH:mm:ss").format('hh:mm a')}
                   </CustomTableCell >
                   <CustomTableCell >
                     {row.role}
