@@ -105,6 +105,9 @@ class EditProfile extends Component {
     
       if( prevProps.state.volunteer.selectedVolunteer !== this.props.state.volunteer.selectedVolunteer ) {
         let newState = {};
+        if(this.props.state.volunteer.selectedVolunteer.availability[0]){
+
+        }
         for ( let userAvailability of this.props.state.volunteer.selectedVolunteer.availability ) {
           newState[userAvailability] = true;
         }
