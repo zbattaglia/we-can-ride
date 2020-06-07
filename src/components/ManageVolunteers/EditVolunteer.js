@@ -58,30 +58,30 @@ class EditVolunteer extends Component {
 
   // initial state for the form fields
   state = {
-    first_name: '',
-    last_name: '',
-    phone: '',
-    email: '',
-    birthday: '',
-    id: '',
-    amSunday: '',
-    pmSunday: '',
-    amMonday: '',
-    pmMonday: '',
-    amTuesday: '',
-    pmTuesday: '',
-    amWednesday: '',
-    pmWednesday: '',
-    amThursday: '',
-    pmThursday: '',
-    amFriday: '',
-    pmFriday: '',
-    amSaturday: '',
-    pmSaturday: '',
-    sidewalker: '',
-    leader: '',
-    barn_aid: '',
-    feeder: '',
+    first_name: null,
+    last_name: null,
+    phone: null,
+    email: null,
+    birthday: null,
+    id: null,
+    amSunday: null,
+    pmSunday: null,
+    amMonday: null,
+    pmMonday: null,
+    amTuesday: null,
+    pmTuesday: null,
+    amWednesday: null,
+    pmWednesday: null,
+    amThursday: null,
+    pmThursday: null,
+    amFriday: null,
+    pmFriday: null,
+    amSaturday: null,
+    pmSaturday: null,
+    sidewalker: null,
+    leader: null,
+    barn_aid: null,
+    feeder: null,
   }
 
   // detects a change on an input field and updates the state accordingly
@@ -106,11 +106,15 @@ class EditVolunteer extends Component {
     if (prevProps.state.volunteer.selectedVolunteer !== this.props.state.volunteer.selectedVolunteer){
       //set the state to match the volunteer
       let newState = {};
-      for ( let userAvailability of this.props.state.volunteer.selectedVolunteer.availability ) {
-        newState[userAvailability] = true;
+      if(this.props.state.volunteer.selectedVolunteer.availability[0]){
+        for ( let userAvailability of this.props.state.volunteer.selectedVolunteer.availability ) {
+          newState[userAvailability] = true;
+        }
       }
-      for ( let userSkill of this.props.state.volunteer.selectedVolunteer.skill ) {
-        newState[userSkill] = true;
+      if(this.props.state.volunteer.selectedVolunteer.skill[0]){
+        for ( let userSkill of this.props.state.volunteer.selectedVolunteer.skill ) {
+          newState[userSkill] = true;
+        }      
       }
       this.setState({
         ...this.state,
