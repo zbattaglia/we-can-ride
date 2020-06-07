@@ -17,6 +17,7 @@ const CustomTableCell = withStyles(theme => ({
     },
     body: {
         fontsize: 14,
+        textAlign: 'center',
     }
 }))(TableCell)
 
