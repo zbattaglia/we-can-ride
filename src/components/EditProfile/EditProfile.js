@@ -56,26 +56,26 @@ const styles = theme => ({
 class EditProfile extends Component {
     // initial state for the form fields
     state = {
-      first_name: '',
-      last_name: '',
-      phone: '',
-      email: '',
-      birthday: '',
-      id: '',
-      amSunday: '',
-      pmSunday: '',
-      amMonday: '',
-      pmMonday: '',
-      amTuesday: '',
-      pmTuesday: '',
-      amWednesday: '',
-      pmWednesday: '',
-      amThursday: '',
-      pmThursday: '',
-      amFriday: '',
-      pmFriday: '',
-      amSaturday: '',
-      pmSaturday: '',
+      first_name: null,
+      last_name: null,
+      phone: null,
+      email: null,
+      birthday: null,
+      id: null,
+      amSunday: null,
+      pmSunday: null,
+      amMonday: null,
+      pmMonday: null,
+      amTuesday: null,
+      pmTuesday: null,
+      amWednesday: null,
+      pmWednesday: null,
+      amThursday: null,
+      pmThursday: null,
+      amFriday: null,
+      pmFriday: null,
+      amSaturday: null,
+      pmSaturday: null,
     }
 
   componentDidMount () {
@@ -105,6 +105,7 @@ class EditProfile extends Component {
     
       if( prevProps.state.volunteer.selectedVolunteer !== this.props.state.volunteer.selectedVolunteer ) {
         let newState = {};
+        //if the user has availabilies, get them. if not, leave them all blank
         if(this.props.state.volunteer.selectedVolunteer.availability[0]){
 
         }
@@ -117,7 +118,7 @@ class EditProfile extends Component {
           last_name: this.props.state.volunteer.selectedVolunteer.last_name,
           phone: this.props.state.volunteer.selectedVolunteer.phone,
           email: this.props.state.volunteer.selectedVolunteer.email,
-          birthday: moment(this.props.state.volunteer.selectedVolunteer.birthday).format('MMMM Do YYYY'),
+          birthday: moment(this.props.state.volunteer.selectedVolunteer.birthday).format('yyyy-MM-DD'),
           id: this.props.state.volunteer.selectedVolunteer.id,
           ...newState,
       })
