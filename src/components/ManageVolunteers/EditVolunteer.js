@@ -101,6 +101,29 @@ class EditVolunteer extends Component {
   componentDidMount(){
     this.props.dispatch( { type: 'FETCH_SELECTED_VOLUNTEER', payload: this.props.match.params.id } );
   }
+  componentDidUpdate(prevProps, prevState){
+    //if we just got a volunteer from the database
+    if (prevProps.state.volunteer.selectedVolunteer !== this.props.state.volunteer.selectedVolunteer){
+      //set the state to match the volunteer
+      let newState = {};
+      for ( let userAvailability of this.props.state.volunteer.selectedVolunteer.availability ) {
+        newState[userAvailability] = true;
+      }
+      for ( let userSkill of this.props.state.volunteer.selectedVolunteer.skill ) {
+        newState[userSkill] = true;
+      }
+      this.setState({
+        ...this.state,
+        first_name: this.props.state.volunteer.selectedVolunteer.first_name,
+        last_name: this.props.state.volunteer.selectedVolunteer.last_name,
+        phone: this.props.state.volunteer.selectedVolunteer.phone,
+        email: this.props.state.volunteer.selectedVolunteer.email,
+        birthday: moment(this.props.state.volunteer.selectedVolunteer.birthday).format('yyyy-MM-DD'),
+        id: this.props.state.volunteer.selectedVolunteer.id,
+        ...newState,
+      })
+    }
+  }
   // componentDidUpdate checks if the current state of first name is blank and if the selectedVolunteer has been set from the database
   // if so, set the initial state to the values of the selected volunteer. (have to check if thae prev.state was blank is well, or else
   // the field will be reset when the user completely deletes the information)
@@ -135,13 +158,15 @@ class EditVolunteer extends Component {
   handleClick = () => {
     // console.log( 'Got a Click', this.state );
     this.props.dispatch( { type: 'UPDATE_SELECTED_VOLUNTEER', payload: this.state } );
-    this.props.history.push( '/managevolunteers');
+    //this.props.history.push( '/managevolunteers');
   }
 
   render() {
     const { classes } = this.props;
     return (
       <>
+      {JSON.stringify(this.props.state.volunteer.selectedVolunteer)}
+      {JSON.stringify(this.state)}
         <form className={classes.container}>
           <h2 className={classes.title}>Edit Volunteer Information</h2>
           <div className={classes.formContent}>
@@ -176,8 +201,12 @@ class EditVolunteer extends Component {
           />
           <TextField
             label="Birthday"
+            type="date"
             className={classes.textField}
             value={this.state.birthday}
+            InputLabelProps={{
+              shrink: true,
+            }}
             onChange={ (event) => this.handleChange( event, 'birthday')}
           />
           </div>
