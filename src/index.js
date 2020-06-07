@@ -10,7 +10,7 @@ import rootSaga from './redux/sagas'; // imports ./redux/sagas/index.js
 
 import App from './components/App/App';
 import { MuiThemeProvider, createMuiTheme } from '@material-ui/core';
-import { purple, green } from '@material-ui/core/colors';
+import { purple, green, blue, grey } from '@material-ui/core/colors';
 
 const sagaMiddleware = createSagaMiddleware();
 
@@ -31,8 +31,8 @@ const store = createStore(
 const theme = createMuiTheme({
   //here's where we put all our theme stuff like our colors to apply to the whole app
   palette: {
-    primary: purple,
-    secondary: green,
+    primary: blue,
+    secondary: grey,
   }
 });
 // tells the saga middleware to use the rootSaga

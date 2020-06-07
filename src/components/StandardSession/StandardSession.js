@@ -260,7 +260,7 @@ class StandardSession extends Component {
                             }
                           </Box>
                           :
-                          <Box id={slot.expected_user}>
+                          <Box style={{backgroundColor: '#a9f097'}}id={slot.expected_user}>
                             {slot.first_name} {slot.last_name}
                             {(this.props.state.user.type_of_user === 'admin')
                             &&
@@ -302,7 +302,8 @@ class StandardSession extends Component {
             ))}
           </Grid>
         </Grid>
-        {this.state.session.ready_to_publish === false &&
+        {/* TODO-- add conditional rendering for volunteer */}
+        {this.state.session.ready_to_publish === false && (this.props.state.user.type_of_user === 'admin') &&
           <PublishSessionButton session_id={this.state.session.id}/>
         }
 
