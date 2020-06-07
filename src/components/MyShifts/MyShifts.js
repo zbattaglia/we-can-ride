@@ -128,7 +128,7 @@ class MyShifts extends Component {
                     {row.weekday}
                   </CustomTableCell >
                   <CustomTableCell >
-                    {row.start_of_lesson} - {row.end_of_lesson}
+                    {moment(row.start_of_lesson, "HH:mm:ss").format('hh:mm a')} - {moment(row.end_of_lesson, "HH:mm:ss").format('hh:mm a')}
                   </CustomTableCell >
                   <CustomTableCell >
                     {row.length_in_weeks.days/7}
