@@ -32,7 +32,7 @@ const styles = theme => ({
     cursor: 'default',
     justify:'flex-start',
     alignItems: 'flex-start',
-    
+    height: '10px',
   },
 });
 
@@ -51,9 +51,9 @@ class DeleteRole extends Component {
    
 return (
     <Box className={classes.pointer} onClick={this.handleClick}>
-      <h4>
+      
         X
-      </h4>
+      
      
     </Box>
     )
