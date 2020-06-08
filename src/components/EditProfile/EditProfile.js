@@ -195,6 +195,9 @@ class EditProfile extends Component {
               <TableHead>
                 <TableRow>
                   <TableCell className={classes.tableTitle} colSpan={7}>
+
+                    {/* {JSON.stringify(this.state)} */}
+
                     Edit Availability
                   </TableCell>
                 </TableRow>

@@ -56,17 +56,12 @@ const styles = theme => ({
   },
 });
 
-
-
-//TODO use button to open a modal to create a new session
-
 class AssignVolunteerButton extends Component {
     
   state = {
     open: false,
     volunteer: ''
   };
-
   
   handleClickOpen = () => {
     this.setState({ open: true });

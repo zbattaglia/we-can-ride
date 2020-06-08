@@ -15,7 +15,7 @@ const UserPage = (props) => {
 
   return(
   <div>
-    {JSON.stringify(props.volunteer)}
+    {/* {JSON.stringify(props.volunteer)} */}
     <h1 id="welcome">
       Welcome, { props.user.username }!
     </h1>

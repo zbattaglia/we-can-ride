@@ -99,6 +99,8 @@ class FindASub extends Component {
     return (
       <>
         <h1>Find a sub for {this.state.shift.role} on  {this.formatDate( this.state.shift.date )} at {this.state.shift.time_to_arrive}</h1>
+        <p>this is the page where you can find a sub</p>
+        {/* {JSON.stringify( this.props.state.myShifts ) }; */}
         <ul>
           {this.props.state.volunteer.volunteer.map( (sub) => 
           <li key={sub.id} className="sub-list-item" value={sub.email}>
