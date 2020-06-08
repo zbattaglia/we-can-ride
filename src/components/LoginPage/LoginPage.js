@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import TextField from '@material-ui/core/TextField';
+import './LoginPage.css';
 
 class LoginPage extends Component {
   state = {
@@ -31,7 +33,7 @@ class LoginPage extends Component {
 
   render() {
     return (
-      <div>
+      <div className="login-page">
         {this.props.errors.loginMessage && (
           <h2
             className="alert"
@@ -42,27 +44,27 @@ class LoginPage extends Component {
         )}
         <form onSubmit={this.login}>
           <h1>Login</h1>
-          <div>
-            <label htmlFor="username">
-              Email:
-                <input
-                type="text"
-                name="username"
-                value={this.state.username}
-                onChange={this.handleInputChangeFor('username')}
-              />
-            </label>
+          <div className="input-field">
+            <TextField 
+            id="username" 
+            label="Username" 
+            variant="outlined"
+            type="text"
+            fullWidth
+            name="username"
+            value={this.state.username}
+            onChange={this.handleInputChangeFor('username')} />
           </div>
-          <div>
-            <label htmlFor="password">
-              Password:
-                <input
-                type="password"
-                name="password"
-                value={this.state.password}
-                onChange={this.handleInputChangeFor('password')}
-              />
-            </label>
+          <div className="input-field">
+            <TextField 
+            id="password" 
+            label="Password" 
+            variant="outlined"
+            type="password"
+            fullWidth
+            name="password"
+            value={this.state.password}
+            onChange={this.handleInputChangeFor('password')} />
           </div>
           <div>
             <input
@@ -81,7 +83,7 @@ class LoginPage extends Component {
             onClick={() => { this.props.dispatch({ type: 'SET_TO_FORGOT_PASSWORD' }) }}
           >
             Forgot Password
-            </button>
+          </button>
         </center>
       </div>
     );

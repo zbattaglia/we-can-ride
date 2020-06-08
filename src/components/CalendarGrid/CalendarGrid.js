@@ -20,7 +20,7 @@ class CalendarGrid extends React.Component {
   }
 
   componentDidUpdate(prevProps, prevState){
-    if((this.props.state.shift.myShifts.length >1) && prevProps.state.shift.myShifts !== this.props.state.shift.myShifts){
+    if((this.props.state.shift.allShifts.length > 1) && prevProps.state.shift.allShifts !== this.props.state.shift.allShifts){
       this.setState({
         calendarEvents: {
           events: this.eventConstructor(this.props.state.shift.allShifts),
