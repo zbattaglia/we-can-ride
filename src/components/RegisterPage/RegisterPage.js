@@ -409,14 +409,14 @@ class RegisterPage extends Component {
                     </TableRow>
                 </TableBody>
               </Table>
-            <div>
-              <input
-                className="register"
-                type="submit"
-                name="submit"
-                value="Register"
-              />
-            </div>
+              <Button
+            variant="contained"
+            color="primary"
+            className={classes.button}
+            onClick={this.registerUser}
+          >
+            Register
+          </Button>
           </>
           :
             <h1>404</h1>
