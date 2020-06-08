@@ -1,24 +1,29 @@
 .nav-title {
   font-size: 30px;
-    font-weight: bold;
-    transform:scale(1.5,1.5);
-    font-family: Marker Felt, fantasy;
-    display: inline-block;
-    color: black;
-    padding-left: 0px;
+  font-weight: bold;
+  transform:scale(1.5,1.5);
+  display: inline-block;
+  color: whitesmoke;
+  padding-left: 0px;
+font-family: 'Philosopher', sans-serif;
 }
 
 .nav {
 overflow: hidden;
+z-index: 2;
 /* background-color: #dbd5d5; */
 text-align: center;
+position: sticky;
+top: 0;
 background-image:
   linear-gradient(
     to right, 
-    #6de423,
-    #dbd5d5 
+    navy, forestgreen
   );
 }
+
+/*     #6de423,
+    #dbd5d5  */
 
 .nav-link {
 float: left;

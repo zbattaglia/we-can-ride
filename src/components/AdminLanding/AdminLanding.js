@@ -16,8 +16,6 @@ class AdminLanding extends React.Component {
     calendarWeekends: true,
     calendarEvents: {
       events: [],
-      // color: 'green',
-      textColor: 'white',
     },
   }
 
@@ -124,7 +122,7 @@ class AdminLanding extends React.Component {
             break;
         }
       }
-      else if(event.id){
+      else{
         let parseName = event.first_name + ' ' + event.last_name[0];
         switch(event.title){
           case 'leader':
