@@ -63,6 +63,9 @@ const styles = theme => ({
 
   title: {
     textAlign: 'center',
+  },
+  button: {
+    height: '30px',
   }
 
 });
@@ -235,10 +238,10 @@ class StandardSession extends Component {
                             spacing={24}
                           >
 
-                            <Grid item xs>
+                            <Grid item xs className={classes.button}>
                             {slot.title}:
                             </Grid>
-                            <Grid justify='right' item s>
+                            <Grid justify='right' item>
                             {(this.props.state.user.type_of_user === 'admin')
                             &&
                             (this.state.session.ready_to_publish === false)

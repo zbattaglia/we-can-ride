@@ -118,7 +118,7 @@ class ManageVolunteersList extends Component {
                             </Link>
                         </CustomTableCell>
                         <CustomTableCell>
-                            {moment(volunteer.birthday).fromNow(true)}
+                        {moment().diff((volunteer.birthday), 'years',false)}
                         </CustomTableCell>
                         <CustomTableCell>
                             {/* {JSON.stringify(this.props.state.volunteer)} */}

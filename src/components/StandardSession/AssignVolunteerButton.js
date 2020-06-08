@@ -12,6 +12,11 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import PropTypes from 'prop-types';
+import TextField from '@material-ui/core/TextField';
+import Checkbox from '@material-ui/core/Checkbox';
+import Autocomplete from '@material-ui/lab/Autocomplete';
+
+
 
 
 
@@ -41,6 +46,13 @@ const styles = theme => ({
     marginLeft: theme.spacing(1),
     marginRight: theme.spacing(1),
     width: 200,
+  },
+  button: {
+    display: 'flex',
+    justifyContent: 'center',
+    width: '100%',
+    height: '30px',
+    marginBottom: '7px',
   },
 });
 
@@ -90,6 +102,7 @@ class AssignVolunteerButton extends Component {
     this.setState({
       [propertyName]: event.target.value,
     });
+    console.log('state is:', this.state);
   };
 
   render() {
@@ -97,7 +110,7 @@ class AssignVolunteerButton extends Component {
    
 return (
   <div>
-    <Button size="small" color='secondary' variant='contained' onClick={this.handleClickOpen} >{this.props.name}</Button>
+    <Button size="small" color='secondary' variant='contained' className={classes.button} onClick={this.handleClickOpen} >{this.props.name}</Button>
     <Dialog
   open={this.state.open}
   onClose={this.handleClose}
@@ -117,7 +130,16 @@ return (
     <DialogContentText>
     Choose which volunteer will be taking this role.
   </DialogContentText>
-    <Select
+  <Autocomplete
+      value={this.state.volunteer}
+      id="combo-box-demo"
+      options={this.props.state.volunteer.volunteer}
+      getOptionLabel={(option) => option.first_name}
+      style={{ width: 300 }}
+      onChange={this.handleInputChangeFor('volunteer')}
+      renderInput={(params) => <TextField {...params} label="none" variant="outlined" />}
+    />
+    {/* <Select
       value={this.state.volunteer}
       onChange={this.handleInputChangeFor('volunteer')}
       inputProps={{
@@ -130,7 +152,7 @@ return (
       {this.props.state.volunteer.volunteer.map( volunteer => (
         <MenuItem value={volunteer.id}>{volunteer.first_name} {volunteer.last_name}</MenuItem>
       ))}
-    </Select>
+    </Select> */}
     </>
     }
 
