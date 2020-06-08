@@ -8,6 +8,9 @@ import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Checkbox from '@material-ui/core/Checkbox';
+import Button from '@material-ui/core/Button';
+
+import ReactPasswordStrength from 'react-password-strength';
 
 
 
@@ -15,32 +18,42 @@ const styles = theme => ({
   container: {
     display: 'flex',
     flexWrap: 'wrap',
+    backgroundColor: 'whitesmoke',
+    width: '80%',
   },
   textField: {
-    marginLeft: theme.spacing(1),
-    marginRight: theme.spacing(1),
-    width: 200,
+    margin: theme.spacing(1),
+    width: '48%',
   },
-  dense: {
-    marginTop: 19,
-  },
-  menu: {
-    width: 200,
-  },
-  root: {
+  title: {
+    textAlign: 'center',
     width: '100%',
-    marginTop: theme.spacing(3),
-    overflowX: 'auto',
+    textDecoration: 'underline',
+    margin: 0,
+    padding: 0,
+  },
+  formContent: {
+    width: '100%',
+    textAlign: 'center',
+  },
+  button: {
+    margin: theme.spacing(1),
+    marginBottom: 30
+  },
+  tableTitle: {
+    textAlign: 'center',
+    textDecoration: 'underline',
+    fontWeight: 'bold',
+    fontSize: '1.5rem',
+  },
+  columnTitle: {
+    textAlign: 'center',
   },
   table: {
-    minWidth: 700,
-  },
-  formControl: {
-    margin: theme.spacing(1),
-    minWidth: 120,
-  },
-  input: {
-    marginBottom: 30
+    backgroundColor: 'whitesmoke',
+    width: '83%',
+    marginLeft: 'auto',
+    marginRight: 'auto',
   }
 });
 
@@ -124,92 +137,88 @@ class RegisterPage extends Component {
   render() {
     const { classes } = this.props;
     return (
-      <div>
+      <>
           <h2
             className="alert"
             role="alert"
           >
             {this.props.errors.registrationMessage}
           </h2>
-        <form onSubmit={this.registerUser}>
+        <form className={classes.container} onSubmit={this.registerUser}>
+          <div className={classes.formContent}>
           {this.props.state.loginMode === 'register' ?
             <>
-            <h1>Register as a Volunteer!</h1>
-            <div>
-              <TextField
-                type="email"
-                label="Email"
-                name="username"
-                value={this.state.username}
-                onChange={this.handleInputChangeFor('username')}
-              />
-            </div>
-            <div>
-              <TextField
-                type="password"
-                label="Password"
-                name="password"
-                value={this.state.password}
-                onChange={this.handleInputChangeFor('password')}
-              />
-            </div>
-            <div>
-              <TextField
-                type="password"
-                label="Confirm Password"
-                name="confirmPassword"
-                value={this.state.confirmPassword}
-                onChange={this.handleInputChangeFor('confirmPassword')}
-              />
-            </div>
-            <div>
+            <h1 className={classes.title}>Register as a Volunteer!</h1>
+
               <TextField
                 type="text"
                 label="First Name"
                 name="firstName"
+                className={classes.textField}
                 value={this.state.firstName}
                 onChange={this.handleInputChangeFor('firstName')}
               />
-            </div>
-            <div>
               <TextField
                 type="text"
                 label="Last Name"
                 name="lastName"
+                className={classes.textField}
                 value={this.state.lastName}
                 onChange={this.handleInputChangeFor('lastName')}
               />
-            </div>
-            <div>
+              <TextField
+                type="email"
+                label="Email"
+                name="username"
+                className={classes.textField}
+                value={this.state.username}
+                onChange={this.handleInputChangeFor('username')}
+              />
               <TextField
                 type="tel"
                 label="Phone Number"
                 name="phoneNumber"
+                className={classes.textField}
                 value={this.state.phoneNumber}
                 onChange={this.handleInputChangeFor('phoneNumber')}
               />
-            </div>
-            <div>
-            
-            <TextField
-              id="date"
-              type="date"
-              value={this.state.birthday}
-              onChange={this.handleInputChangeFor('birthday')}
-              className={classes.textField}
-              InputLabelProps={{
-                shrink: false,
-              }}
-            />
-            </div>
-            <div>
+              <TextField
+                type="password"
+                label="Password"
+                name="password"
+                className={classes.textField}
+                value={this.state.password}
+                onChange={this.handleInputChangeFor('password')}
+              />
+              <TextField
+                type="password"
+                label="Confirm Password"
+                name="confirmPassword"
+                className={classes.textField}
+                value={this.state.confirmPassword}
+                onChange={this.handleInputChangeFor('confirmPassword')}
+              />
+
+              <TextField
+                label="Date of birth"
+                id="date"
+                type="date"
+                className={classes.textField}
+                value={this.state.birthday}
+                onChange={this.handleInputChangeFor('birthday')}
+
+                InputLabelProps={{
+                  shrink: true,
+                }}
+              />
               <Table className={classes.table}>
-                <TableHead>
-                <TableRow>
+                <TableHead alignItem='center'>
+                  <TableRow>
                     <TableCell className={classes.tableTitle} colSpan={7}>
                       Add Availability
                     </TableCell>
                   </TableRow>
+                </TableHead>
                   <TableRow>
                     <TableCell className={classes.columnTitle}>Sunday</TableCell>
                     <TableCell className={classes.columnTitle}>Monday</TableCell>
@@ -219,7 +228,7 @@ class RegisterPage extends Component {
                     <TableCell className={classes.columnTitle}>Friday</TableCell>
                     <TableCell className={classes.columnTitle}>Saturday</TableCell>
                   </TableRow>
-                </TableHead>
+
                 <TableBody>
                     <TableRow>
                       <TableCell>
@@ -323,21 +332,27 @@ class RegisterPage extends Component {
                     </TableRow>
                 </TableBody>
               </Table>
-            </div>
-            <div>
+              <Button
+            variant="contained"
+            color="primary"
+            className={classes.button}
+            onClick={this.registerUser}
+          >
+            Submit
+          </Button>
               <input
                 className="register"
                 type="submit"
                 name="submit"
                 value="Register"
               />
-            </div>
           </>
           :
             <h1>404</h1>
           }
+        </div>
         </form>
-      </div>
+          </>
     );
   }
 }

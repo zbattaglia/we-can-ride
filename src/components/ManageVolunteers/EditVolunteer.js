@@ -170,8 +170,8 @@ class EditVolunteer extends Component {
     const { classes } = this.props;
     return (
       <>
-      {JSON.stringify(this.props.state.volunteer.selectedVolunteer)}
-      {JSON.stringify(this.state)}
+      {/* {JSON.stringify(this.props.state.volunteer.selectedVolunteer)}
+      {JSON.stringify(this.state)} */}
         <form className={classes.container}>
           <h2 className={classes.title}>Edit Volunteer Information</h2>
           <div className={classes.formContent}>
@@ -229,8 +229,7 @@ class EditVolunteer extends Component {
             }}
             onChange={ (event) => this.handleChange( event, 'birthday')}
           />
-          </div>
-          </form>
+
           {/* TABLE BELOW */}
           
           <Table  className={classes.table}>
@@ -411,6 +410,8 @@ class EditVolunteer extends Component {
           >
             UPDATE
           </Button>
+          </div>
+          </form>
       </>
     )
   }
