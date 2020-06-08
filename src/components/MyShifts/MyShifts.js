@@ -8,7 +8,7 @@ import Paper from '@material-ui/core/Paper'
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import moment from 'moment';
-
+import Button from '@material-ui/core/Button';
 
 const CustomTableCell = withStyles(theme => ({
   head: {
@@ -103,14 +103,14 @@ class MyShifts extends Component {
                   <CustomTableCell className={classes.tableCell}>
                     {moment(row.date).format('dddd, MMMM Do, YYYY')}
                   </CustomTableCell >
-                  <CustomTableCell >
+                  <CustomTableCell className={classes.tableCell}>
                   {moment(row.time_to_arrive, "HH:mm:ss").format('hh:mm a')}
                   </CustomTableCell >
                   <CustomTableCell className={classes.tableCell}>
                     {row.role}
                   </CustomTableCell >
                   <CustomTableCell className={classes.tableCell}>
-                    <button onClick={ (event) => this.handleClick( event, row.id ) }>Give Up</button>
+                    <Button variant="contained" color="primary" onClick={ (event) => this.handleClick( event, row.id ) }>Give Up</Button>
                   </CustomTableCell >
                 </TableRow>
               ))}

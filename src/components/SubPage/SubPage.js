@@ -10,6 +10,14 @@ import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
+// for confirmation dialog
+import Button from '@material-ui/core/Button';
+import CheckCircle from '@material-ui/icons/CheckCircle';
+import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogTitle from '@material-ui/core/DialogTitle';
+
 
 import './SubPage.css';
 
@@ -40,10 +48,24 @@ const styles = theme => ({
   shiftTableContainer: {
     width: '60%',
     margin: 'auto',
-  }
+  }, 
+  iconContainer: {
+    textAlign: 'center',
+  },
+  success: {
+    color: theme.palette.primary.light,
+    fontSize: '3rem',
+  },
+  title: {
+    color: theme.palette.primary.light,
+  },
 });
 
 class SubPage extends Component {
+
+  state = {
+    open: false,
+  }
 
   componentDidMount () {
     this.props.dispatch({type: 'FETCH_SUB_SHIFTS'});
@@ -52,7 +74,16 @@ class SubPage extends Component {
   handleClick = ( event, shiftId ) => {
     // console.log( 'Got a click on shift with id', shiftId );
     this.props.dispatch( { type: 'TAKE_SUB_SHIFT', payload: shiftId } );
+    this.setState({
+      open: true,
+    })
   };
+
+  handleClose = () => {
+    this.setState({
+      open: false,
+    })
+  }
 
   render() {
     const { classes } = this.props
@@ -87,6 +118,19 @@ class SubPage extends Component {
                 </TableBody>
           </Table>
         </Paper>
+        <Dialog
+          open={this.state.open}
+        >
+          <DialogTitle className={classes.title}>Shift Added to Schedule</DialogTitle>
+          <DialogContent className={classes.iconContainer}>
+              <CheckCircle className={classes.success} />
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={this.handleClose} color="primary">
+              Close
+            </Button>
+          </DialogActions>
+         </Dialog>
       </>
     )
   }
