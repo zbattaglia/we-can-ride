@@ -10,6 +10,7 @@ import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
+import SubmitEditButton from './SubmitEditButton';
 
 const styles = theme => ({
   container: {
@@ -50,7 +51,7 @@ const styles = theme => ({
     width: '83%',
     marginLeft: 'auto',
     marginRight: 'auto',
-  }
+  },
 });
 
 class EditProfile extends Component {
@@ -311,14 +312,9 @@ class EditProfile extends Component {
               </TableBody>
             </Table>
           {/* TABLE ABOVE */}
-          <Button
-            variant="contained"
-            color="primary"
-            className={classes.button}
-            onClick={this.handleClick}
-          >
-            UPDATE
-          </Button>
+          <div onClick={this.handleClick}>
+            <SubmitEditButton />
+          </div>
       </>
 
     )
