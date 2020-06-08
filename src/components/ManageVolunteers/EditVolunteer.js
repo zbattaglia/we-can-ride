@@ -17,6 +17,10 @@ const styles = theme => ({
     flexWrap: 'wrap',
     backgroundColor: 'whitesmoke',
     width: '80%',
+    marginLeft: 'auto',
+    marginRight: 'auto',
+    marginBottom: '30px',
+    marginTop: '30px'
   },
   textField: {
     margin: theme.spacing(1),
@@ -170,8 +174,8 @@ class EditVolunteer extends Component {
     const { classes } = this.props;
     return (
       <>
-      {JSON.stringify(this.props.state.volunteer.selectedVolunteer)}
-      {JSON.stringify(this.state)}
+      {/* {JSON.stringify(this.props.state.volunteer.selectedVolunteer)}
+      {JSON.stringify(this.state)} */}
         <form className={classes.container}>
           <h2 className={classes.title}>Edit Volunteer Information</h2>
           <div className={classes.formContent}>
