@@ -16,7 +16,7 @@ router.get('/volunteer', rejectUnauthenticated, (req, res) => {
                     JOIN "lesson" ON "lesson"."id" = "slot"."lesson_id"
                     WHERE "date" < NOW()
                     GROUP BY "user"."id") AS "hours" ON "hours"."id" = "user"."id"
-                    ORDER BY "last_name", "first_name"
+                    ORDER BY "last_name", "first_name", "user"."id"
                     ; `;
 
     pool.query( sqlText )
@@ -62,7 +62,8 @@ router.put( '/:selectedId', rejectUnauthenticated, async(req, res) => {
     const last_name = req.body.last_name;
     const phone = req.body.phone;
     const email = req.body.email;
-    const birthday = req.body.birthday;
+    let birthday = req.body.birthday;
+    if (birthday === 'Invalid date'){birthday = null};
     const availability_skills = [];
 
     // loop over the req.body and create an array of avalabilities and skills to insert in database.

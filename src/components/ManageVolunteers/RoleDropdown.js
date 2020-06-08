@@ -71,6 +71,11 @@ class RoleDropdown extends React.Component {
   componentDidMount() {
     this.props.dispatch ({ type: "GET_USER_ROLES"})
   }
+  componentDidUpdate(prevProps){
+/*     if(){
+      this.props.dispatch ({ type: "GET_USER_ROLES"})
+    } */
+  }
 
   render() {
     const { classes } = this.props;
