@@ -12,7 +12,7 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import PropTypes from 'prop-types';
-
+import TextField from '@material-ui/core/TextField';
 import Checkbox from '@material-ui/core/Checkbox';
 import Autocomplete from '@material-ui/lab/Autocomplete';
 
@@ -46,6 +46,13 @@ const styles = theme => ({
     marginLeft: theme.spacing(1),
     marginRight: theme.spacing(1),
     width: 200,
+  },
+  button: {
+    display: 'flex',
+    justifyContent: 'center',
+    width: '100%',
+    height: '30px',
+    marginBottom: '7px',
   },
 });
 
@@ -108,7 +115,7 @@ class AssignVolunteerButton extends Component {
    
 return (
   <div>
-    <Button size="small" color='secondary' variant='contained' onClick={this.handleClickOpen} >{this.props.name}</Button>
+    <Button size="small" color='secondary' variant='contained' className={classes.button} onClick={this.handleClickOpen} >{this.props.name}</Button>
     <Dialog
   open={this.state.open}
   onClose={this.handleClose}
