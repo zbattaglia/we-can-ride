@@ -19,7 +19,7 @@ const styles = theme => ({
   button: {
     display: 'flex',
     justifyContent: 'center',
-    width: '200px',
+    width: '100%',
   },
 });
 

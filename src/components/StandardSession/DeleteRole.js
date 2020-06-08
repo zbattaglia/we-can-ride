@@ -32,7 +32,7 @@ const styles = theme => ({
     cursor: 'default',
     justify:'flex-start',
     alignItems: 'flex-start',
-    height: '10px',
+    height: '30px',
   },
 });
 

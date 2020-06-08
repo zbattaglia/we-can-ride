@@ -38,7 +38,7 @@ const styles = theme => ({
   button: {
     display: 'flex',
     justifyContent: 'center',
-    width: '200px',
+    width: '100%',
     marginBottom: '7px',
   },
 });
