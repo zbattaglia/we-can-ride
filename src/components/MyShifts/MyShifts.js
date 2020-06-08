@@ -8,6 +8,7 @@ import Paper from '@material-ui/core/Paper'
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import moment from 'moment';
+import Button from '@material-ui/core/Button';
 
 
 const CustomTableCell = withStyles(theme => ({
@@ -56,7 +57,10 @@ const styles = theme => ({
   shiftTableContainer: {
     width: '60%',
     margin: 'auto',
-  }
+  },
+  button: {
+    margin: theme.spacing.unit,
+  },
 });
 
 class MyShifts extends Component {
@@ -103,14 +107,14 @@ class MyShifts extends Component {
                   <CustomTableCell className={classes.tableCell}>
                     {moment(row.date).format('dddd, MMMM Do, YYYY')}
                   </CustomTableCell >
-                  <CustomTableCell >
+                  <CustomTableCell className={classes.tableCell}>
                   {moment(row.time_to_arrive, "HH:mm:ss").format('hh:mm a')}
                   </CustomTableCell >
                   <CustomTableCell className={classes.tableCell}>
                     {row.role}
                   </CustomTableCell >
                   <CustomTableCell className={classes.tableCell}>
-                    <button onClick={ (event) => this.handleClick( event, row.id ) }>Give Up</button>
+                    <Button variant="contained" className={classes.button} onClick={ (event) => this.handleClick( event, row.id ) }>Give Up</Button>
                   </CustomTableCell >
                 </TableRow>
               ))}
@@ -124,19 +128,19 @@ class MyShifts extends Component {
           <Table>
             <TableHead>
               <TableRow>
-                <CustomTableCell >
+                <CustomTableCell className={classes.role}>
                 Session Start Date 
                 </CustomTableCell >
-                <CustomTableCell >
+                <CustomTableCell className={classes.role}>
                 Weekday
                 </CustomTableCell >
-                <CustomTableCell >
+                <CustomTableCell className={classes.role}>
                 Time
                 </CustomTableCell >
-                <CustomTableCell >
+                <CustomTableCell className={classes.role}>
                 Session Length in Weeks
                 </CustomTableCell >
-                <CustomTableCell >
+                <CustomTableCell className={classes.role}>
                 Role
                 </CustomTableCell >
               </TableRow>
@@ -144,19 +148,19 @@ class MyShifts extends Component {
             <TableBody>
               {this.props.state.shift.mySlots.map( (row) =>(
                 <TableRow key={row.id}>
-                  <CustomTableCell >
+                  <CustomTableCell className={classes.tableCell}>
                     {moment(row.session_start_date).format('dddd, MMMM Do, YYYY')}
                   </CustomTableCell >
-                  <CustomTableCell >
+                  <CustomTableCell className={classes.tableCell}>
                     {row.weekday}
                   </CustomTableCell >
-                  <CustomTableCell >
+                  <CustomTableCell className={classes.tableCell}>
                     {moment(row.start_of_lesson, "HH:mm:ss").format('hh:mm a')} - {moment(row.end_of_lesson, "HH:mm:ss").format('hh:mm a')}
                   </CustomTableCell >
-                  <CustomTableCell >
+                  <CustomTableCell className={classes.tableCell}>
                     {row.length_in_weeks.days/7}
                   </CustomTableCell >
-                  <CustomTableCell >
+                  <CustomTableCell className={classes.tableCell}>
                     {row.title}
                   </CustomTableCell >
                 </TableRow>
