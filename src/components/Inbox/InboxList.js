@@ -4,12 +4,19 @@ import { withStyles, StylesProvider } from '@material-ui/core/styles';
 import TableCell from '@material-ui/core/TableCell';
 import TableRow from '@material-ui/core/TableRow';
 import DeleteForever from '@material-ui/icons/DeleteForever';
-import Reply from '@material-ui/icons/Reply';
 import Check from '@material-ui/icons/Check';
 import Clear from '@material-ui/icons/Clear';
 import IconButton from '@material-ui/core/IconButton';
 import Tooltip from '@material-ui/core/Tooltip';
 import moment from 'moment';
+// for confirmation modal
+import Button from '@material-ui/core/Button';
+import CheckCircle from '@material-ui/icons/CheckCircle';
+import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogTitle from '@material-ui/core/DialogTitle';
+
 
 import './InboxList.css';
 
@@ -61,10 +68,24 @@ const CustomTableCell = withStyles(theme => ({
     },
     action: {
       textAlign: 'center',
-    }
-  });
+    }, 
+    iconContainer: {
+      textAlign: 'center',
+    },
+    success: {
+      color: theme.palette.primary.light,
+      fontSize: '3rem',
+   },
+   title: {
+    color: theme.palette.primary.light,
+  },
+});
 
 class InboxList extends Component {
+
+  state = {
+    open: false,
+  }
 
     // method to handlce click on any of the inbox buttons.
     handleClick = ( messageId, button ) => {
@@ -74,10 +95,18 @@ class InboxList extends Component {
             this.props.dispatch( { type: 'DELETE_MESSAGE', payload: messageId } );
         }
         else {
-            // console.log( 'Replying to message' );
+            this.setState({
+              open: true,
+            })
             // if a message is "accepted" or "declined" send the preset message
             this.props.dispatch( { type: 'REPLY_TO_MESSAGE', payload: { id: messageId, type: button } } );
         }
+    }
+
+    handleClose = () => {
+      this.setState({
+        open: false,
+      })
     }
 
   render() {
@@ -96,9 +125,6 @@ class InboxList extends Component {
                 {message.message}
             </CustomTableCell>
             <CustomTableCell className={classes.action}>
-                {/* if the user is a volunteer they should only be able to send an accept or decline message. If admin, should be able to custom reply */}
-                {this.props.state.user.type_of_user === 'volunteer' ?
-                <>
                 <CustomTooltip title="Accept">
                     <IconButton aria-label="Accept" onClick={ (event) => this.handleClick( message.id, 'accept' )}>
                         <Check className="action"/>
@@ -109,14 +135,6 @@ class InboxList extends Component {
                         <Clear className="action"/>
                     </IconButton>
                 </CustomTooltip>
-                </>
-                :
-                <CustomTooltip title="Reply">
-                    <IconButton aria-label="Reply" onClick={ (event) => this.handleClick( message.id, 'reply' )}>
-                        <Reply className="action"/>
-                    </IconButton>
-                </CustomTooltip>
-                }
                 <CustomTooltip title="Delete">
                     <IconButton aria-label="Delete" onClick={ (event) => this.handleClick( message.id, 'delete' )}>
                         <DeleteForever  className="action"/>
@@ -125,6 +143,19 @@ class InboxList extends Component {
             </CustomTableCell>
         </TableRow>
         })}
+        <Dialog
+          open={this.state.open}
+        >
+          <DialogTitle className={classes.title}>Replied To Message</DialogTitle>
+          <DialogContent className={classes.iconContainer}>
+              <CheckCircle className={classes.success} />
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={this.handleClose} color="primary">
+              Close
+            </Button>
+          </DialogActions>
+         </Dialog>
     </>
     )
   }

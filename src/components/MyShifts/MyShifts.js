@@ -10,7 +10,6 @@ import TableRow from '@material-ui/core/TableRow';
 import moment from 'moment';
 import Button from '@material-ui/core/Button';
 
-
 const CustomTableCell = withStyles(theme => ({
   head: {
     backgroundColor: 'lightgrey',
