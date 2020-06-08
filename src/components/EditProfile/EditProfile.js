@@ -18,6 +18,10 @@ const styles = theme => ({
     flexWrap: 'wrap',
     backgroundColor: 'whitesmoke',
     width: '80%',
+    marginLeft: 'auto',
+    marginRight: 'auto',
+    marginBottom: '30px',
+    marginTop: '30px'
   },
   textField: {
     margin: theme.spacing(1),

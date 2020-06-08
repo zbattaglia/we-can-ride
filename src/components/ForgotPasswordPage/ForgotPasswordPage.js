@@ -29,7 +29,7 @@ class ForgotPasswordPage extends Component {
   render() {
     return (
         <div>
-        <form>
+        <form className="form">
           <h1>Send Reset Link</h1>
           {/* conditional rendering to show the input field on page load, and a message stating email has been sent after sending */}
           {!this.state.linkSent ?
