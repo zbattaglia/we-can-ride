@@ -62,8 +62,8 @@ router.get('/fourweeks', rejectUnauthenticated, (req, res) => {
 });
 
 router.get(`/all`, rejectUnauthenticated, (req, res) => {
-    const sqlText = `SELECT "shift"."date", "user"."first_name", "user"."last_name", "lesson"."start_of_lesson", 
-    "shift"."assigned_user", "shift"."user_wants_to_trade", "skill"."title" FROM "shift"
+    const sqlText = `SELECT "shift"."date", "user"."first_name", LEFT("user"."last_name", 1) AS "last_name", 
+    "lesson"."start_of_lesson", "shift"."assigned_user", "shift"."user_wants_to_trade", "skill"."title" FROM "shift"
     LEFT JOIN "user" ON "shift"."assigned_user" = "user"."id"
     JOIN "slot" ON "shift"."slot_id" = "slot"."id"
     JOIN "lesson" ON "slot"."lesson_id" = "lesson"."id"
