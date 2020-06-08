@@ -46,7 +46,7 @@ const styles = theme => ({
     },
   },
   shiftTableContainer: {
-    width: '60%',
+    width: '70%',
     margin: 'auto',
   }, 
   iconContainer: {
