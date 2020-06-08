@@ -109,7 +109,7 @@ class AdminLanding extends React.Component {
         }
       }
       else if(event.user_wants_to_trade){
-        let parseName = event.first_name + ' ' + event.last_name[0];
+        let parseName = event.first_name + ' ' + event.last_name;
         switch(event.title){
           case 'leader':
             parsedEvents.push({title: parseName, start:parseDate, color: 'gray', borderColor: 'goldenrod'});
@@ -123,7 +123,7 @@ class AdminLanding extends React.Component {
         }
       }
       else{
-        let parseName = event.first_name + ' ' + event.last_name[0];
+        let parseName = event.first_name + ' ' + event.last_name;
         switch(event.title){
           case 'leader':
             parsedEvents.push({title: parseName, start:parseDate, color: 'goldenrod'});
