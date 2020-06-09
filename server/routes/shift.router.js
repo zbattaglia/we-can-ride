@@ -151,7 +151,7 @@ router.put('/sub/shift', rejectUnauthenticated, (req, res) => {
 }); //end PUT route
 
 router.put('/update/volunteer', (req, res) => {
-    const queryText = `UPDATE "shift" SET "assigned_user" = $1 WHERE "id" = $2;`;
+    const queryText = `UPDATE "shift" SET "assigned_user" = $1, "user_wants_to_trade" = FALSE WHERE "id" = $2;`;
     const queryValues = [req.body.selectUser, req.body.eventId];
     pool.query(queryText, queryValues)
         .then(() => { res.sendStatus(204); })
