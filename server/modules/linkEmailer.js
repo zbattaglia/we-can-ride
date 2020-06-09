@@ -30,8 +30,8 @@ module.exports = sendEmailLink = ( emailInfo) => {
                 account password with We Can Ride. To reset your password click the link below.</p> <br />
                 <a href="http://localhost:3000/#/reset/${id}/${token}">RESET PASSWORD</a><br />
                 <p>If you still have trouble with your account pleaser contact the volunteer coordinator.<br />
-                volunteers@wecanride.org<br />
-                952-934-0057</p>`
+                Email: volunteers@wecanride.org<br />
+                Phone: 952-934-0057</p>`
     };
 
     // .sendMail uses the transporter and specified mail options to attempt to send an email.
