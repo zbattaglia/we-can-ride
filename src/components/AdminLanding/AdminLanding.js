@@ -6,6 +6,14 @@ import interactionPlugin from '@fullcalendar/interaction' // needed for dayClick
 import listPlugin from '@fullcalendar/list';
 import { connect } from 'react-redux';
 import moment from 'moment';
+import Button from '@material-ui/core/Button';
+import MenuItem from '@material-ui/core/MenuItem';
+import Select from '@material-ui/core/Select';
+import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogContentText from '@material-ui/core/DialogContentText';
+import DialogTitle from '@material-ui/core/DialogTitle';
 
 import './AdminLanding.css'
 
@@ -17,6 +25,9 @@ class AdminLanding extends React.Component {
     calendarEvents: {
       events: [],
     },
+    open: false,
+    selectUser: '',
+    eventId: '',
   }
 
   componentDidMount(){
@@ -31,6 +42,37 @@ class AdminLanding extends React.Component {
         }
       });
     }
+  }
+
+  handleOpen = () => {
+    this.setState({open: true});
+  };
+
+  handleClose = () => {
+    this.setState({open: false});
+  };
+
+  handleChange = (propertyName) => (event) => {
+    this.setState({
+      [propertyName]: event.target.value,
+    });
+  }
+
+  emptyState = () => {
+    this.setState({
+      selectUser: '',
+      eventId: '',
+    });
+  }
+
+  handleSave = () => {
+    let update = {
+      selectUser: this.state.selectUser,
+      eventId: this.state.eventId,
+    }
+    this.props.dispatch({type: 'UPDATE_SHIFT', payload: update});
+    this.emptyState();
+    this.handleClose();
   }
 
   render() {
@@ -58,6 +100,36 @@ class AdminLanding extends React.Component {
             eventClick={this.handleEventClick}
             />
         </div>
+
+        <Dialog open={this.state.open} onClose={this.handleClose} aria-labelledby="form-dialog-title">
+        <DialogTitle id="form-dialog-title">Assign volunteer</DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            Choose a volunteer to assign to this shift:
+          </DialogContentText>
+          <Select
+          labelId="demo-simple-select-outlined-label"
+          id="demo-simple-select-outlined"
+          value={this.state.selectUser}
+          onChange={this.handleChange('selectUser')}
+          fullWidth
+          label="Volunteer">
+          <MenuItem value="">
+            <em>None</em>
+          </MenuItem>
+          {this.props.volunteer.map((v) => 
+          <MenuItem key={v.id} value={v.id}>{v.first_name + ' ' + v.last_name}</MenuItem>)}
+        </Select>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={this.handleClose} color="primary">
+            Cancel
+          </Button>
+          <Button onClick={this.handleSave} color="primary">
+            Save
+          </Button>
+        </DialogActions>
+      </Dialog>
       </div>
     )
   }
@@ -87,7 +159,8 @@ class AdminLanding extends React.Component {
   }
 
   handleEventClick = (info) => {
-    console.log('Clicked on', info.event);
+    this.setState({eventId: Number(info.event.id)});
+    this.handleOpen();
   }
 
   eventConstructor = (eventsArray) => {
@@ -98,13 +171,13 @@ class AdminLanding extends React.Component {
       if(event.assigned_user === null){
         switch(event.title){
           case 'leader':
-            parsedEvents.push({title: 'Leader', start:parseDate, color: 'crimson'});
+            parsedEvents.push({title: 'Leader', start:parseDate, color: 'crimson', id: event.id});
             break;
           case 'side walker':
-            parsedEvents.push({title: 'Walker', start:parseDate, color: 'crimson'});
+            parsedEvents.push({title: 'Walker', start:parseDate, color: 'crimson', id: event.id});
             break;
           default:
-            parsedEvents.push({title: 'Open', start:parseDate, color: 'crimson'});
+            parsedEvents.push({title: 'Open', start:parseDate, color: 'crimson', id: event.id});
             break;
         }
       }
@@ -112,13 +185,13 @@ class AdminLanding extends React.Component {
         let parseName = event.first_name + ' ' + event.last_name;
         switch(event.title){
           case 'leader':
-            parsedEvents.push({title: parseName, start:parseDate, color: 'gray', borderColor: 'goldenrod'});
+            parsedEvents.push({title: parseName, start:parseDate, color: 'gray', borderColor: 'goldenrod', id: event.id});
             break;
           case 'side walker':
-            parsedEvents.push({title: parseName, start:parseDate, color: 'gray', borderColor: 'forestgreen'});
+            parsedEvents.push({title: parseName, start:parseDate, color: 'gray', borderColor: 'forestgreen', id: event.id});
             break;
           default:
-            parsedEvents.push({title: parseName, start:parseDate, color: 'gray', borderColor: 'forestgreen'});
+            parsedEvents.push({title: parseName, start:parseDate, color: 'gray', borderColor: 'forestgreen', id: event.id});
             break;
         }
       }
@@ -126,13 +199,13 @@ class AdminLanding extends React.Component {
         let parseName = event.first_name + ' ' + event.last_name;
         switch(event.title){
           case 'leader':
-            parsedEvents.push({title: parseName, start:parseDate, color: 'goldenrod'});
+            parsedEvents.push({title: parseName, start:parseDate, color: 'goldenrod', id: event.id});
             break;
           case 'side walker':
-            parsedEvents.push({title: parseName, start:parseDate, color: 'forestgreen'});
+            parsedEvents.push({title: parseName, start:parseDate, color: 'forestgreen', id: event.id});
             break;
           default:
-            parsedEvents.push({title: parseName, start:parseDate, color: 'forestgreen'});
+            parsedEvents.push({title: parseName, start:parseDate, color: 'forestgreen', id: event.id});
             break;
         }
       }
@@ -145,6 +218,7 @@ class AdminLanding extends React.Component {
 
 const mapStateToProps = state => ({
   allShifts: state.shift.allShifts,
+  volunteer: state.volunteer.volunteer,
 });
 
 export default connect(mapStateToProps)(AdminLanding);

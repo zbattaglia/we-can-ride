@@ -81,6 +81,17 @@ function* updateSubShift(action) {
   }
 }
 
+function* updateShift(action){
+  try{
+      yield console.log(action.payload);
+      yield axios.put('/shift/update/volunteer', action.payload);
+      yield put ({type: 'FETCH_ALL_SHIFTS'});
+  }
+  catch(error){
+      console.log('Error in updateShift.', error);
+  }
+}
+
 function* shiftSaga() {
   yield takeLatest('FETCH_FOUR_WEEKS_SHIFTS', fetchFourWeeksShifts);
   yield takeLatest('FETCH_MY_SHIFTS', fetchMyShifts);
@@ -89,6 +100,7 @@ function* shiftSaga() {
   yield takeLatest('FETCH_SUB_SHIFTS', fetchSubShifts);
   yield takeLatest('TAKE_SUB_SHIFT', updateSubShift);
   yield takeLatest('FETCH_MY_SLOTS', fetchMySlots);
+  yield takeLatest('UPDATE_SHIFT', updateShift);
 };
 
 export default shiftSaga;

@@ -19,7 +19,7 @@ router.get(`/myslots/:user_id`, rejectUnauthenticated, (req, res) => {
     WHERE "slot"."expected_user" = $1 AND "start_date" >= NOW();`;
     pool.query(sqlText, [req.params.user_id]).then(response => {
         res.send(response.rows);
-    }).catch( error => {
+    }).catch(error => {
         console.log('error in getting my slots', error);
         res.sendStatus(500);
     });
@@ -33,11 +33,11 @@ router.get(`/myshift/:user_id`, rejectUnauthenticated, (req, res) => {
     JOIN "skill" ON "skill_needed" = "skill"."id"
     WHERE "assigned_user" = $1
     ORDER BY "date" ASC;`;
-    pool.query(sqlText, [Number( req.user.id )]).then( (response) => {
-        res.send( response.rows );
-    }).catch( (error) => {
-        console.log( 'Error getting current users shifts', error );
-        res.sendStatus( 500 );
+    pool.query(sqlText, [Number(req.user.id)]).then((response) => {
+        res.send(response.rows);
+    }).catch((error) => {
+        console.log('Error getting current users shifts', error);
+        res.sendStatus(500);
     });
 });
 
@@ -51,18 +51,18 @@ router.get('/fourweeks', rejectUnauthenticated, (req, res) => {
     WHERE "date" >= (current_date + cast(abs(extract(dow from current_date) - 6) - 7 as int)) AND "date" < DATE ((current_date + INTERVAL '4 weeks')::timestamp::date) + cast(abs(extract(dow from current_date)-6) - 7 as int)
     ORDER BY "date", "start_of_lesson";`;
 
-    pool.query( sqlText )
-        .then( (response) => {
-            res.send( response.rows );
+    pool.query(sqlText)
+        .then((response) => {
+            res.send(response.rows);
         })
-        .catch( (error) => {
-            console.log( 'Error getting fourweeks shifts', error );
-            res.sendStatus( 500 );
+        .catch((error) => {
+            console.log('Error getting fourweeks shifts', error);
+            res.sendStatus(500);
         })
 });
 
 router.get(`/all`, rejectUnauthenticated, (req, res) => {
-    const sqlText = `SELECT "shift"."date", "user"."first_name", LEFT("user"."last_name", 1) AS "last_name", 
+    const sqlText = `SELECT "shift"."id", "shift"."date", "user"."first_name", LEFT("user"."last_name", 1) AS "last_name", 
     "lesson"."start_of_lesson", "shift"."assigned_user", "shift"."user_wants_to_trade", "skill"."title" FROM "shift"
     LEFT JOIN "user" ON "shift"."assigned_user" = "user"."id"
     JOIN "slot" ON "shift"."slot_id" = "slot"."id"
@@ -70,13 +70,13 @@ router.get(`/all`, rejectUnauthenticated, (req, res) => {
     JOIN "skill" ON "slot"."skill_needed" = "skill"."id"
     ORDER BY "shift"."date";`;
     pool.query(sqlText)
-    .then( (response) => {
-        res.send( response.rows );
-    })
-    .catch( (error) => {
-        console.log( 'Error getting all shifts', error );
-        res.sendStatus( 500 );
-    });
+        .then((response) => {
+            res.send(response.rows);
+        })
+        .catch((error) => {
+            console.log('Error getting all shifts', error);
+            res.sendStatus(500);
+        });
 });
 
 /**
@@ -87,26 +87,26 @@ router.post('/', rejectUnauthenticated, (req, res) => {
 });
 
 // PUT route to update a shift when a volunteer is trying to give up
-router.put( '/:shiftId', (req, res) => {
+router.put('/:shiftId', (req, res) => {
     const shiftId = req.params.shiftId;
     // console.log( 'Got shiftId in server', shiftId );
     const sqlText = `UPDATE "shift"
                     SET "user_wants_to_trade" = $1
                     WHERE "shift"."id" = $2;`;
 
-    pool.query( sqlText, [ true, shiftId ] )
-        .then( (response) => {
-            console.log( 'Successfully updated shift availability' );
-            res.sendStatus( 200 );
+    pool.query(sqlText, [true, shiftId])
+        .then((response) => {
+            console.log('Successfully updated shift availability');
+            res.sendStatus(200);
         })
-        .catch( (error) => {
-            console.log( 'Error updaing shift availability', error );
-            res.sendStatus( 500 );
+        .catch((error) => {
+            console.log('Error updaing shift availability', error);
+            res.sendStatus(500);
         })
-})
+});
 
 // GET route to get all shifts with open shifts for sub
-router.get( '/sub', (req, res) => {
+router.get('/sub', (req, res) => {
     // console.log( 'Getting sub shifts on server' );
 
     const sqlText = `SELECT "shift"."id", "date", "start_of_lesson", ("start_of_lesson" + "length_of_lesson") AS "end_of_lesson", "skill"."title", "eu"."first_name" AS "expected_first_name", "au"."first_name" AS "assigned_first_name", LEFT("au"."last_name", 1) AS "assigned_user_last_initial", "expected_user", "assigned_user", "client" FROM "shift" 
@@ -118,36 +118,47 @@ router.get( '/sub', (req, res) => {
                     WHERE "assigned_user" IS NULL OR "user_wants_to_trade" IS TRUE
                     ORDER BY "date";`
 
-    pool.query( sqlText )
-        .then( (response) => {
+    pool.query(sqlText)
+        .then((response) => {
             // console.log( 'Got sub shifts on server', response.rows );
-            res.send( response.rows );
+            res.send(response.rows);
         })
-        .catch( (error) => {
-            console.log( "Error getting sub shifts", error );
-            res.sendStatus( error );
+        .catch((error) => {
+            console.log("Error getting sub shifts", error);
+            res.sendStatus(error);
         })
 });
 
 // PUT route to update sub table when volunteer takes an open shift
-router.put( '/sub/shift', rejectUnauthenticated, (req, res) => {
+router.put('/sub/shift', rejectUnauthenticated, (req, res) => {
     const userId = req.user.id;
     const shiftId = req.body.shiftId;
-    console.log( `Adding user with id ${userId} to shift with id ${shiftId}` );
+    console.log(`Adding user with id ${userId} to shift with id ${shiftId}`);
 
     // query to update userId on shift table at appropriate shift id, reset user wants to trade since this has been picked up
     const sqlText = `UPDATE "shift" SET "assigned_user" = $1, "user_wants_to_trade" = FALSE
                     WHERE "shift"."id" = $2;`;
 
-    pool.query( sqlText, [ userId, shiftId ] )
-        .then( (response) => {
-            console.log( 'Successfully added user to shift table' );
-            res.sendStatus( 200 );
+    pool.query(sqlText, [userId, shiftId])
+        .then((response) => {
+            console.log('Successfully added user to shift table');
+            res.sendStatus(200);
         })
-        .catch( (error) => {
-            console.log( 'Error adding user to shift table', error );
-            res.sendStatus( 500 );
+        .catch((error) => {
+            console.log('Error adding user to shift table', error);
+            res.sendStatus(500);
         });
 }); //end PUT route
+
+router.put('/update/volunteer', (req, res) => {
+    const queryText = `UPDATE "shift" SET "assigned_user" = $1, "user_wants_to_trade" = FALSE WHERE "id" = $2;`;
+    const queryValues = [req.body.selectUser, req.body.eventId];
+    pool.query(queryText, queryValues)
+        .then(() => { res.sendStatus(204); })
+        .catch((error) => {
+            console.log('Error in router.put.', error);
+            res.sendStatus(500);
+        })
+});
 
 module.exports = router;
