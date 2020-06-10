@@ -36,11 +36,9 @@ class DeleteLessonButton extends Component {
 
   handleClose = (task) => {
     if(task === 'delete'){
-      console.log('delete', this.props.lesson_id);
-      //TODO here's where we send the action
+     //if the user selects to really delete the lesson, it is sent to the server
       this.props.dispatch({ type: 'DELETE_LESSON', payload: {lesson_id: this.props.lesson_id, session_id:this.props.session_id}});
     } else {
-      console.log('keep')
     }
     this.setState({ open: false });
   };

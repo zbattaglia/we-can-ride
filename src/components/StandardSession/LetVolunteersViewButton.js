@@ -20,7 +20,7 @@ class LetVolunteersViewButton extends Component {
     
 
   handleClick = () => {
-      console.log('data to send', 'session_id:', this.props.session_id, "let_volunteer_view:", !this.props.allow)
+    //clicking the button will change whether the volunteers are allowed to see the session
     this.props.dispatch({ type: 'SHOW_SESSION', payload: {session_id: this.props.session_id, let_volunteer_view:!this.props.allow}});
 
   };

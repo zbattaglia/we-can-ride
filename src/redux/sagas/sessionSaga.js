@@ -47,7 +47,7 @@ try {
   let currentLessonId = 0;
   for(let row of response.data){
       if(row.lesson_id !== currentLessonId){
-          lessons.push({lesson_id: row.lesson_id, start_of_lesson: row.start_of_lesson, end_of_lesson: row.end_of_lesson, weekday: row.weekday});
+          lessons.push({lesson_id: row.lesson_id, start_of_lesson: row.start_of_lesson, end_of_lesson: row.end_of_lesson, weekday: row.weekday, client: row.client});
           currentLessonId = row.lesson_id;
       }
       switch (row.weekday) {

@@ -62,10 +62,12 @@ class AssignVolunteerButton extends Component {
     open: false,
     volunteer: ''
   };
+  componentDidMount(){
+    this.props.dispatch({type: 'FETCH_VOLUNTEERS'})
+  }
   
   handleClickOpen = () => {
     this.setState({ open: true });
-    this.props.dispatch({type: 'FETCH_VOLUNTEERS'})
 
   };
 
@@ -98,12 +100,15 @@ class AssignVolunteerButton extends Component {
     this.setState({
       [propertyName]: event.target.value,
     });
-    console.log('state is:', this.state);
   };
 
   render() {
     const { classes } = this.props;
    
+
+    //this component has a lot of conditional rendering because it is used for both admins and users,
+    //and to assign volunteers and to remove them. admins can assign and remove anyone, while users can only assign
+    //and remove themselves
 return (
   <div>
     <Button size="small" color='secondary' variant='contained' className={classes.button} onClick={this.handleClickOpen} >{this.props.name}</Button>

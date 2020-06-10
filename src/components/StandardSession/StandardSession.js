@@ -83,9 +83,9 @@ class StandardSession extends Component {
   };
 
   componentDidMount () {
-    this.props.dispatch({type: 'FETCH_USER'});
-    this.props.dispatch({type: 'FETCH_SESSIONS'});
-    this.props.dispatch({type: 'GET_ROLES'});
+    this.props.dispatch({type: 'FETCH_USER'});//know which user is looking at the standard session
+    this.props.dispatch({type: 'FETCH_SESSIONS'});//get all of the sessions that the user could look at
+    this.props.dispatch({type: 'GET_ROLES'});//get all the roles that could be assigned to a lesson
   }
   componentDidUpdate (prevProps, prevState) {
     //if the page just loaded, set the top session in the reducer as the current session
@@ -96,35 +96,34 @@ class StandardSession extends Component {
     }
     //if we picked a different session, fetch the lessons that are associated with that session
     if(prevState.session.id !== this.state.session.id){
-      console.log('get the lessons again!');
       this.props.dispatch({ type: 'FETCH_SESSION_LESSONS', payload: {session_id: this.state.session.id}})
     }
-    //if we just added/deleted a session, set the top session in the reducer as the current session
+    //if we just added/deleted a session, set the top session in the reducer as the newest session
     if (prevProps.state.session.allSessions.length !== this.props.state.session.allSessions.length){
       this.setState({
         session: this.props.state.session.allSessions[0]
       });
     }
-        //if we didn't create or delete a shift, please show the session you were showing before
-        else if((prevProps.state.session.allSessions !== this.props.state.session.allSessions && this.state.session.id)){
-          //find the object with the id of this.state.session.id and set that session to be the id.
-          let tempSession = this.props.state.session.allSessions.find(x => x.id === this.state.session.id);
-           console.log('update',JSON.stringify(this.props.state.session.allSessions.find(x => x.id === this.state.session.id)));
-          this.setState({
-            session: tempSession
-          });
-
-    //if we just updated a session, keep showing that one
-
-      
+    //if we didn't create or delete a shift, please show the session you were showing before
+    else if((prevProps.state.session.allSessions !== this.props.state.session.allSessions && this.state.session.id)){
+      //find the object with the id of this.state.session.id and set that session to be the id.
+      let tempSession = this.props.state.session.allSessions.find(x => x.id === this.state.session.id);
+        console.log('update',JSON.stringify(this.props.state.session.allSessions.find(x => x.id === this.state.session.id)));
+      this.setState({
+        session: tempSession
+      });
     }
   }
 
 
 
-
+//this component also has a lot of conditional rendering. volunteers can see some of the parts but they
+//can't see buttons or add or delete lessons or roles, and they can only change their own roles or open roles
+//admins can add/delete lessons and assign volunteers, but only before the session is published. Once it's 
+//published, no one can edit it.
   render() {
     const {classes} = this.props;
+    //array of weekdays to show the lessons inside of
     const weekdays = [
       {name: 'Sunday', reducer: this.props.state.session.slots.sunday, number: 0},
       {name: 'Monday', reducer: this.props.state.session.slots.monday, number: 1},
@@ -137,8 +136,6 @@ class StandardSession extends Component {
     return (
       <>
         <h2 className={classes.title}>Standard Session</h2>
-        {/* {JSON.stringify(this.state)}
-        {JSON.stringify(this.props.state.user)} */}
         <Grid container>
           <Grid item>
             {/**this is the button to add new lessons, visible when the session isn't published, also not
@@ -224,7 +221,7 @@ class StandardSession extends Component {
                   {(lesson.weekday === day.number) && 
                   <Box className={classes.lesson} key={lesson.id}>
                     <Box>
-                      {lesson.start_of_lesson} - {lesson.end_of_lesson}
+                      {lesson.start_of_lesson} - {lesson.end_of_lesson} {lesson.client}
                       {/**here's where we get the information about each lesson */}
                       {day.reducer && day.reducer.map( slot => (
                         <>

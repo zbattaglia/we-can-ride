@@ -54,7 +54,8 @@ const styles = theme => ({
   }
 });
 
-
+//this takes care of creating a lesson within a session. 
+//the session id is passed in as props and the rest of the information is edited in the modal
 class AddLessonButton extends Component {
   state = {
     open: false,
@@ -74,6 +75,7 @@ class AddLessonButton extends Component {
 
   handleClose = (blob) => {
     if(blob === 'create'){
+      //if you have the required data, it can be sent to the server to create a lesson
       if(this.state.start_time && this.state.day && this.state.duration){
         this.props.dispatch({ 
           type: 'CREATE_LESSON', payload: {
@@ -84,7 +86,7 @@ class AddLessonButton extends Component {
             session_id: this.props.session_id
           }
         });
-        //setstate
+        //clear out the inputs
         this.setState({
           open: false,
           start_time: null,
@@ -97,12 +99,15 @@ class AddLessonButton extends Component {
           durationError: null,
         });
       }else{
+        //if you don't have all the data, it will not be sent to the database, the modal will not close
+        //and instead a message will appear to let you know what is needed
         this.setState({
           createError: 'Please fill out all information before creating a lesson'
         });
       } 
     }else{
       //setState
+      //this is for if you click cancel or click away from the modal - the information is simply erased
       this.setState({
         open: false,
         start_time: null,
@@ -129,6 +134,7 @@ class AddLessonButton extends Component {
     });
   };
 
+  //this is so that errors can be cleared when you start typing in the correct box
   clearError = propertyName => (event) => {
     this.setState({
       [propertyName]: null,
@@ -136,6 +142,8 @@ class AddLessonButton extends Component {
     })
   }
 
+  //this checks to see if you have filled in the required fields. if you click on a required field and then
+  //click away without filling it in, a warning will appear to tell you what to do
   validate = propertyName => (event) => {
     console.log('blur', propertyName);
     if(propertyName === 'start_timeError'){
@@ -161,7 +169,10 @@ class AddLessonButton extends Component {
     }
   };
 
-
+  //this array keeps the weeks so that we can send the associated dates to the database
+  //the days are stored as days in january 1996 because it was a leap year and monday was on the 
+  //1st of january that year, so the dates are easy to match with the days of the week
+  //we store them as dates because sql can easily do math with dates and figure out the weekday from them
   render() {
     const { classes } = this.props;
     const weekdays = [
@@ -191,13 +202,6 @@ return (
               <Box className={classes.warning}>{this.state.createError}</Box>
               }
     </DialogContentText>
-    {/**we need a day of the week select that maps over an array of days with associated 
-     * days in 1996, as well as a time picker and a picker for the interval - another time picker?!
-     * 
-     * a seelct that maps throguh weekdays
-
-
-     */}
       <Select
         label='day'
         required
@@ -228,7 +232,7 @@ return (
         onChange={this.handleInputChangeFor('client')}
       />
 
-<TextField
+      <TextField
       required
       label='Lesson Length in Minutes'
       type='number'
