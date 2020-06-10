@@ -1,5 +1,6 @@
 import { combineReducers } from 'redux';
 
+//holds all the volunteers
 const volunteer = (state = [], action) => {
     switch (action.type) {
       case 'SET_VOLUNTEERS':
@@ -9,6 +10,7 @@ const volunteer = (state = [], action) => {
     }
   };
 
+  //holds the volunteer that the admin is editing
   const selectedVolunteer = (state = {}, action ) => {
     switch ( action.type ) {
       case 'SET_SELECTED_VOLUNTEER':
@@ -18,6 +20,7 @@ const volunteer = (state = [], action) => {
     }
   };
 
+  //holds the skills that apply to the user
   const userRoles = (state = [], action ) => {
     switch ( action.type ) {
       case 'SET_USER_ROLES':
