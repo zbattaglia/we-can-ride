@@ -236,7 +236,7 @@ class StandardSession extends Component {
                           >
 
                             <Grid item xs className={classes.button}>
-                            {slot.title}:
+                            {slot.title.replace( '_', ' ')}:
                             </Grid>
                             <Grid justify='right' item>
                             {(this.props.state.user.type_of_user === 'admin')
