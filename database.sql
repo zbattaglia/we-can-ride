@@ -12,6 +12,7 @@ CREATE TABLE "user" (
     "first_name" VARCHAR(50),
     "last_name" VARCHAR(50),
     "disable" BOOLEAN DEFAULT false
+    "notification" BOOLEAN DEFAULT true
 );
 --Create availablity table
 CREATE TABLE "availability" (
