@@ -1,7 +1,5 @@
 import React, {Component} from 'react';
-
 import {connect} from 'react-redux';
-
 import { withStyles } from '@material-ui/core/styles';
 import MenuItem from '@material-ui/core/MenuItem';
 import Select from '@material-ui/core/Select';
@@ -63,6 +61,7 @@ class AssignVolunteerButton extends Component {
     volunteer: ''
   };
   
+  //
   handleClickOpen = () => {
     this.setState({ open: true });
     this.props.dispatch({type: 'FETCH_VOLUNTEERS'})
@@ -124,7 +123,7 @@ return (
     :
     <>
     <DialogContentText>
-      {JSON.stringify(this.state)}
+      {/* {JSON.stringify(this.state)} */}
     Choose which volunteer will be taking this role.
   </DialogContentText>
   <Autocomplete
