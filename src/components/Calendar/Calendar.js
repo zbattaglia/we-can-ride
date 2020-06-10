@@ -10,6 +10,7 @@ class Calendar extends Component {
     this.props.dispatch({ type: 'FETCH_MY_SHIFTS', payload: this.props.state.user.id });
     this.props.dispatch( { type: 'FETCH_SELECTED_VOLUNTEER', payload: this.props.state.user.id } );
     this.props.dispatch({type: 'FETCH_ALL_SHIFTS'});
+    this.props.dispatch({type: 'FETCH_VOLUNTEERS'});
   }
 
   render() {

@@ -3,7 +3,7 @@ const pool = require('../modules/pool');
 const router = express.Router();
 const encryptLib = require('../modules/encryption');
 
-// bring in module to decode web token
+// require modules to create and decode tokens and send in email
 const createToken = require('../modules/createToken');
 const decodeToken = require('../modules/decodeToken');
 const sendEmailLink = require('../modules/linkEmailer');
@@ -15,14 +15,12 @@ router.get('/:id/:token', (req, res) => {
     // extract user id and web token from req.params
     const id = req.params.id;
     const token = req.params.token;
-    // console.log( `Got reset password for user with id: ${id} and token ${token}`)
 
     // query database with id to get current hashed password to decode token
     const sqlText = `SELECT "user"."password" FROM "user" WHERE "user"."id" = $1;`;
 
     pool.query( sqlText, [ id ] )
         .then( (response) => {
-            console.log( 'Valid user', response.rows );
             // pass token with returned hashed password to token module to be decoded
             const user = decodeToken( {token, key: response.rows[0].password, id } );
             // if token is decoded successfully return userId
@@ -35,6 +33,7 @@ router.get('/:id/:token', (req, res) => {
             }
         })
         .catch( (error) => {
+            // if query error, log to terminal
             console.log( 'Error: User does not exist', error );
             res.sendStatus( 500 );
         });
@@ -46,26 +45,25 @@ router.get('/:id/:token', (req, res) => {
 router.post('/', (req, res) => {
     // get email from req.body
     const email = req.body.email;
-    console.log( 'In POST route on password router', email );
-
+    // query text to get current user information
     const sqlText = `SELECT "password", "user"."id", "first_name" FROM "user" WHERE "email" = $1;`;
 
     pool.query( sqlText, [ email ] )
         .then( (response) => {
             // create a new token with the user's id using the current hashed password as the encryption key
-            console.log( 'Valid User', response.rows );
             const id = response.rows[0].id;
             const key = response.rows[0].password;
             const name = response.rows[0].first_name;
+            // call createToken with the userId and key
             const newToken = createToken( { id, key } );
-            console.log( 'Got newToken back in router', newToken );
             // send new token to email module to send reset password link
             sendEmailLink( { email, name, id, newToken } );
         })
         .catch( (error) => {
+            // if error log to console
             console.log( 'User does not exist', error )
         })
-});
+}); // end POST route
 
 // PUT route to update passwords
 router.put( '/:id', (req, res) => {

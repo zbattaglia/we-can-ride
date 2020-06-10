@@ -9,7 +9,7 @@ const { rejectUnauthenticated } = require('../modules/authentication-middleware'
 router.get('/volunteer', rejectUnauthenticated, (req, res) => {
     const sqlText = `
     SELECT "user"."id", "type_of_user", "email", "birthday", "phone", 
-                    "first_name", "last_name", "total_hours", "disable" FROM "user" LEFT JOIN (SELECT "user"."id", SUM("length_of_lesson") AS "total_hours" FROM "user" 
+                    "first_name", "last_name", "total_hours", "disable", "user"."notification" FROM "user" LEFT JOIN (SELECT "user"."id", SUM("length_of_lesson") AS "total_hours" FROM "user" 
                     LEFT JOIN "shift" ON "shift"."assigned_user" = "user"."id"
                     JOIN "slot" ON "shift"."slot_id" = "slot"."id"
                     JOIN "lesson" ON "lesson"."id" = "slot"."lesson_id"
@@ -34,7 +34,7 @@ router.get('/select/:volunteerId', rejectUnauthenticated, (req, res) => {
     // get volunteerId from req.params
     const volunteerId = req.params.volunteerId;
     // sqlText to return ALL information besides password stored on database for specific user
-    const sqlText = `SELECT "user"."id", "user"."email", "user"."birthday", "user"."phone", "user"."first_name", "user"."last_name", ARRAY_AGG(DISTINCT "skill"."title") AS "skill", ARRAY_AGG(DISTINCT "availability"."time_available") AS "availability" FROM "user"
+    const sqlText = `SELECT "user"."id", "user"."email", "user"."birthday", "user"."phone", "user"."first_name", "user"."last_name", "user"."notification", "user"."type_of_user", ARRAY_AGG(DISTINCT "skill"."title") AS "skill", ARRAY_AGG(DISTINCT "availability"."time_available") AS "availability" FROM "user"
                     FULL JOIN "user_availability" ON "user_availability"."user_id" = "user"."id"
                     FULL JOIN "user_skill" ON "user_skill"."user_id" = "user"."id"
                     FULL JOIN "skill" ON "skill"."id" = "user_skill"."skill_id"
@@ -64,6 +64,13 @@ router.put( '/:selectedId', rejectUnauthenticated, async(req, res) => {
     let birthday = req.body.birthday;
     if (birthday === 'Invalid date'){birthday = null}; //this is just to prevent errors due to blank birthdays
     const availability_skills = [];
+    let type_of_user = req.body.type_of_user;
+    if( type_of_user === false ) {
+        type_of_user = 'volunteer';
+    }
+    else {
+        type_of_user = 'admin';
+    }
 
     // loop over the req.body and create an array of avalabilities and skills to insert in database.
     for ( let availability_skill in req.body ) {
@@ -72,8 +79,10 @@ router.put( '/:selectedId', rejectUnauthenticated, async(req, res) => {
         };
     };
 
-    //console.log( `Updating user with id ${req.params.selectedId}`, id, first_name, last_name, phone, email, birthday );
-    //console.log( 'Updating selected user`s skills and availabilities on server ', req.body, availability_skills );
+    console.log( 'Type of user on server =', type_of_user )
+    // console.log( `Updating user with id ${req.params.selectedId}`, id, first_name, last_name, phone, email, birthday );
+    // console.log( 'Updating selected user`s skills and availabilities on server ', req.body, availability_skills );
+
 
     const connection = await pool.connect();
 
@@ -81,8 +90,8 @@ router.put( '/:selectedId', rejectUnauthenticated, async(req, res) => {
         await connection.query('BEGIN;');
         // the first query updates all of the user information stored in the user table
         const sqlTextOne = `UPDATE "user" 
-                            SET "first_name" = $1, "last_name" = $2, "phone" = $3, "email" = $4, "birthday" = $5
-                            WHERE "user"."id" = $6;`;
+                            SET "first_name" = $1, "last_name" = $2, "phone" = $3, "email" = $4, "birthday" = $5, "notification" = $6, "type_of_user" = $7
+                            WHERE "user"."id" = $8;`;
         // second query deletes all the selected users availability
         const sqlTextTwo = `DELETE FROM "user_availability" WHERE "user_availability"."user_id" = $1;`
         // third query gets id of specific availability to insert into user_availability table
@@ -97,7 +106,7 @@ router.put( '/:selectedId', rejectUnauthenticated, async(req, res) => {
         const sqlTextSeven = `DELETE FROM "user_skill" WHERE "user_skill"."user_id" = $1;`
 
         // run SQL transaction's
-        await connection.query( sqlTextOne, [ first_name, last_name, phone, email, birthday, id ] );
+        await connection.query( sqlTextOne, [ first_name, last_name, phone, email, birthday, req.body.notification, type_of_user, id ] );
         await connection.query( sqlTextTwo, [ id ] );
         await connection.query( sqlTextSeven, [ id ] );
         for( const availability_skill of availability_skills ) {

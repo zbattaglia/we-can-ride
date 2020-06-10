@@ -57,7 +57,7 @@ class SendRegistration extends Component {
     //TODO Zach - why is this?
     handleClick = () => {
         if( this.state.email !== '' ) {
-            // this.props.dispatch( { type: 'SEND_REGISTRATION', payload: this.state.email } );
+            this.props.dispatch( { type: 'SEND_REGISTRATION', payload: this.state.email } );
             this.setState({
                 email: '',
                 open: true,

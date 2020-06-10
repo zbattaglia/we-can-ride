@@ -80,6 +80,7 @@ class EditProfile extends Component {
       pmFriday: null,
       amSaturday: null,
       pmSaturday: null,
+      notification: null, 
     }
 
   componentDidMount () {
@@ -124,6 +125,7 @@ class EditProfile extends Component {
           email: this.props.state.volunteer.selectedVolunteer.email,
           birthday: moment(this.props.state.volunteer.selectedVolunteer.birthday).format('yyyy-MM-DD'),
           id: this.props.state.volunteer.selectedVolunteer.id,
+          notification: this.props.state.volunteer.selectedVolunteer.notification,
           ...newState,
       })
     }
@@ -190,6 +192,12 @@ class EditProfile extends Component {
               shrink: true,
             }}
             onChange={ (event) => this.handleChange( event, 'birthday')}
+          />
+          Notifications
+          <Checkbox
+            checked={this.state.notification}
+            onChange={this.handleCheckboxChangeFor( 'notification')}
+            value="notification"
           />
           </div>
           </form>

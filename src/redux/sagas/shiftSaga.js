@@ -42,7 +42,10 @@ function* fetchMySlots(action) {
 //TODO zach
 function* giveUpShift(action) {
   try {
-    yield axios.put( `/shift/${action.payload}` )
+    // first update the status of the selected shift to 'looking_to_give_up',
+    // then send automated message to admin users notifying them the a shift is being given up
+    yield axios.put( `/shift/${action.payload}` );
+    yield axios.post( '/message/trade', {shiftId: action.payload } );
     yield put( { type: 'SET_TRADE_SHIFT', payload: action.payload } );
   }
   catch(error) {
@@ -52,7 +55,6 @@ function* giveUpShift(action) {
 
 //this saga is to fetch all the shifts so that they can be displayed on the calendar
 function* fetchAllShifts(action) {
-  console.log( 'In fetchShift Saga', action.payload );
   try {
     const response = yield axios.get(`/shift/all`);
     yield put({ type: 'SET_ALL_SHIFTS', payload: response.data });
@@ -76,7 +78,6 @@ function* fetchSubShifts(action) {
 
 // saga will be fired when volunteer takes an open sub shift
 function* updateSubShift(action) {
-  console.log( 'In update sub shiftsaga  with shift id', action.payload );
   try {
     yield axios.put( '/shift/sub/shift', { shiftId: action.payload } );
     yield put( { type: 'FETCH_SUB_SHIFTS' } );
@@ -89,7 +90,6 @@ function* updateSubShift(action) {
 //this saga is to update which volunteer is assigned to a shift
 function* updateShift(action){
   try{
-      yield console.log(action.payload);
       yield axios.put('/shift/update/volunteer', action.payload);
       yield put ({type: 'FETCH_ALL_SHIFTS'});
   }

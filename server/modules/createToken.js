@@ -1,12 +1,12 @@
 // module for createing webtokens to be sent via email
+// called from password router
+// require jwt-simple for creating tokens
 const jwt = require( 'jwt-simple' );
 
 module.exports = createToken = ( tokenInfo ) => {
     // get required info for creating token from tokenInfo
     const userId = tokenInfo.id;
     const key = tokenInfo.key;
-
-    // console.log( 'Got token info in token module', userId, key );
 
     // payload is what will be encrypted in web token
     // since jwt-simple does not include an expiration feature, we include one in the payload
