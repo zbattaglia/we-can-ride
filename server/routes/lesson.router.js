@@ -4,9 +4,7 @@ const router = express.Router();
 const { rejectUnauthenticated } = require('../modules/authentication-middleware');
 
 
-/**
- * GET route template
- */
+//Get all the sessions, with the most recently created ones first
 router.get(`/all`, rejectUnauthenticated, (req, res) => {
     const sqlText = `SELECT * FROM "session" ORDER BY "id" DESC;`;
     pool.query(sqlText).then( (response) => {
@@ -16,8 +14,9 @@ router.get(`/all`, rejectUnauthenticated, (req, res) => {
         res.sendStatus( 500 );
     });
 });
+
+// GET all the possible volunteer roles, which are stored in the skill table
 router.get(`/roles`, rejectUnauthenticated, (req, res) => {
-  console.log('in get roles on server');
   const queryText = `SELECT * FROM "skill";`;
   pool.query(queryText).then(response => {
     res.send(response.rows);
@@ -27,9 +26,10 @@ router.get(`/roles`, rejectUnauthenticated, (req, res) => {
   });
  
 });
+
+//Add a new job to a particular lesson, such as adding another sidewalker
 router.post(`/roles`, rejectUnauthenticated, (req, res) => {
   //req.body looks like {lesson_id: 35, session_id: 6, skill_id: 1}
-  console.log('in server in add a role to a lesson', req.body);
   const sqlText = `INSERT INTO "slot"("lesson_id", "skill_needed") 
   VALUES($1, $2);
   `;
@@ -42,6 +42,7 @@ router.post(`/roles`, rejectUnauthenticated, (req, res) => {
   });
 });
 
+//get all the lessons for the selected session, with the start times and end times of each lesson
 router.get(`/lessons/:session_id`, rejectUnauthenticated, (req, res) => {
     const sqlText = `SELECT "user"."first_name", "user"."last_name", "start_of_lesson", 
     ("start_of_lesson" + "length_of_lesson") AS "end_of_lesson", "length_of_lesson", "client",
@@ -61,11 +62,9 @@ router.get(`/lessons/:session_id`, rejectUnauthenticated, (req, res) => {
     });
 })
 
-/**
- * POST route template
- */
+//create a lesson for a particular session. When creating a lesson, it automatically creates a leader and two side
+//walker positions for each lesson created, which can be deleted later or filled with a volunteer
 router.post('/create', rejectUnauthenticated, async (req, res, next) => {
-  console.log('in create a lesson for',   req.body.client );
   const connection = await pool.connect();
   const session_id = req.body.session_id;
   try {
@@ -90,8 +89,10 @@ router.post('/create', rejectUnauthenticated, async (req, res, next) => {
   };
 });
 
+//delete a job for a particular lesson, such as if the client doesn't need two sidewalkers.
+//the code shouldn't have let anyone delete one of these if it has been published, but the 
+//delete statements here are to make sure that there aren't any shifts for that job for that lesson
   router.delete('/slot', rejectUnauthenticated, async (req, res, next) => {
-    console.log('in delete route slot', req.body.slot_id, 'session', req.body.session_id);
     const connection = await pool.connect();
     try {
       await connection.query(`BEGIN;`);
@@ -120,11 +121,8 @@ router.post('/create', rejectUnauthenticated, async (req, res, next) => {
     }
   });
 
-/**
- * POST route template
- */
+// assign a volunteer to a particular job for a lesson in a session
 router.post('/assign', rejectUnauthenticated, async (req, res, next) => {
-  console.log('In assign volunteer with:', req.body);
   const connection = await pool.connect();
   let volunteer_id = req.body.volunteer_id;
   if(volunteer_id === ""){volunteer_id = null};
@@ -145,52 +143,55 @@ router.post('/assign', rejectUnauthenticated, async (req, res, next) => {
   };
 });
 
-  router.delete('/lesson', rejectUnauthenticated, async (req, res, next) => {
-   console.log('in delete route lesson:', req.body.lesson_id, 'session', req.body.session_id);
-   const connection = await pool.connect();
- 
-   try {
-    await connection.query(`BEGIN`);
-     const getShiftsQuery = `SELECT "lesson"."id" AS "lesson_id", "slot"."id" AS "slot_id", "shift"."id" AS "shift_id" FROM "lesson"
-     LEFT JOIN "slot" ON "slot"."lesson_id" = "lesson"."id"
-     LEFT JOIN "shift" ON "shift"."slot_id" = "slot"."id"
-     WHERE "lesson_id" = $1
-     ORDER BY "slot"."id"
-     ;`;
-     const shiftsToDelete = await connection.query(getShiftsQuery, [req.body.lesson_id]);
-     const deleteShiftsQuery = `DELETE FROM "shift" WHERE "id"=$1;`;
-     //delete each shift
-      for(i=0; i<shiftsToDelete.rows.length; i++){
-        console.log('deleting shift', shiftsToDelete.rows[i].shift_id);
-        await connection.query(deleteShiftsQuery, [shiftsToDelete.rows[i].shift_id]);
-      }
-      const getSlotsQuery = `SELECT "lesson"."id" AS "lesson_id",
-       "slot"."id" AS "slot_id" FROM "lesson"
-      LEFT JOIN "slot" ON "slot"."lesson_id" = "lesson"."id"
-      WHERE "lesson_id" = $1
-      ORDER BY "slot"."id"
-      ;`;
-      const slotsToDelete = await connection.query(getSlotsQuery, [req.body.lesson_id]);
-      const deleteSlotsQuery = `DELETE FROM "slot" WHERE "id"=$1;`;
-      // get slots from shiftsToDelete
-      console.log(slotsToDelete.rows);
-      for(i=0; i<slotsToDelete.rows.length; i++){
-        console.log('deleting slot', slotsToDelete[i]);
-        await connection.query(deleteSlotsQuery, [slotsToDelete.rows[i].slot_id]);
-      }
-   //delete the lesson
-     const deleteLessonQuery = `DELETE FROM "lesson" WHERE "id"=$1 RETURNING "id";`;
-      await connection.query(deleteLessonQuery, [req.body.lesson_id]);
-      await connection.query(`COMMIT`);
-      res.sendStatus(200);
+//delete a lesson. this includes deleting any shifts associated with the lesson, 
+//as well as any slots, which makes sure that the lesson will actually be deleted
+//the user shouldn't be able to delete a lesson for an already published session though, 
+//it's just to make sure that there won't be errors
+router.delete('/lesson', rejectUnauthenticated, async (req, res, next) => {
+  const connection = await pool.connect();
+
+  try {
+  await connection.query(`BEGIN`);
+    const getShiftsQuery = `SELECT "lesson"."id" AS "lesson_id", "slot"."id" AS "slot_id", "shift"."id" AS "shift_id" FROM "lesson"
+    LEFT JOIN "slot" ON "slot"."lesson_id" = "lesson"."id"
+    LEFT JOIN "shift" ON "shift"."slot_id" = "slot"."id"
+    WHERE "lesson_id" = $1
+    ORDER BY "slot"."id"
+    ;`;
+    const shiftsToDelete = await connection.query(getShiftsQuery, [req.body.lesson_id]);
+    const deleteShiftsQuery = `DELETE FROM "shift" WHERE "id"=$1;`;
+    //delete each shift
+    for(i=0; i<shiftsToDelete.rows.length; i++){
+      console.log('deleting shift', shiftsToDelete.rows[i].shift_id);
+      await connection.query(deleteShiftsQuery, [shiftsToDelete.rows[i].shift_id]);
+    }
+    const getSlotsQuery = `SELECT "lesson"."id" AS "lesson_id",
+      "slot"."id" AS "slot_id" FROM "lesson"
+    LEFT JOIN "slot" ON "slot"."lesson_id" = "lesson"."id"
+    WHERE "lesson_id" = $1
+    ORDER BY "slot"."id"
+    ;`;
+    const slotsToDelete = await connection.query(getSlotsQuery, [req.body.lesson_id]);
+    const deleteSlotsQuery = `DELETE FROM "slot" WHERE "id"=$1;`;
+    // get slots from shiftsToDelete
+    // delete the slots
+    for(i=0; i<slotsToDelete.rows.length; i++){
+      console.log('deleting slot', slotsToDelete[i]);
+      await connection.query(deleteSlotsQuery, [slotsToDelete.rows[i].slot_id]);
+    }
+  //delete the lesson
+    const deleteLessonQuery = `DELETE FROM "lesson" WHERE "id"=$1 RETURNING "id";`;
+    await connection.query(deleteLessonQuery, [req.body.lesson_id]);
+    await connection.query(`COMMIT`);
+    res.sendStatus(200);
 
 
-   } catch (error) {
-    console.log('error in deleting lesson', error);
-    await connection.query(`ROLLBACK`);
-    res.sendStatus(500);
-   } finally {
-    connection.release();
-   };
- })
+  } catch (error) {
+  console.log('error in deleting lesson', error);
+  await connection.query(`ROLLBACK`);
+  res.sendStatus(500);
+  } finally {
+  connection.release();
+  };
+})
 module.exports = router;

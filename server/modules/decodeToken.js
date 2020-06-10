@@ -1,4 +1,6 @@
-// module for decoding webtokens
+// module for decoding webtokens for forgot password
+// jwt-simple required for decoding tokens
+// called from password.router
 const jwt = require( 'jwt-simple' );
 
 module.exports = decodeToken = ( tokenInfo ) => {
@@ -6,14 +8,13 @@ module.exports = decodeToken = ( tokenInfo ) => {
     // need to convert userId passed in from string to a number for comparison with id in decoded token
     const userId = Number( tokenInfo.id );
     const token = tokenInfo.token;
+    // hashed password is used as a key
     const key = tokenInfo.key;
-    console.log( 'Decoding token', userId, token, key );
 
     // try to decode token, if successful check that decoded token is not expired
-    // if not, return userId to allow access to reset password page
+    // if not expired, return userId to allow access to reset password page
     try {
         const decodedToken = jwt.decode( token, key );
-        // console.log( 'decoded token successfully', decodedToken );
         if ( Date.now() <= decodedToken.exp * 1000 ) {
             return userId;
         }
@@ -23,4 +24,4 @@ module.exports = decodeToken = ( tokenInfo ) => {
         console.log( 'error decoding token', error );
         return false;
     }
-}
+}; // end decode token

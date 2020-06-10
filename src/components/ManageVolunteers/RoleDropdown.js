@@ -71,11 +71,7 @@ class RoleDropdown extends React.Component {
   componentDidMount() {
     this.props.dispatch ({ type: "GET_USER_ROLES"})
   }
-  componentDidUpdate(prevProps){
-/*     if(){
-      this.props.dispatch ({ type: "GET_USER_ROLES"})
-    } */
-  }
+
 
   render() {
     const { classes } = this.props;
@@ -83,6 +79,7 @@ class RoleDropdown extends React.Component {
         <div className={classes.rolesListDiv}>
           {this.props.state.volunteer.userRoles.map(name => (
             <>
+            {/**show the roles that apply to this volunteer */}
             {(this.props.user_id === name.user_id) && 
                           <ul key={name.id} className={classes.rolesListDiv2}>
                           <li className={classes.rolesList}>

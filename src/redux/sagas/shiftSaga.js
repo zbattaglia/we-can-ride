@@ -1,11 +1,11 @@
 import axios from 'axios';
 import { put, takeLatest } from 'redux-saga/effects';
 
-// worker Saga: will be fired on "FETCH_FOUR_WEEKS_SHIFTS" actions
+// this saga gets the next four weeks worth of shifts for the admin to look at
 function* fetchFourWeeksShifts() {
-    console.log( 'In fetchShift Saga' );
   try {
     const response = yield axios.get('/shift/fourweeks');
+    //once the shifts are retrieved, they are put into the reducer
     yield put({ type: 'SET_FOUR_WEEKS_SHIFTS', payload: response.data });
 
   } catch (error) {
@@ -13,10 +13,11 @@ function* fetchFourWeeksShifts() {
   }
 };
 
+//this saga gets the shifts for a specific user
 function* fetchMyShifts(action) {
-  console.log( 'In fetchShift Saga', action.payload );
   try {
     const response = yield axios.get(`/shift/myshift/${action.payload.user_id}`);
+    //once the shifts are retrieved they are sent to the my shifts reducer
     yield put({ type: 'SET_MY_SHIFTS', payload: response.data });
 
   } catch (error) {
@@ -24,6 +25,9 @@ function* fetchMyShifts(action) {
   }
 };
 
+//this saga is to get the slots that a user has signed up for that are in sessions that are still in
+//the future. The admin may not have published them yet, but the user should still be able to see which
+//ones they have signed up for
 function* fetchMySlots(action) {
   //action.payload is in the form {user_id: 8}
   try{
@@ -35,10 +39,13 @@ function* fetchMySlots(action) {
   }
 }
 
-
+//TODO zach
 function* giveUpShift(action) {
   try {
-    yield axios.put( `/shift/${action.payload}` )
+    // first update the status of the selected shift to 'looking_to_give_up',
+    // then send automated message to admin users notifying them the a shift is being given up
+    yield axios.put( `/shift/${action.payload}` );
+    yield axios.post( '/message/trade', {shiftId: action.payload } );
     yield put( { type: 'SET_TRADE_SHIFT', payload: action.payload } );
   }
   catch(error) {
@@ -46,8 +53,8 @@ function* giveUpShift(action) {
   }
 }
 
+//this saga is to fetch all the shifts so that they can be displayed on the calendar
 function* fetchAllShifts(action) {
-  console.log( 'In fetchShift Saga', action.payload );
   try {
     const response = yield axios.get(`/shift/all`);
     yield put({ type: 'SET_ALL_SHIFTS', payload: response.data });
@@ -57,7 +64,7 @@ function* fetchAllShifts(action) {
   }
 };
 
-// saga get's all shifts that are open for subs
+// saga gets all shifts that are open for subs
 function* fetchSubShifts(action) {
   try {
     const response = yield axios.get( '/shift/sub' );
@@ -71,7 +78,6 @@ function* fetchSubShifts(action) {
 
 // saga will be fired when volunteer takes an open sub shift
 function* updateSubShift(action) {
-  console.log( 'In update sub shiftsaga  with shift id', action.payload );
   try {
     yield axios.put( '/shift/sub/shift', { shiftId: action.payload } );
     yield put( { type: 'FETCH_SUB_SHIFTS' } );
@@ -81,9 +87,9 @@ function* updateSubShift(action) {
   }
 }
 
+//this saga is to update which volunteer is assigned to a shift
 function* updateShift(action){
   try{
-      yield console.log(action.payload);
       yield axios.put('/shift/update/volunteer', action.payload);
       yield put ({type: 'FETCH_ALL_SHIFTS'});
   }

@@ -15,7 +15,6 @@ import Footer from '../Footer/Footer';
 import ProtectedRoute from '../ProtectedRoute/ProtectedRoute'
 
 import AboutPage from '../AboutPage/AboutPage';
-import InfoPage from '../InfoPage/InfoPage';
 import Calendar from '../Calendar/Calendar';
 import EditProfile from '../EditProfile/EditProfile';
 import FindASub from '../FindASub/FindASub';
@@ -47,7 +46,7 @@ class App extends Component {
           <div className="content">
             <Switch>
               {/* Visiting localhost:3000 will redirect to localhost:3000/home */}
-              <Redirect exact from="/" to="/inbox" />
+              <Redirect exact from="/" to="/inbox" /> {/**TODO!!! */}
               {/* Visiting localhost:3000/about will show the about page.
               This is a route anyone can see, no login necessary */}
               <Route
@@ -56,13 +55,6 @@ class App extends Component {
                 component={AboutPage}
               />
               
-              {/* This works the same as the other protected route, except that if the user is logged in,
-              they will see the info page instead. */}
-              <ProtectedRoute
-                exact
-                path="/info"
-                component={InfoPage}
-              />
               <ProtectedRoute
                 exact
                 path="/calendar"

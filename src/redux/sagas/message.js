@@ -1,6 +1,10 @@
 import axios from 'axios';
 import { put, takeLatest } from 'redux-saga/effects';
 
+
+//TODO zach
+
+
 // worker Saga: will be fired on "FETCH_MESSAGE" actions
 function* fetchMessage() {
     console.log( 'In fetchMessage Saga' );
@@ -16,7 +20,6 @@ function* fetchMessage() {
 
 // saga will be fired on "DELETE_MESSAGE" actions
 function* deleteMessage(action) {
-  // console.log( `In delete message saga with messge id: ${action.payload}`);
   try {
     yield axios.delete( `/message/${action.payload}` );
 

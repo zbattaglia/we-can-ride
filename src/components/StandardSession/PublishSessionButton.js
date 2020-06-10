@@ -36,22 +36,19 @@ const styles = theme => ({
 });
 
 
-//TODO switch ready to publish to true
-//TODO make the shifts for the whole session 
-
 class PublishSessionButton extends Component {
   state = {
     open: false,
   };
 
   handleClickOpen = () => {
-    console.log('opend modal to publish session:', this.props.session_id);
     this.setState({ open: true });
   };
 
   handleClose = (blob) => {
     if(blob === 'publish'){
-      console.log('publish session!', this.props.session_id);
+      //send the data to the server to publish the session, which means to create shifts for the whole 
+      //length of the session for each role for each lesson and assign the person who will be expected to them
       this.props.dispatch({type: 'PUBLISH_SESSION', payload: {session_id: this.props.session_id}});
     
     }
@@ -77,13 +74,11 @@ return (
     <DialogContentText>
      Are you sure you would like to publish this session? Once you do, you won't be able to edit the roles and lessons
     </DialogContentText>
-    {/* {JSON.stringify(this.state)} */}
   </DialogContent>
   <DialogActions>
     <Button onClick={this.handleClose} color="primary">
       Cancel
     </Button>
-    {/**to do -- on the click of this button it doesn't actually change state of the component up, so it doesn't know  */}
     <Button onClick={() => this.handleClose('publish')} color="primary">
       Publish Session
     </Button>

@@ -10,7 +10,7 @@ import rootSaga from './redux/sagas'; // imports ./redux/sagas/index.js
 
 import App from './components/App/App';
 import { MuiThemeProvider, createMuiTheme } from '@material-ui/core';
-import { purple, green, blue, grey } from '@material-ui/core/colors';
+import { blue, grey } from '@material-ui/core/colors';
 
 const sagaMiddleware = createSagaMiddleware();
 

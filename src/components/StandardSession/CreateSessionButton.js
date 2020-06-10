@@ -49,8 +49,6 @@ const styles = theme => ({
 
 
 
-//TODO use button to open a modal to create a new session
-
 class CreateSession extends Component {
     
   state = {
@@ -69,8 +67,8 @@ class CreateSession extends Component {
   };
 
   handleClose = (blob) => {
-    if(blob === 'create'){
-      if(this.state.date && this.state.length){
+    if(blob === 'create'){ //if the user clicked on the create session button
+      if(this.state.date && this.state.length){ //if there is a start date and a length, dispatch and clear state
         this.props.dispatch({ type: 'CREATE_SESSION', payload: {date: this.state.date, yearlong: this.state.yearlong, length: this.state.length}});
         this.setState({ 
           open: false,
@@ -81,13 +79,13 @@ class CreateSession extends Component {
           dateError: null, 
           lengthError: null,
         })
-      } else{
+      } else{ //if there is not a start date and a length, ask the user for more information
           this.setState({
             createError: 'please fill out the information before attempting to submit the new sesion'
           });
         }
      
-    } else{
+    } else{ //if the user did not click on create session (cancel or click away)
       this.setState({ 
         open: false,
         date: null,

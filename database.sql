@@ -5,7 +5,7 @@
 CREATE TABLE "user" (
     "id" serial PRIMARY KEY,
     password VARCHAR(255),
-    "type_of_user" VARCHAR(50),
+    "type_of_user" VARCHAR(50) DEFAULT 'volunteer',
     "email" VARCHAR(100),
     "birthday" DATE,
     "phone" VARCHAR(22),

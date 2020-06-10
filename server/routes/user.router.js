@@ -16,20 +16,23 @@ router.get('/', rejectUnauthenticated, (req, res) => {
   res.send(req.user);
 });
 
+// router to verify if a web token is valid so a user can register
 router.get('/register/:token', async (req, res) => {
   // get token from req.params
   const token = req.params.token;
-  console.log( 'got a token on server', token );
+
   try {
+    // call decodeRegistrationToken module and pass token in
     if( decodeRegistrationToken( token ) ) {
       res.sendStatus( 200 );
     }
   }
   catch(error) {
+    // if error, log to terminal
     console.log( 'Error decoding token', error );
     res.sendStatus( 500 );
   }
-})
+}); // end GET route
 
 // Handles POST request with new user information and availability with encrypted password
 router.post('/register', async (req, res, next) => {  
@@ -100,21 +103,22 @@ router.post('/logout', (req, res) => {
   res.sendStatus(200);
 });
 
+// POST route to send a registration link to new user
 router.post('/register/new', async (req, res) => {
   // get email from req.body
   const email = req.body.email;
-  console.log( 'sending link to new email', email );
 
   try {
+    // create registration token to send in email link, when token is created call sendRegistrationLink
     const token = await createRegistrationToken();
-    console.log( 'Got registration token on user router', token );
     await sendRegistrationLink( { email, token } );
     res.sendStatus( 200 );
   }
   catch(error) {
+    // if error, log to terminal
     console.log( 'Error sending registration link', error );
     res.sendStatus( 500 );
   }
-})
+}); // end POST route
 
 module.exports = router;

@@ -10,27 +10,18 @@ class Calendar extends Component {
     this.props.dispatch({ type: 'FETCH_MY_SHIFTS', payload: this.props.state.user.id });
     this.props.dispatch( { type: 'FETCH_SELECTED_VOLUNTEER', payload: this.props.state.user.id } );
     this.props.dispatch({type: 'FETCH_ALL_SHIFTS'});
+    this.props.dispatch({type: 'FETCH_VOLUNTEERS'});
   }
 
   render() {
     return (
       <>
-        {/* <h2 style={{textAlign: 'center'}}>Calendar</h2>
-        <p>here is the user info, use it to compare with all the shifts</p>
-        {/* {JSON.stringify(this.props.state.user)} */}
-        {/* <p>this is the page where the calendar will be</p>
-        {/* {JSON.stringify(this.props.state.shift)} */}
-
-        {/* {JSON.stringify(this.props.state.shift)} */}
-
         <CalendarGrid />
       </>
     )
   }
 }
 
-const mapStateToProps = state => ({
-  state
-});
 
-export default connect(mapStateToProps)(Calendar);
+
+export default connect()(Calendar);
