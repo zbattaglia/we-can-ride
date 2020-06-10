@@ -38,7 +38,10 @@ function* fetchMySlots(action) {
 
 function* giveUpShift(action) {
   try {
-    yield axios.put( `/shift/${action.payload}` )
+    // first update the status of the selected shift to 'looking_to_give_up',
+    // then send automated message to admin users notifying them the a shift is being given up
+    yield axios.put( `/shift/${action.payload}` );
+    yield axios.post( '/message/trade', {shiftId: action.payload } );
     yield put( { type: 'SET_TRADE_SHIFT', payload: action.payload } );
   }
   catch(error) {
