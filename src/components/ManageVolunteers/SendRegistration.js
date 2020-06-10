@@ -54,7 +54,7 @@ class SendRegistration extends Component {
             email: event.target.value
         });
     };
-    //TODO Zach - why is this?
+    //Check that email fiels is not blank. If not, send email
     handleClick = () => {
         if( this.state.email !== '' ) {
             this.props.dispatch( { type: 'SEND_REGISTRATION', payload: this.state.email } );

@@ -34,7 +34,9 @@ const mySlots = (state = [], action) => {
 };  
 
 
-//TODO zach
+//This holds the id of a shift that is selected to be given up on the my shifts page
+// the id is stored in redux state, so it can be used to request other volunteers take the shift
+// on the find a sub page
 const tradeShift = (state = '', action) => {
   switch (action.type) {
     case 'SET_TRADE_SHIFT':
@@ -54,7 +56,10 @@ const allShifts = (state = [], action) => {
   }
 }
 
-//TODO zach
+//This holds all of the shifts from the database that do not have a user assigned
+// OR have a user assigned, but are set as user_wants_to_trade on redux state
+// these are shifts to be displayed on the sub page for volunteers to assign themselves to 
+// if they are able to sub
 const subShifts = (state = [], action) => {
   switch (action.type) {
     case 'SET_SUB_SHIFTS':
