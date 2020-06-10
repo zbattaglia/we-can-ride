@@ -50,7 +50,7 @@ router.post('/', rejectUnauthenticated, (req, res) => {
     }
 
     // requires two querires. One to get the id, email, and name of the user the response is being sent to, and the second to send the message
-    const sqlTextOne = `SELECT "message"."sender", "user"."email", "user"."first_name" FROM "message" 
+    const sqlTextOne = `SELECT "message"."sender", "user"."email", "user"."first_name", "user"."notification" FROM "message" 
                         JOIN "user" ON "message"."sender" = "user"."id"
                         WHERE "message"."id" = $1;`;
     const sqlTextTwo = `INSERT INTO "message" ("sender", "recipient", "message", "sent")
@@ -64,11 +64,15 @@ router.post('/', rejectUnauthenticated, (req, res) => {
             const recipient = response.rows[0].sender;
             const email = response.rows[0].email;
             const first_name = response.rows[0].first_name;
+            const notification = response.rows[0].notification;
             pool.query( sqlTextTwo, [ sender, recipient, message, 'Now()' ] )
             .then( (response) => {
-                // upon successfully sending message internally in app, call sendEmail to send message in email
-                const emailInfo = { email, first_name, message };
-                sendEmail( emailInfo );
+                // upon successfully sending message internally in app,
+                // call sendEmail to send message in email if user has notifications on
+                if( notification === true ) {
+                    const emailInfo = { email, first_name, message };
+                    sendEmail( emailInfo );
+                }
                 res.sendStatus( 201 );
             })
             .catch( (error) => {
@@ -120,7 +124,7 @@ router.post('/request', rejectUnauthenticated, async (req, res) => {
     // gets name of volunteer sending message
     const sqlTextOne = `SELECT "user"."first_name", "user"."last_name" FROM "user" WHERE "id" = $1;`;
     // gets id of user message is being sent to
-    const sqlTextTwo = `SELECT "user"."id" FROM "user" WHERE "email" = $1;`;
+    const sqlTextTwo = `SELECT "user"."id", "user"."notification" FROM "user" WHERE "email" = $1;`;
     // Inserts message into selected users "inbox on database"
     const sqlTextThree = `INSERT INTO "message" ("sender", "recipient", "message", "sent")
                             VALUES ($1, $2, $3, 'Now()');`;
@@ -130,9 +134,12 @@ router.post('/request', rejectUnauthenticated, async (req, res) => {
         console.log( 'request sent from', senderName );
         response = await pool.query( sqlTextTwo, [ email ] )
         const recipientId = response.rows[0].id;
+        const notification = response.rows[0].notification;
         console.log( 'Recipient has id of', recipientId );
         await pool.query( sqlTextThree, [ senderId, recipientId, message ] );
-        await sendEmail( { email, first_name: req.body.first_name, message } );
+        if( notification === true ) {
+            await sendEmail( { email, first_name: req.body.first_name, message } );
+        }
         res.sendStatus( 200 );
     }
     catch(error) {
