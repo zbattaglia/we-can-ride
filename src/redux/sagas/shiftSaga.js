@@ -3,7 +3,6 @@ import { put, takeLatest } from 'redux-saga/effects';
 
 // worker Saga: will be fired on "FETCH_FOUR_WEEKS_SHIFTS" actions
 function* fetchFourWeeksShifts() {
-    console.log( 'In fetchShift Saga' );
   try {
     const response = yield axios.get('/shift/fourweeks');
     yield put({ type: 'SET_FOUR_WEEKS_SHIFTS', payload: response.data });
@@ -14,7 +13,6 @@ function* fetchFourWeeksShifts() {
 };
 
 function* fetchMyShifts(action) {
-  console.log( 'In fetchShift Saga', action.payload );
   try {
     const response = yield axios.get(`/shift/myshift/${action.payload.user_id}`);
     yield put({ type: 'SET_MY_SHIFTS', payload: response.data });
@@ -50,7 +48,6 @@ function* giveUpShift(action) {
 }
 
 function* fetchAllShifts(action) {
-  console.log( 'In fetchShift Saga', action.payload );
   try {
     const response = yield axios.get(`/shift/all`);
     yield put({ type: 'SET_ALL_SHIFTS', payload: response.data });
@@ -74,7 +71,6 @@ function* fetchSubShifts(action) {
 
 // saga will be fired when volunteer takes an open sub shift
 function* updateSubShift(action) {
-  console.log( 'In update sub shiftsaga  with shift id', action.payload );
   try {
     yield axios.put( '/shift/sub/shift', { shiftId: action.payload } );
     yield put( { type: 'FETCH_SUB_SHIFTS' } );
@@ -86,7 +82,6 @@ function* updateSubShift(action) {
 
 function* updateShift(action){
   try{
-      yield console.log(action.payload);
       yield axios.put('/shift/update/volunteer', action.payload);
       yield put ({type: 'FETCH_ALL_SHIFTS'});
   }

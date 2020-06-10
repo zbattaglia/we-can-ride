@@ -1,17 +1,21 @@
 // module to send emails using nodemailer
+// called from message.router
 const nodemailer = require('nodemailer');
 
 module.exports = sendEmail = ( emailInfo) => {
     // get email parameters from emailInfo
+    // toAddress is email message is being sent to
+    // recipient is first name of user email is being sent to
+    // message is current message being sent
+    // original message is only true if this is a reply to a message
     const toAddress = emailInfo.email;
     const recipient = emailInfo.first_name;
     const message = emailInfo.message;
     const originalMessage = emailInfo.originalMessage;
     let body;
-    console.log( `Sending email to user ${recipient} at email 
-                    address ${toAddress} with message ${message} Original message = ${originalMessage}` );
     if( originalMessage !== undefined ){
         // if there is an originalMessage then this is a reply to a message
+        // href must be modified to link to correct url
         body = `<p>Hi ${recipient}! <br />You got a response to your request in the We Can Ride volunteer app:<br /><br />"${message}"
         <br /><br /><i>Original Message: ${originalMessage}</i><br /><br />
         <br /><br />To keep looking for someone to cover your shift please log into your volunteer account.

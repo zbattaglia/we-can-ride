@@ -1,11 +1,14 @@
 // module to send nightly email to all admin users listing any shifts that are open
 // and scheduled to take place in the next three days
+
+// require nodemailer for emails, require moment for formatting dates
 const nodemailer = require('nodemailer');
 const moment = require('moment');
 
 module.exports = upcomingReminderEmail = ( reminderInfo ) => {
-    // console.log( `In upcoming reminder module`, reminderInfo );
     // extract required email pieces from reminderInfo
+    // toAddress will be an array of admin emails
+    // upcoming shifts will be an array of all shifts that need attention
     let toAddress = [];
     let upcomingShifts = [];
     // loop over admin users to create email list
@@ -16,7 +19,6 @@ module.exports = upcomingReminderEmail = ( reminderInfo ) => {
     for( shift of reminderInfo.shifts ) {
         upcomingShifts.push(`<br />${shift.role} on ${moment(shift.date).format('MMMM Do, YYYY')} arrive at ${shift.time_to_arrive}`);
     }
-    // console.log( `In reminder module. Sending ${upcomingShifts} to ${toAddress}.` )
     // compose body of email
     let message = `This is a reminder of upcoming shifts that need to be filled:<br />
                     ${upcomingShifts}<br/>
@@ -52,6 +54,4 @@ module.exports = upcomingReminderEmail = ( reminderInfo ) => {
             console.log( 'Success!', info );
         }
     })
-    
-    return message;
-}
+}; //end upcomingReminder module

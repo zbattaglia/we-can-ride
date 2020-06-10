@@ -1,10 +1,14 @@
 // module to send weekly email to all user's with shifts in the next week
+// called from server.js on node-cron schedule
+// nodemailer required to send emails, moment required to format dates in messages
 const nodemailer = require('nodemailer');
 const moment = require('moment');
 
 module.exports = weeklyReminderEmail = ( reminderInfo ) => {
-    // console.log( `In weekly reminder module`, reminderInfo );
     // extract required email pieces from reminderInfo
+    // toAddress is address of user being emailed
+    // recipient is first name of user being emailed
+    // shifts is a blank array to hold all upcoming shifts
     const toAddress = reminderInfo.email;
     const recipient = reminderInfo.firstName;
     let upcomingShifts = [];
