@@ -133,11 +133,4 @@ router.put( '/:selectedId', rejectUnauthenticated, async(req, res) => {
     }
 });
 
-/**
- * POST route template
- */
-router.post('/', rejectUnauthenticated, (req, res) => {
-
-});
-
 module.exports = router;
