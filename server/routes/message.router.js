@@ -8,9 +8,9 @@ const moment = require('moment');
 // import emailer to be able to pass messages sent internally in the app by email
 const sendEmail = require('../modules/emailer');
 
-/**
- * GET route to return all messages for a specific user to display on their inbox
- */
+
+ //GET route to return all messages for a specific user to display on their inbox
+
 router.get('/', rejectUnauthenticated, (req, res) => {
     console.log( `Getting messages for user with id ${req.user.id}`);
     const sqlText = `SELECT "message"."id", "user"."first_name", "user"."last_name", "message"."message", "message"."sent" FROM "message"
@@ -29,9 +29,9 @@ router.get('/', rejectUnauthenticated, (req, res) => {
         })
 });
 
-/**
- * POST route to send a message
- */
+
+ // POST route to send a message
+
 router.post('/', rejectUnauthenticated, (req, res) => {
     // Set default accept/reject messages for user's to send.
     const acceptMessage = `I can take your shift!`;
@@ -49,7 +49,7 @@ router.post('/', rejectUnauthenticated, (req, res) => {
         message = rejectMessage;
     }
 
-    // requires two querires. One to get the id, email, and name of the user the response is being sent to, and the second to send the message
+    // requires two queries. One to get the id, email, and name of the user the response is being sent to, and the second to send the message
     const sqlTextOne = `SELECT "message"."sender", "user"."email", "user"."first_name" FROM "message" 
                         JOIN "user" ON "message"."sender" = "user"."id"
                         WHERE "message"."id" = $1;`;
@@ -83,7 +83,6 @@ router.post('/', rejectUnauthenticated, (req, res) => {
 
 // DELETE route to delete message from database
 router.delete('/:messageId', rejectUnauthenticated, (req, res) => {
-    console.log( `Got delete message on server for message with id ${req.params.messageId}`)
     // set messageId to value passed in request parameter
     const messageId = req.params.messageId;
 
@@ -127,10 +126,8 @@ router.post('/request', rejectUnauthenticated, async (req, res) => {
     try {
         let response = await pool.query( sqlTextOne, [ senderId ] )
         const senderName = response.rows[0].first_name + ' ' + response.rows[0].last_name[0];
-        console.log( 'request sent from', senderName );
         response = await pool.query( sqlTextTwo, [ email ] )
         const recipientId = response.rows[0].id;
-        console.log( 'Recipient has id of', recipientId );
         await pool.query( sqlTextThree, [ senderId, recipientId, message ] );
         await sendEmail( { email, first_name: req.body.first_name, message } );
         res.sendStatus( 200 );
