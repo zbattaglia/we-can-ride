@@ -93,6 +93,12 @@ class AdminLanding extends React.Component {
           case 'side walker':
             parsedEvents.push({title: 'Walker', start:parseDate, color: 'crimson', id: event.id});
             break;
+          case 'barn aid':
+            parsedEvents.push({ title: 'Barn Aid', start: parseDate, color: 'crimson', id: event.id});
+            break;
+          case 'feeder':
+            parsedEvents.push({ title: 'Feeder', start: parseDate, color: 'crimson', id: event.id});
+            break;
           default:
             parsedEvents.push({title: 'Open', start:parseDate, color: 'crimson', id: event.id});
             break;
@@ -107,8 +113,14 @@ class AdminLanding extends React.Component {
           case 'side walker':
             parsedEvents.push({title: parseName, start:parseDate, color: 'gray', borderColor: 'forestgreen', id: event.id});
             break;
+          case 'barn aid':
+            parsedEvents.push({ title: parseName, start: parseDate, color: 'gray', borderColor: '#3498DB', id: event.id});
+            break;
+          case 'feeder':
+            parsedEvents.push({ title: parseName, start: parseDate, color: 'gray', borderColor: '#6C3483', id: event.id});
+            break;
           default:
-            parsedEvents.push({title: parseName, start:parseDate, color: 'gray', borderColor: 'forestgreen', id: event.id});
+            parsedEvents.push({title: parseName, start:parseDate, color: 'gray', id: event.id});
             break;
         }
       }
@@ -120,6 +132,12 @@ class AdminLanding extends React.Component {
             break;
           case 'side walker':
             parsedEvents.push({title: parseName, start:parseDate, color: 'forestgreen', id: event.id});
+            break;
+          case 'barn aid':
+            parsedEvents.push({ title: parseName, start: parseDate, id: event.id});
+            break;
+          case 'feeder':
+            parsedEvents.push({ title: parseName, start: parseDate, color: '#6C3483', id: event.id});
             break;
           default:
             parsedEvents.push({title: parseName, start:parseDate, color: 'forestgreen', id: event.id});
@@ -149,6 +167,7 @@ class AdminLanding extends React.Component {
             events={ this.state.calendarEvents }
             dateClick={ this.handleDateClick }
             eventClick={this.handleEventClick}
+            cursor='pointer'
             />
         </div>
 

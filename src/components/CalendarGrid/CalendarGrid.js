@@ -79,8 +79,14 @@ class CalendarGrid extends React.Component {
           case 'side walker':
             parsedEvents.push({ title: 'Walker', start: parseDate, color: 'forestgreen', id: event.id});
             break;
+          case 'barn aid':
+            parsedEvents.push({ title: 'Barn Aid', start: parseDate, id: event.id});
+            break;
+          case 'feeder':
+            parsedEvents.push({ title: 'Feeder', start: parseDate, color: '#6C3483', id: event.id});
+            break;
           default:
-            parsedEvents.push({ title: 'Walker', start: parseDate, color: 'forestgreen', id: event.id});
+            parsedEvents.push({ title: 'Unknown role', start: parseDate, id: event.id});
             break;
         }
       }
@@ -91,6 +97,12 @@ class CalendarGrid extends React.Component {
             break;
           case 'side walker':
             parsedEvents.push({ title: 'Walker', start: parseDate, color: 'crimson', id: event.id});
+            break;
+          case 'barn aid':
+            parsedEvents.push({ title: 'Barn Aid', start: parseDate, color: 'crimson', id: event.id});
+            break;
+          case 'feeder':
+            parsedEvents.push({ title: 'Feeder', start: parseDate, color: 'crimson', id: event.id});
             break;
           default:
             parsedEvents.push({ title: 'Open', start: parseDate, color: 'crimson', id: event.id});
