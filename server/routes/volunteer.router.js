@@ -4,9 +4,8 @@ const router = express.Router();
 const { rejectUnauthenticated } = require('../modules/authentication-middleware');
 
 
-/**
- * GET route template
- */
+//Get route to get the information about all volunteers, including the total number of hours their name is signed up for
+//that have happened already
 router.get('/volunteer', rejectUnauthenticated, (req, res) => {
     const sqlText = `
     SELECT "user"."id", "type_of_user", "email", "birthday", "phone", 
@@ -63,7 +62,7 @@ router.put( '/:selectedId', rejectUnauthenticated, async(req, res) => {
     const phone = req.body.phone;
     const email = req.body.email;
     let birthday = req.body.birthday;
-    if (birthday === 'Invalid date'){birthday = null};
+    if (birthday === 'Invalid date'){birthday = null}; //this is just to prevent errors due to blank birthdays
     const availability_skills = [];
 
     // loop over the req.body and create an array of avalabilities and skills to insert in database.
@@ -73,8 +72,8 @@ router.put( '/:selectedId', rejectUnauthenticated, async(req, res) => {
         };
     };
 
-    console.log( `Updating user with id ${req.params.selectedId}`, id, first_name, last_name, phone, email, birthday );
-    console.log( 'Updating selected user`s skills and availabilities on server ', req.body, availability_skills );
+    //console.log( `Updating user with id ${req.params.selectedId}`, id, first_name, last_name, phone, email, birthday );
+    //console.log( 'Updating selected user`s skills and availabilities on server ', req.body, availability_skills );
 
     const connection = await pool.connect();
 
@@ -86,11 +85,11 @@ router.put( '/:selectedId', rejectUnauthenticated, async(req, res) => {
                             WHERE "user"."id" = $6;`;
         // second query deletes all the selected users availability
         const sqlTextTwo = `DELETE FROM "user_availability" WHERE "user_availability"."user_id" = $1;`
-        // third query get's id of specific availability to insert into user_availability table
+        // third query gets id of specific availability to insert into user_availability table
         const sqlTextThree = `SELECT "id" FROM "availability" WHERE "availability"."time_available" = $1;`;
         // fourth query inserts user.id and availability id from third query into user_availability
         const sqlTextFour = `INSERT INTO "user_availability" ("user_id", "availability_id") VALUES ($1, $2);`;
-        // fifth query get's id of specific skill to insert into user_skill table
+        // fifth query gets id of specific skill to insert into user_skill table
         const sqlTextFive = `SELECT "id" FROM "skill" WHERE "skill"."title" = $1;`;
         // sixth query inserts user.id and skill.id from fifth query into user_skill
         const sqlTextSix = `INSERT INTO "user_skill" ("user_id", "skill_id") VALUES ($1, $2);`;
@@ -124,13 +123,6 @@ router.put( '/:selectedId', rejectUnauthenticated, async(req, res) => {
     finally {
         connection.release();
     }
-});
-
-/**
- * POST route template
- */
-router.post('/', rejectUnauthenticated, (req, res) => {
-
 });
 
 module.exports = router;

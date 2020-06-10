@@ -19,7 +19,7 @@ router.get('/', rejectUnauthenticated, (req, res) => {
 router.get('/register/:token', async (req, res) => {
   // get token from req.params
   const token = req.params.token;
-  console.log( 'got a token on server', token );
+  //console.log( 'got a token on server', token );
   try {
     if( decodeRegistrationToken( token ) ) {
       res.sendStatus( 200 );
