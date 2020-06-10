@@ -14,7 +14,6 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
-
 import './AdminLanding.css'
 
 class AdminLanding extends React.Component {
@@ -32,8 +31,9 @@ class AdminLanding extends React.Component {
 
   componentDidMount(){
     this.props.dispatch({type: 'FETCH_ALL_SHIFTS'});
-
+    this.props.dispatch({type: 'FETCH_VOLUNTEERS'});
   }
+  
   componentDidUpdate(prevProps, prevState){
     if((this.props.allShifts.length >1) && prevProps.allShifts !== this.props.allShifts){
       this.setState({
@@ -75,14 +75,83 @@ class AdminLanding extends React.Component {
     this.handleClose();
   }
 
+  handleEventClick = (info) => {
+    this.setState({eventId: Number(info.event.id)});
+    this.handleOpen();
+  }
+
+  eventConstructor = (eventsArray) => {
+      let parsedEvents = [];
+    for(let event of eventsArray){
+      let dateSum = moment(event.date).add(event.start_of_lesson, 'h');
+      let parseDate = new Date(dateSum);
+      if(event.assigned_user === null){
+        switch(event.title){
+          case 'leader':
+            parsedEvents.push({title: 'Leader', start:parseDate, color: 'crimson', id: event.id});
+            break;
+          case 'side walker':
+            parsedEvents.push({title: 'Walker', start:parseDate, color: 'crimson', id: event.id});
+            break;
+          case 'barn aid':
+            parsedEvents.push({ title: 'Barn Aid', start: parseDate, color: 'crimson', id: event.id});
+            break;
+          case 'feeder':
+            parsedEvents.push({ title: 'Feeder', start: parseDate, color: 'crimson', id: event.id});
+            break;
+          default:
+            parsedEvents.push({title: 'Open', start:parseDate, color: 'crimson', id: event.id});
+            break;
+        }
+      }
+      else if(event.user_wants_to_trade){
+        let parseName = event.first_name + ' ' + event.last_name;
+        switch(event.title){
+          case 'leader':
+            parsedEvents.push({title: parseName, start:parseDate, color: 'gray', borderColor: 'goldenrod', id: event.id});
+            break;
+          case 'side walker':
+            parsedEvents.push({title: parseName, start:parseDate, color: 'gray', borderColor: 'forestgreen', id: event.id});
+            break;
+          case 'barn aid':
+            parsedEvents.push({ title: parseName, start: parseDate, color: 'gray', borderColor: '#3498DB', id: event.id});
+            break;
+          case 'feeder':
+            parsedEvents.push({ title: parseName, start: parseDate, color: 'gray', borderColor: '#6C3483', id: event.id});
+            break;
+          default:
+            parsedEvents.push({title: parseName, start:parseDate, color: 'gray', id: event.id});
+            break;
+        }
+      }
+      else{
+        let parseName = event.first_name + ' ' + event.last_name;
+        switch(event.title){
+          case 'leader':
+            parsedEvents.push({title: parseName, start:parseDate, color: 'goldenrod', id: event.id});
+            break;
+          case 'side walker':
+            parsedEvents.push({title: parseName, start:parseDate, color: 'forestgreen', id: event.id});
+            break;
+          case 'barn aid':
+            parsedEvents.push({ title: parseName, start: parseDate, id: event.id});
+            break;
+          case 'feeder':
+            parsedEvents.push({ title: parseName, start: parseDate, color: '#6C3483', id: event.id});
+            break;
+          default:
+            parsedEvents.push({title: parseName, start:parseDate, color: 'forestgreen', id: event.id});
+            break;
+        }
+      }
+    }
+    return parsedEvents;
+  }
+
   render() {
     return (
       <div className='demo-app'>
         <div className='demo-app-top'>
-          {/* <button onClick={ this.toggleWeekends }>toggle weekends</button>&nbsp;
-          <button onClick={ this.gotoPast }>Test</button>&nbsp;
-          {JSON.stringify(this.state)}
-          {JSON.stringify(new Date())} */}
         </div>
         <div className='demo-app-calendar'>
           <FullCalendar
@@ -98,6 +167,7 @@ class AdminLanding extends React.Component {
             events={ this.state.calendarEvents }
             dateClick={ this.handleDateClick }
             eventClick={this.handleEventClick}
+            cursor='pointer'
             />
         </div>
 
@@ -133,87 +203,6 @@ class AdminLanding extends React.Component {
       </div>
     )
   }
-
-  toggleWeekends = () => {
-    this.setState({ // update a property
-      calendarWeekends: !this.state.calendarWeekends
-    })
-  }
-
-  gotoPast = () => {
-    let calendarApi = this.calendarComponentRef.current.getApi()
-    calendarApi.gotoDate('2000-01-01') // call a method on the Calendar object
-  }
-
-  handleDateClick = (arg) => {
-    // confirm('Would you like to add an event to ' + arg.dateStr + ' ?')
-    // if (true) {
-    //   this.setState({  // add new event data
-    //     calendarEvents: this.state.calendarEvents.concat({ // creates a new array
-    //       title: 'New Event',
-    //       start: arg.date,
-    //       allDay: arg.allDay
-    //     })
-    //   })
-    // }
-  }
-
-  handleEventClick = (info) => {
-    this.setState({eventId: Number(info.event.id)});
-    this.handleOpen();
-  }
-
-  eventConstructor = (eventsArray) => {
-      let parsedEvents = [];
-    for(let event of eventsArray){
-      let dateSum = moment(event.date).add(event.start_of_lesson, 'h');
-      let parseDate = new Date(dateSum);
-      if(event.assigned_user === null){
-        switch(event.title){
-          case 'leader':
-            parsedEvents.push({title: 'Leader', start:parseDate, color: 'crimson', id: event.id});
-            break;
-          case 'side walker':
-            parsedEvents.push({title: 'Walker', start:parseDate, color: 'crimson', id: event.id});
-            break;
-          default:
-            parsedEvents.push({title: 'Open', start:parseDate, color: 'crimson', id: event.id});
-            break;
-        }
-      }
-      else if(event.user_wants_to_trade){
-        let parseName = event.first_name + ' ' + event.last_name;
-        switch(event.title){
-          case 'leader':
-            parsedEvents.push({title: parseName, start:parseDate, color: 'gray', borderColor: 'goldenrod', id: event.id});
-            break;
-          case 'side walker':
-            parsedEvents.push({title: parseName, start:parseDate, color: 'gray', borderColor: 'forestgreen', id: event.id});
-            break;
-          default:
-            parsedEvents.push({title: parseName, start:parseDate, color: 'gray', borderColor: 'forestgreen', id: event.id});
-            break;
-        }
-      }
-      else{
-        let parseName = event.first_name + ' ' + event.last_name;
-        switch(event.title){
-          case 'leader':
-            parsedEvents.push({title: parseName, start:parseDate, color: 'goldenrod', id: event.id});
-            break;
-          case 'side walker':
-            parsedEvents.push({title: parseName, start:parseDate, color: 'forestgreen', id: event.id});
-            break;
-          default:
-            parsedEvents.push({title: parseName, start:parseDate, color: 'forestgreen', id: event.id});
-            break;
-        }
-      }
-    }
-    return parsedEvents;
-    }
-    
-
 }
 
 const mapStateToProps = state => ({

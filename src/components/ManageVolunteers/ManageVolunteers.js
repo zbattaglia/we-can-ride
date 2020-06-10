@@ -42,8 +42,8 @@ const styles = theme => ({
 class ManageVolunteers extends Component {
 
   componentDidMount () {
-    this.props.dispatch({type: 'FETCH_VOLUNTEERS'})
-    this.props.dispatch ({ type: "GET_USER_ROLES"})
+    this.props.dispatch({type: 'FETCH_VOLUNTEERS'});
+    this.props.dispatch ({ type: 'GET_USER_ROLES'});
   }
   componentDidUpdate(prevProps) {
     if(prevProps.state.volunteer.volunteer !== this.props.state.volunteer.volunteer)
