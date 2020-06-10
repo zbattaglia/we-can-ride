@@ -15,22 +15,12 @@ class Calendar extends Component {
   render() {
     return (
       <>
-        {/* <h2 style={{textAlign: 'center'}}>Calendar</h2>
-        <p>here is the user info, use it to compare with all the shifts</p>
-        {/* {JSON.stringify(this.props.state.user)} */}
-        <p>this is the page where the calendar will be</p>
-        {/* {JSON.stringify(this.props.state.shift)} */}
-
-        {JSON.stringify(this.props.state.shift)} */}
-
         <CalendarGrid />
       </>
     )
   }
 }
 
-const mapStateToProps = state => ({
-  state
-});
 
-export default connect(mapStateToProps)(Calendar);
+
+export default connect()(Calendar);
