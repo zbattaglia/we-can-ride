@@ -102,7 +102,6 @@ VALUES
 ('pmSaturday'),
 ('amSunday'),
 ('pmSunday');
-RETURNING "id", "time_available";
 --TODO eventually the stuff below here should be deleted for the final project
 -- weeks start on Saturday (which is weekday 6)
 --you can just do 8 weeks, 60 minutes, whatever, in a field that's an interval
@@ -212,3 +211,9 @@ JOIN "slot" ON "shift"."slot_id" = "slot"."id"
 JOIN "lesson" ON "lesson"."id" = "slot"."lesson_id"
 WHERE "user"."id" = 5
 ;
+
+-- Rina's initial login account information
+--Password: zxcvbnm,
+INSERT INTO "public"."user"("password", "type_of_user", "email", "first_name") 
+VALUES
+('$2a$10$IjEJimvFUFWfE1xCfHi1l.6EsD2lEDG4f6IHbIPDeTlzs.p4MNB/K', 'admin', 'rina@wecanride.com', 'Rina');
