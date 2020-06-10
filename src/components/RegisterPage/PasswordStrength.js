@@ -17,7 +17,7 @@ class PasswordStrength extends React.Component {
         this.analyze = this.analyze.bind(this);
     };
 
-
+//TODO Max - is this actually being used?
 
     analyze(event) {
         if(strongRegex.test(event.target.value)) {

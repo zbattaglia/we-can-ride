@@ -1,10 +1,9 @@
 // module for decoding registration webtokens
+// calle from user.router
+// require jwt-simple for decoding tokens
 const jwt = require( 'jwt-simple' );
 
 module.exports = decodeToken = ( token ) => {
-
-    console.log( 'Decoding registration token in module');
-
     // try to decode token, if successful check that decoded token is not expired
     try {
         const decodedToken = jwt.decode( token, process.env.SERVER_SESSION_SECRET );
@@ -18,4 +17,4 @@ module.exports = decodeToken = ( token ) => {
         console.log( 'error decoding token', error );
         return false;
     }
-}
+}; // end decodeRegistrationToken

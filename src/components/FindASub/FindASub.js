@@ -22,11 +22,6 @@ const styles = theme => ({
     marginTop: theme.spacing(3),
     overflowX: 'auto',
   },
-  // absolute: {
-  //     position: 'absolute',
-  //     bottom: theme.spacing(2),
-  //     right: theme.spacing(3),
-  // },
   action: {
     textAlign: 'center',
   }, 
@@ -51,10 +46,12 @@ class FindASub extends Component {
   }
 
   componentDidMount () {
-    this.props.dispatch({type: 'FETCH_VOLUNTEERS'})
-    this.props.dispatch( {type: 'FETCH_MY_SHIFTS' } )
+    //get all the volunteers I might want to ask to take my shift
+    //get all my shifts
+    this.props.dispatch({type: 'FETCH_VOLUNTEERS'});
+    this.props.dispatch( {type: 'FETCH_MY_SHIFTS' } );
   }
-
+//TODO ZACH what's going on here?
   componentDidUpdate( prevProps, prevState ) {
     if( ( this.state.shift === '' ) && this.props.state.shift.tradeShift ) {
       this.getShift( this.props.state.shift.tradeShift );
@@ -68,7 +65,7 @@ class FindASub extends Component {
       if( shift.id === tradeShiftId ) {
         this.setState({
           shift: shift,
-        })
+        });
       }
     }
   };
@@ -99,12 +96,11 @@ class FindASub extends Component {
     return (
       <>
         <h1>Find a sub for {this.state.shift.role} on  {this.formatDate( this.state.shift.date )} at {this.state.shift.time_to_arrive}</h1>
-        <p>this is the page where you can find a sub</p>
-        {/* {JSON.stringify( this.props.state.myShifts ) }; */}
+        <p>Select a volunteer below to send them a message to see if they can cover your shift:</p>
         <ul>
           {this.props.state.volunteer.volunteer.map( (sub) => 
           <li key={sub.id} className="sub-list-item" value={sub.email}>
-              <Tooltip title="Message" classname="tooltip">
+              <Tooltip title="Message" className="tooltip">
                 <IconButton aria-label="Accept" onClick={ (event) => this.handleClick( event, sub.email, sub.first_name, sub.last_name )}>
                   <Email className="action"/>
                 </IconButton>

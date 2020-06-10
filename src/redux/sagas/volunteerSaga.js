@@ -2,10 +2,12 @@ import axios from 'axios';
 import { put, takeLatest } from 'redux-saga/effects';
 
 // worker Saga: will be fired on "FETCH_USER" actions
+//this saga is to get all of the volunteers from the database
 function* fetchVolunteer() {
     console.log( 'In fetchVolunteer Saga' );
   try {
     const response = yield axios.get('/volunteer/volunteer');
+    //once they are retrieved, they are sent to the reducer
     yield put({ type: 'SET_VOLUNTEERS', payload: response.data });
 
   } catch (error) {
@@ -13,12 +15,13 @@ function* fetchVolunteer() {
   }
 };
 
-// saga will fire when specific volunteer is selected
+// this saga is for when an admin is looking at a specific volunteer
 function* fetchSelectedVolunteer(action) {
-  console.log(`In fetchSelectedVolunteer Saga fetching id ${action.payload}`)
-  // make an axios get request with selected volunteers id in parameter
+
   try {
+    //the selected volunteer is grabbed from the database
     const response = yield axios.get( `/volunteer/select/${action.payload}` );
+    //and sent to the reducer
     yield put( { type: 'SET_SELECTED_VOLUNTEER', payload: response.data } );
   }
   catch(error) {
@@ -26,12 +29,15 @@ function* fetchSelectedVolunteer(action) {
   }
 }
 
+//this saga is for the admin to update a specific volunteer
 function* updateSelectedVolunteer(action) {
   console.log( `In updateVolunteer saga`, action.payload );
 
   try{
     yield axios.put( `/volunteer/${action.payload.id}`, action.payload );
-
+    //once the volunteer has been updated, it's necessary to get the list of
+    //volunteers again, as well as to get the selected volunteer again since
+    //the data has changed
     yield put( { type: 'FETCH_VOLUNTEERS' } );
     yield put( {type: 'FETCH_SELECTED_VOLUNTEER', payload: action.payload.id})
   }
@@ -40,6 +46,7 @@ function* updateSelectedVolunteer(action) {
   }
 };
 
+//this saga is to set a user to disabled
 function* disableVolunteer(action) {
   console.log( `In disableVolunteer saga`, action.payload );
 
@@ -53,6 +60,7 @@ function* disableVolunteer(action) {
   }
 }
 
+//this saga is to set a disabled volunteer to active
 function* activateVolunteer(action) {
   console.log( `In activateVolunteer saga`, action.payload );
 
@@ -66,6 +74,7 @@ function* activateVolunteer(action) {
   }
 };
 
+//TODO Zach
 function* getUserRoles() {
   console.log( 'In getUserRoles Saga' );
 try {

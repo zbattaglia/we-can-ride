@@ -1,12 +1,13 @@
 // module to send email links protected with web token's
+// called from user router
+// require nodemailer to send emails
 const nodemailer = require('nodemailer');
 
 module.exports = sendRegistraionLink = ( emailInfo) => {
     // get email parameters from emailInfo
+    // toAddress is email the registration link is being sent to, token is webtoken generated for this link
     const toAddress = emailInfo.email;
     const token = emailInfo.token;
-    console.log( `Sending email to user ${toAddress} with token ${token}` );
-
 
     // transporter designates the email service for the We Can Ride account
     // username and password stored in .env file for security

@@ -12,7 +12,6 @@ import skill from './skillReducer';
 // It bundles up all of the other reducers so our project can use them.
 // This is imported in index.js as rootSaga
 
-// Lets make a bigger object for our store, with the objects from our reducers.
 // This is what we get when we use 'state' inside of 'mapStateToProps'
 const rootReducer = combineReducers({
   errors, // contains registrationMessage and loginMessage
@@ -22,7 +21,7 @@ const rootReducer = combineReducers({
   shift, //will have information relating to all the shifts
   session, //will relate to the sessions which we are dealing with
   message, //will have all of a user's current messages in their inbox
-  skill,
+  skill, //will have information relating to the roles volunteers are able to take
 });
 
 export default rootReducer;

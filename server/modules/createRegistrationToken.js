@@ -1,4 +1,6 @@
 // module for createing webtokens to be sent via email for registration
+// called from user.router
+// require jwt-simpel for creating web tokens
 const jwt = require( 'jwt-simple' );
 
 module.exports = createRegistrationToken = ( email ) => {

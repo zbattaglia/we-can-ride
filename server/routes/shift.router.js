@@ -4,11 +4,10 @@ const router = express.Router();
 const { rejectUnauthenticated } = require('../modules/authentication-middleware');
 
 
-/**
- * GET route template
- */
+//get all the slots that a user has signed up for. This is because if you sign up for a standard session
+//but it hasn't been published yet, you won't have shifts associated with that signup, but you might still want 
+//to know when you signed up for
 router.get(`/myslots/:user_id`, rejectUnauthenticated, (req, res) => {
-    console.log('in my slots router,', req.params);
     //req.params is in the form { user_id: '8' }
     const sqlText = `SELECT "slot"."id" AS "slot_id", 
     "start_date" AS "session_start_date", "start_of_lesson", 
@@ -24,6 +23,8 @@ router.get(`/myslots/:user_id`, rejectUnauthenticated, (req, res) => {
         res.sendStatus(500);
     });
 })
+
+//get all the shifts that a user has signed up for
 router.get(`/myshift/:user_id`, rejectUnauthenticated, (req, res) => {
     // console.log( `Finding shifts for user with id ${req.user.id}`)
     const sqlText = `SELECT "shift"."id", "date", ("start_of_lesson" - INTERVAL '15 minutes') AS "time_to_arrive", 
@@ -41,6 +42,7 @@ router.get(`/myshift/:user_id`, rejectUnauthenticated, (req, res) => {
     });
 });
 
+//get the next four weeks worth of shifts
 router.get('/fourweeks', rejectUnauthenticated, (req, res) => {
     const sqlText = `SELECT EXTRACT(DOW FROM "date") AS "weekday", "shift"."id", "date", "start_of_lesson", ("start_of_lesson" + "length_of_lesson") AS "end_of_lesson", "skill"."title", "eu"."first_name" AS "expected_first_name", "au"."first_name" AS "assigned_first_name", LEFT("au"."last_name", 1) AS "assigned_user_last_initial", "expected_user", "assigned_user", "client" FROM "shift" 
     JOIN "slot" ON "shift"."slot_id" = "slot"."id"
@@ -58,9 +60,10 @@ router.get('/fourweeks', rejectUnauthenticated, (req, res) => {
         .catch((error) => {
             console.log('Error getting fourweeks shifts', error);
             res.sendStatus(500);
-        })
+        });
 });
 
+//get all the shifts
 router.get(`/all`, rejectUnauthenticated, (req, res) => {
     const sqlText = `SELECT "shift"."id", "shift"."date", "user"."first_name", LEFT("user"."last_name", 1) AS "last_name", 
     "lesson"."start_of_lesson", "shift"."assigned_user", "shift"."user_wants_to_trade", "skill"."title" FROM "shift"
@@ -79,14 +82,9 @@ router.get(`/all`, rejectUnauthenticated, (req, res) => {
         });
 });
 
-/**
- * POST route template
- */
-router.post('/', rejectUnauthenticated, (req, res) => {
-
-});
 
 // PUT route to update a shift when a volunteer is trying to give up
+//this marks that shift as a shift that the volunteer would like to give up, so others can take it
 router.put('/:shiftId', (req, res) => {
     const shiftId = req.params.shiftId;
     // console.log( 'Got shiftId in server', shiftId );
@@ -116,7 +114,7 @@ router.get('/sub', (req, res) => {
                     LEFT JOIN "user" AS "au" ON "assigned_user" = "au"."id"
                     LEFT JOIN "skill" ON "skill_needed" = "skill"."id"
                     WHERE "assigned_user" IS NULL OR "user_wants_to_trade" IS TRUE
-                    ORDER BY "date";`
+                    ORDER BY "date";`;
 
     pool.query(sqlText)
         .then((response) => {
@@ -150,6 +148,9 @@ router.put('/sub/shift', rejectUnauthenticated, (req, res) => {
         });
 }); //end PUT route
 
+
+//this is so that the admin can change who is assigned to a shift from the calendar, by picking a user to
+//assign
 router.put('/update/volunteer', (req, res) => {
     const queryText = `UPDATE "shift" SET "assigned_user" = $1, "user_wants_to_trade" = FALSE WHERE "id" = $2;`;
     const queryValues = [req.body.selectUser, req.body.eventId];
