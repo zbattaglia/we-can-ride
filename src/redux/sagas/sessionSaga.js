@@ -86,6 +86,8 @@ try {
           case 6 :
             saturday.push(row);
             break;
+          default:
+            break;
         }
   }
   let object = {saturday, sunday, monday, tuesday, wednesday, thursday, friday, lessons}
