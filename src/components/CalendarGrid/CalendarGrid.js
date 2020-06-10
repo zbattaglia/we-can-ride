@@ -6,7 +6,12 @@ import interactionPlugin from '@fullcalendar/interaction' // needed for dayClick
 import listPlugin from '@fullcalendar/list';
 import { connect } from 'react-redux';
 import moment from 'moment';
-
+import Button from '@material-ui/core/Button';
+import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogContentText from '@material-ui/core/DialogContentText';
+import DialogTitle from '@material-ui/core/DialogTitle';
 import './CalendarGrid.css'
 
 class CalendarGrid extends React.Component {
@@ -17,6 +22,8 @@ class CalendarGrid extends React.Component {
     calendarEvents: {
       events: [],
     },
+    open: false,
+    eventId: '',
   }
 
   componentDidUpdate(prevProps, prevState){
@@ -29,59 +36,33 @@ class CalendarGrid extends React.Component {
     }
   }
 
-  render() {
-    return (
-      <div className='demo-app'>
-        <div className='demo-app-top'>
-          {/* <button onClick={this.toggleWeekends}>toggle weekends</button>&nbsp;
-          <button onClick={console.log('test')}>test</button>&nbsp; */}
-        </div>
-        <div className='demo-app-calendar'>
-          <FullCalendar
-            defaultView="dayGridMonth"
-            header={{
-              left: 'prev,next today',
-              center: 'title',
-              right: 'dayGridMonth,timeGridWeek,timeGridDay,listWeek'
-            }}
-            plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin, listPlugin]}
-            ref={this.calendarComponentRef}
-            weekends={this.state.calendarWeekends}
-            events={this.state.calendarEvents}
-            dateClick={this.handleDateClick}
-            eventClick={this.handleEventClick}
-          />
-        </div>
-      </div>
-    )
+  handleOpen = () => {
+    this.setState({open: true});
+  };
+
+  handleClose = () => {
+    this.setState({open: false});
+  };
+
+  emptyState = () => {
+    this.setState({
+      eventId: '',
+    });
   }
 
-  toggleWeekends = () => {
-    this.setState({ // update a property
-      calendarWeekends: !this.state.calendarWeekends
-    })
-  }
-
-  gotoPast = () => {
-    let calendarApi = this.calendarComponentRef.current.getApi()
-    calendarApi.gotoDate('2000-01-01') // call a method on the Calendar object
-  }
-
-  handleDateClick = (arg) => {
-    // confirm('Would you like to add an event to ' + arg.dateStr + ' ?')
-    // if (true) {
-    //   this.setState({  // add new event data
-    //     calendarEvents: this.state.calendarEvents.concat({ // creates a new array
-    //       title: 'New Event',
-    //       start: arg.date,
-    //       allDay: arg.allDay
-    //     })
-    //   })
-    // }
+  handleSave = () => {
+    let update = {
+      selectUser: this.props.state.user.id,
+      eventId: this.state.eventId,
+    }
+    this.props.dispatch({type: 'UPDATE_SHIFT', payload: update});
+    this.emptyState();
+    this.handleClose();
   }
 
   handleEventClick = (info) => {
-    console.log('Clicked on', info.event);
+    this.setState({eventId: Number(info.event.id)});
+    this.handleOpen();
   }
 
   eventConstructor = (allShiftsArray) => {
@@ -120,6 +101,47 @@ class CalendarGrid extends React.Component {
     return parsedEvents;
   }
 
+  render() {
+    return (
+      <div className='demo-app'>
+        <div className='demo-app-top'>
+        </div>
+        <div className='demo-app-calendar'>
+          <FullCalendar
+            defaultView="dayGridMonth"
+            header={{
+              left: 'prev,next today',
+              center: 'title',
+              right: 'dayGridMonth,timeGridWeek,timeGridDay,listWeek'
+            }}
+            plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin, listPlugin]}
+            ref={this.calendarComponentRef}
+            weekends={this.state.calendarWeekends}
+            events={this.state.calendarEvents}
+            dateClick={this.handleDateClick}
+            eventClick={this.handleEventClick}
+          />
+        </div>
+
+        <Dialog open={this.state.open} onClose={this.handleClose} aria-labelledby="form-dialog-title">
+        <DialogTitle id="form-dialog-title">Assign Volunteer</DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            Are you sure you want to pick up this shift?
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={this.handleClose} color="primary">
+            Cancel
+          </Button>
+          <Button onClick={this.handleSave} color="primary">
+            Save
+          </Button>
+        </DialogActions>
+      </Dialog>
+      </div>
+    )
+  }
 }
 
 const mapStateToProps = state => ({

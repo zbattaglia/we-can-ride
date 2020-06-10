@@ -14,7 +14,6 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
-
 import './AdminLanding.css'
 
 class AdminLanding extends React.Component {
@@ -32,8 +31,9 @@ class AdminLanding extends React.Component {
 
   componentDidMount(){
     this.props.dispatch({type: 'FETCH_ALL_SHIFTS'});
-
+    this.props.dispatch({type: 'FETCH_VOLUNTEERS'});
   }
+  
   componentDidUpdate(prevProps, prevState){
     if((this.props.allShifts.length >1) && prevProps.allShifts !== this.props.allShifts){
       this.setState({
@@ -73,89 +73,6 @@ class AdminLanding extends React.Component {
     this.props.dispatch({type: 'UPDATE_SHIFT', payload: update});
     this.emptyState();
     this.handleClose();
-  }
-
-  render() {
-    return (
-      <div className='demo-app'>
-        <div className='demo-app-top'>
-          {/* <button onClick={ this.toggleWeekends }>toggle weekends</button>&nbsp;
-          <button onClick={ this.gotoPast }>Test</button>&nbsp;
-          {JSON.stringify(this.state)}
-          {JSON.stringify(new Date())} */}
-        </div>
-        <div className='demo-app-calendar'>
-          <FullCalendar
-            defaultView="timeGridWeek"
-            header={{
-              left: 'prev,next today',
-              center: 'title',
-              right: 'dayGridMonth,timeGridWeek,timeGridDay,listWeek'
-            }}
-            plugins={[ dayGridPlugin, timeGridPlugin, interactionPlugin, listPlugin ]}
-            ref={ this.calendarComponentRef }
-            weekends={ this.state.calendarWeekends }
-            events={ this.state.calendarEvents }
-            dateClick={ this.handleDateClick }
-            eventClick={this.handleEventClick}
-            />
-        </div>
-
-        <Dialog open={this.state.open} onClose={this.handleClose} aria-labelledby="form-dialog-title">
-        <DialogTitle id="form-dialog-title">Assign volunteer</DialogTitle>
-        <DialogContent>
-          <DialogContentText>
-            Choose a volunteer to assign to this shift:
-          </DialogContentText>
-          <Select
-          labelId="demo-simple-select-outlined-label"
-          id="demo-simple-select-outlined"
-          value={this.state.selectUser}
-          onChange={this.handleChange('selectUser')}
-          fullWidth
-          label="Volunteer">
-          <MenuItem value="">
-            <em>None</em>
-          </MenuItem>
-          {this.props.volunteer.map((v) => 
-          <MenuItem key={v.id} value={v.id}>{v.first_name + ' ' + v.last_name}</MenuItem>)}
-        </Select>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={this.handleClose} color="primary">
-            Cancel
-          </Button>
-          <Button onClick={this.handleSave} color="primary">
-            Save
-          </Button>
-        </DialogActions>
-      </Dialog>
-      </div>
-    )
-  }
-
-  toggleWeekends = () => {
-    this.setState({ // update a property
-      calendarWeekends: !this.state.calendarWeekends
-    })
-  }
-
-  gotoPast = () => {
-    let calendarApi = this.calendarComponentRef.current.getApi()
-    calendarApi.gotoDate('2000-01-01') // call a method on the Calendar object
-  }
-
-  handleDateClick = (arg) => {
-    // confirm('Would you like to add an event to ' + arg.dateStr + ' ?')
-    // if (true) {
-    //   this.setState({  // add new event data
-    //     calendarEvents: this.state.calendarEvents.concat({ // creates a new array
-    //       title: 'New Event',
-    //       start: arg.date,
-    //       allDay: arg.allDay
-    //     })
-    //   })
-    // }
   }
 
   handleEventClick = (info) => {
@@ -211,9 +128,62 @@ class AdminLanding extends React.Component {
       }
     }
     return parsedEvents;
-    }
-    
+  }
 
+  render() {
+    return (
+      <div className='demo-app'>
+        <div className='demo-app-top'>
+        </div>
+        <div className='demo-app-calendar'>
+          <FullCalendar
+            defaultView="timeGridWeek"
+            header={{
+              left: 'prev,next today',
+              center: 'title',
+              right: 'dayGridMonth,timeGridWeek,timeGridDay,listWeek'
+            }}
+            plugins={[ dayGridPlugin, timeGridPlugin, interactionPlugin, listPlugin ]}
+            ref={ this.calendarComponentRef }
+            weekends={ this.state.calendarWeekends }
+            events={ this.state.calendarEvents }
+            dateClick={ this.handleDateClick }
+            eventClick={this.handleEventClick}
+            />
+        </div>
+
+        <Dialog open={this.state.open} onClose={this.handleClose} aria-labelledby="form-dialog-title">
+        <DialogTitle id="form-dialog-title">Assign volunteer</DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            Choose a volunteer to assign to this shift:
+          </DialogContentText>
+          <Select
+          labelId="demo-simple-select-outlined-label"
+          id="demo-simple-select-outlined"
+          value={this.state.selectUser}
+          onChange={this.handleChange('selectUser')}
+          fullWidth
+          label="Volunteer">
+          <MenuItem value="">
+            <em>None</em>
+          </MenuItem>
+          {this.props.volunteer.map((v) => 
+          <MenuItem key={v.id} value={v.id}>{v.first_name + ' ' + v.last_name}</MenuItem>)}
+        </Select>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={this.handleClose} color="primary">
+            Cancel
+          </Button>
+          <Button onClick={this.handleSave} color="primary">
+            Save
+          </Button>
+        </DialogActions>
+      </Dialog>
+      </div>
+    )
+  }
 }
 
 const mapStateToProps = state => ({
