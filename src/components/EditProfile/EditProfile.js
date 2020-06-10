@@ -18,6 +18,10 @@ const styles = theme => ({
     flexWrap: 'wrap',
     backgroundColor: 'whitesmoke',
     width: '80%',
+    marginLeft: 'auto',
+    marginRight: 'auto',
+    marginBottom: '30px',
+    marginTop: '30px'
   },
   textField: {
     margin: theme.spacing(1),
@@ -77,6 +81,7 @@ class EditProfile extends Component {
       pmFriday: null,
       amSaturday: null,
       pmSaturday: null,
+      notification: null, 
     }
 
   componentDidMount () {
@@ -121,6 +126,7 @@ class EditProfile extends Component {
           email: this.props.state.volunteer.selectedVolunteer.email,
           birthday: moment(this.props.state.volunteer.selectedVolunteer.birthday).format('yyyy-MM-DD'),
           id: this.props.state.volunteer.selectedVolunteer.id,
+          notification: this.props.state.volunteer.selectedVolunteer.notification,
           ...newState,
       })
     }
@@ -188,6 +194,12 @@ class EditProfile extends Component {
             }}
             onChange={ (event) => this.handleChange( event, 'birthday')}
           />
+          Notifications
+          <Checkbox
+            checked={this.state.notification}
+            onChange={this.handleCheckboxChangeFor( 'notification')}
+            value="notification"
+          />
           </div>
           </form>
           {/* TABLE BELOW */}
@@ -195,6 +207,9 @@ class EditProfile extends Component {
               <TableHead>
                 <TableRow>
                   <TableCell className={classes.tableTitle} colSpan={7}>
+
+                    {/* {JSON.stringify(this.state)} */}
+
                     Edit Availability
                   </TableCell>
                 </TableRow>

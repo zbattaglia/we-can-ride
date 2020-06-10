@@ -56,17 +56,12 @@ const styles = theme => ({
   },
 });
 
-
-
-//TODO use button to open a modal to create a new session
-
 class AssignVolunteerButton extends Component {
     
   state = {
     open: false,
     volunteer: ''
   };
-
   
   handleClickOpen = () => {
     this.setState({ open: true });
@@ -79,7 +74,7 @@ class AssignVolunteerButton extends Component {
       if(this.props.user_id){
         if(this.props.name === 'Remove Yourself'){
           this.props.dispatch({ type: 'ASSIGN_VOLUNTEER', 
-          payload: {volunteer_id: '', 
+          payload: {volunteer_id: this.state.volunteer.id, 
                     session_id: this.props.session_id,
                     slot_id: this.props.slot_id}});
         } else{
@@ -88,17 +83,13 @@ class AssignVolunteerButton extends Component {
                     session_id: this.props.session_id,
                     slot_id: this.props.slot_id}});
         }
-
       }
       else{
         this.props.dispatch({ type: 'ASSIGN_VOLUNTEER', 
-        payload: {volunteer_id: this.state.volunteer, 
+        payload: {volunteer_id: this.state.volunteer.id, 
                   session_id: this.props.session_id,
                   slot_id: this.props.slot_id}});
-
       }
-   
-
     }
     this.setState({ open: false });
   };
@@ -133,31 +124,18 @@ return (
     :
     <>
     <DialogContentText>
+      {JSON.stringify(this.state)}
     Choose which volunteer will be taking this role.
   </DialogContentText>
   <Autocomplete
       value={this.state.volunteer}
-      id="combo-box-demo"
+      id="assign-volunteer"
       options={this.props.state.volunteer.volunteer}
       getOptionLabel={(option) => option.first_name}
       style={{ width: 300 }}
-      onChange={this.handleInputChangeFor('volunteer')}
-      renderInput={(params) => <TextField {...params} label="none" variant="outlined" />}
+      onChange={(event, value) => this.setState({volunteer: value})}
+      renderInput={(params) => <TextField {...params} label="none" variant="outlined" ></TextField>}
     />
-    {/* <Select
-      value={this.state.volunteer}
-      onChange={this.handleInputChangeFor('volunteer')}
-      inputProps={{
-        volunteer: 'volunteer',
-      }}
-    >
-      <MenuItem value="">
-        <em>None</em>
-      </MenuItem>
-      {this.props.state.volunteer.volunteer.map( volunteer => (
-        <MenuItem value={volunteer.id}>{volunteer.first_name} {volunteer.last_name}</MenuItem>
-      ))}
-    </Select> */}
     </>
     }
 
@@ -170,7 +148,7 @@ return (
     <Button onClick={() => this.handleClose('create')} color="primary">
       {this.props.user_id
       ?
-      <>Accept Role</>
+      <>Accept</>
       :
       <>Assign Volunteer</>
       }

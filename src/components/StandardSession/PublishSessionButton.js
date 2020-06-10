@@ -77,7 +77,7 @@ return (
     <DialogContentText>
      Are you sure you would like to publish this session? Once you do, you won't be able to edit the roles and lessons
     </DialogContentText>
-    {JSON.stringify(this.state)}
+    {/* {JSON.stringify(this.state)} */}
   </DialogContent>
   <DialogActions>
     <Button onClick={this.handleClose} color="primary">

@@ -20,7 +20,7 @@ class CalendarGrid extends React.Component {
   }
 
   componentDidUpdate(prevProps, prevState){
-    if((this.props.state.shift.myShifts.length >1) && prevProps.state.shift.myShifts !== this.props.state.shift.myShifts){
+    if((this.props.state.shift.allShifts.length > 1) && prevProps.state.shift.allShifts !== this.props.state.shift.allShifts){
       this.setState({
         calendarEvents: {
           events: this.eventConstructor(this.props.state.shift.allShifts),
@@ -93,26 +93,26 @@ class CalendarGrid extends React.Component {
       if(event.assigned_user === this.props.state.user.id){
         switch (event.title) {
           case 'leader':
-            parsedEvents.push({ title: 'Leader', start: parseDate, color: 'goldenrod' });
+            parsedEvents.push({ title: 'Leader', start: parseDate, color: 'goldenrod', id: event.id});
             break;
           case 'side walker':
-            parsedEvents.push({ title: 'Walker', start: parseDate, color: 'forestgreen' });
+            parsedEvents.push({ title: 'Walker', start: parseDate, color: 'forestgreen', id: event.id});
             break;
           default:
-            parsedEvents.push({ title: this.props.state.user.first_name, start: parseDate, color: 'forestgreen' });
+            parsedEvents.push({ title: 'Walker', start: parseDate, color: 'forestgreen', id: event.id});
             break;
         }
       }
       else if(event.assigned_user === null){
         switch (event.title) {
           case 'leader':
-            parsedEvents.push({ title: 'Leader', start: parseDate, color: 'crimson' });
+            parsedEvents.push({ title: 'Leader', start: parseDate, color: 'crimson', id: event.id});
             break;
           case 'side walker':
-            parsedEvents.push({ title: 'Walker', start: parseDate, color: 'crimson' });
+            parsedEvents.push({ title: 'Walker', start: parseDate, color: 'crimson', id: event.id});
             break;
           default:
-            parsedEvents.push({ title: 'Open', start: parseDate, color: 'crimson' });
+            parsedEvents.push({ title: 'Open', start: parseDate, color: 'crimson', id: event.id});
             break;
         }
       }

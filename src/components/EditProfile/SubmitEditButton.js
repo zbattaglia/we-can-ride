@@ -39,9 +39,6 @@ const styles = theme => ({
     marginRight: theme.spacing(1),
     width: 200,
   },
-  warning: {
-    color: 'red'
-  },
   title: {
       color: theme.palette.primary.light,
   },

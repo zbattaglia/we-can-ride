@@ -41,7 +41,7 @@ class App extends Component {
   render() {
     return (
       <Router>
-        <div>
+        <div className={this.props.user.id ? "" : "login-mode"}>
           <Nav />
           <SideBar />
           <div className="content">

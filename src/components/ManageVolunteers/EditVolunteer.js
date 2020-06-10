@@ -17,6 +17,10 @@ const styles = theme => ({
     flexWrap: 'wrap',
     backgroundColor: 'whitesmoke',
     width: '80%',
+    marginLeft: 'auto',
+    marginRight: 'auto',
+    marginBottom: '30px',
+    marginTop: '30px'
   },
   textField: {
     margin: theme.spacing(1),
@@ -82,6 +86,8 @@ class EditVolunteer extends Component {
     leader: null,
     barn_aid: null,
     feeder: null,
+    notification: null,
+    type_of_user: null,
   }
 
   // detects a change on an input field and updates the state accordingly
@@ -105,6 +111,7 @@ class EditVolunteer extends Component {
     //if we just got a volunteer from the database
     if (prevProps.state.volunteer.selectedVolunteer !== this.props.state.volunteer.selectedVolunteer){
       //set the state to match the volunteer
+      let type_of_user;
       let newState = {};
       if(this.props.state.volunteer.selectedVolunteer.availability[0]){
         for ( let userAvailability of this.props.state.volunteer.selectedVolunteer.availability ) {
@@ -116,6 +123,12 @@ class EditVolunteer extends Component {
           newState[userSkill] = true;
         }      
       }
+      if( this.props.state.volunteer.selectedVolunteer.type_of_user === 'admin' ) {
+        type_of_user = true;
+      }
+      else {
+        type_of_user = false;
+      }
       this.setState({
         ...this.state,
         first_name: this.props.state.volunteer.selectedVolunteer.first_name,
@@ -124,6 +137,8 @@ class EditVolunteer extends Component {
         email: this.props.state.volunteer.selectedVolunteer.email,
         birthday: moment(this.props.state.volunteer.selectedVolunteer.birthday).format('yyyy-MM-DD'),
         id: this.props.state.volunteer.selectedVolunteer.id,
+        notification: this.props.state.volunteer.selectedVolunteer.notification,
+        type_of_user,
         ...newState,
       })
     }
@@ -170,8 +185,8 @@ class EditVolunteer extends Component {
     const { classes } = this.props;
     return (
       <>
-      {JSON.stringify(this.props.state.volunteer.selectedVolunteer)}
-      {JSON.stringify(this.state)}
+      {/* {JSON.stringify(this.props.state.volunteer.selectedVolunteer)}
+      {JSON.stringify(this.state)} */}
         <form className={classes.container}>
           <h2 className={classes.title}>Edit Volunteer Information</h2>
           <div className={classes.formContent}>
@@ -228,6 +243,18 @@ class EditVolunteer extends Component {
               shrink: true,
             }}
             onChange={ (event) => this.handleChange( event, 'birthday')}
+          />
+          Notifications
+          <Checkbox
+            checked={this.state.notification}
+            onChange={this.handleCheckboxChangeFor('notification')}
+            value="notification"
+          />
+          Admin
+          <Checkbox
+            checked={this.state.type_of_user}
+            onChange={this.handleCheckboxChangeFor('type_of_user')}
+            value="admin"
           />
           </div>
           </form>

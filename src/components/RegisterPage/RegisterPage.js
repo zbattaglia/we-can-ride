@@ -8,51 +8,64 @@ import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Checkbox from '@material-ui/core/Checkbox';
-
-
+import Box from '@material-ui/core/Box';
+import Button from '@material-ui/core/Button';
 
 const styles = theme => ({
   container: {
     display: 'flex',
     flexWrap: 'wrap',
+    backgroundColor: 'whitesmoke',
+    width: '80%',
   },
   textField: {
-    marginLeft: theme.spacing(1),
-    marginRight: theme.spacing(1),
-    width: 200,
+    margin: theme.spacing(1),
+    width: '48%',
   },
-  dense: {
-    marginTop: 19,
-  },
-  menu: {
-    width: 200,
-  },
-  root: {
+  title: {
+    textAlign: 'center',
     width: '100%',
-    marginTop: theme.spacing(3),
-    overflowX: 'auto',
+    textDecoration: 'underline',
+    margin: 0,
+    padding: 0,
+  },
+  formContent: {
+    width: '100%',
+    textAlign: 'center',
+  },
+  button: {
+    margin: theme.spacing(1),
+    marginBottom: 30
+  },
+  tableTitle: {
+    textAlign: 'center',
+    textDecoration: 'underline',
+    fontWeight: 'bold',
+    fontSize: '1.5rem',
+  },
+  columnTitle: {
+    textAlign: 'center',
   },
   table: {
-    minWidth: 700,
+    backgroundColor: 'whitesmoke',
+    width: '83%',
+    marginLeft: 'auto',
+    marginRight: 'auto',
   },
-  formControl: {
-    margin: theme.spacing(1),
-    minWidth: 120,
-  },
-  input: {
-    marginBottom: 30
+  warning: {
+    color: 'red'
   }
 });
 
 class RegisterPage extends Component {
   state = {
-    username: '',
-    password: '',
-    confirmPassword: '',
-    firstName: '',
-    lastName: '',
-    phoneNumber: '',
-    birthday: '',
+    username: null,
+    password: null,
+    confirmPassword: null,
+    firstName: null,
+    lastName: null,
+    phoneNumber: null,
+    birthday: null,
       amSunday: false,
       pmSunday: false,
       amMonday: false,
@@ -67,6 +80,11 @@ class RegisterPage extends Component {
       pmFriday: false,
       amSaturday: false,
       pmSaturday: false,
+        createError: null,
+        first_nameError: null,
+        emailError: null,
+        birthdayError: null,
+        passwordError: null
   };
 
   componentDidMount() {
@@ -76,7 +94,7 @@ class RegisterPage extends Component {
   registerUser = (event) => {
     event.preventDefault();
     console.log(`Dispatching register:`, this.state)
-    if (this.state.username && (this.state.password === this.state.confirmPassword)) {
+    if (this.state.username && this.state.birthday && this.state.password && (this.state.password === this.state.confirmPassword)) {
       this.props.dispatch({
         type: 'REGISTER',
         payload: {
@@ -105,8 +123,9 @@ class RegisterPage extends Component {
       });
       this.props.history.push( '/' );
     } else {
-      this.props.history.push({ type: 'REGISTRATION_INPUT_ERROR' });
-    }
+      this.setState({
+        createError: 'Please fill out all information before registering'
+      });    }
   }; // end registerUser
 
   handleInputChangeFor = propertyName => (event) => {
@@ -121,88 +140,155 @@ class RegisterPage extends Component {
     });
   };
 
+  clearError = propertyName => (event) => {
+    this.setState({
+      [propertyName]: null,
+      createError: null,
+    })
+  };
+
+  validate = propertyName => (event) => {
+    console.log('error', propertyName);
+    if(propertyName === 'first_nameError'){
+      if(!this.state.firstName){
+        this.setState({
+          [propertyName]: 'you need to select a first name'
+        });
+      }
+    }
+    if(propertyName === 'emailError'){
+      if(!this.state.username){
+        this.setState({
+          [propertyName]: 'you need to enter an email'
+        });
+      }
+    }
+    if(propertyName === 'birthdayError'){
+      if(!this.state.birthday){
+        this.setState({
+          [propertyName]: 'you need to enter a date of birth'
+        });
+      }
+    }
+    if(propertyName === 'passwordError'){
+      if(!this.state.password){
+        this.setState({
+          [propertyName]: 'you need to enter a password'
+        });
+      }
+    }
+    if(propertyName === 'confirmPasswordError'){
+      if(!this.state.confirmPassword){
+        this.setState({
+          [propertyName]: 'please confirm your password'
+        });
+      }
+    }
+  };
+
   render() {
     const { classes } = this.props;
     return (
-      <div>
+      <>
           <h2
-            className="alert"
+            className={classes.warning}
             role="alert"
           >
-            {this.props.errors.registrationMessage}
+            {this.state.createError}
           </h2>
-        <form onSubmit={this.registerUser}>
+        <form className={classes.container} onSubmit={this.registerUser}>
+          <div  className={classes.formContent}>
           {this.props.state.loginMode === 'register' ?
             <>
-            <h1>Register as a Volunteer!</h1>
-            <div>
-              <TextField
-                type="email"
-                label="Email"
-                name="username"
-                value={this.state.username}
-                onChange={this.handleInputChangeFor('username')}
-              />
-            </div>
-            <div>
-              <TextField
-                type="password"
-                label="Password"
-                name="password"
-                value={this.state.password}
-                onChange={this.handleInputChangeFor('password')}
-              />
-            </div>
-            <div>
-              <TextField
-                type="password"
-                label="Confirm Password"
-                name="confirmPassword"
-                value={this.state.confirmPassword}
-                onChange={this.handleInputChangeFor('confirmPassword')}
-              />
-            </div>
-            <div>
-              <TextField
+            <h1 className={classes.title}>Register as a Volunteer!</h1>
+            <TextField
+                required
                 type="text"
                 label="First Name"
                 name="firstName"
+                className={classes.textField}
                 value={this.state.firstName}
+                onBlur={this.validate('first_nameError')}
+                onFocus={this.clearError('first_nameError')}
                 onChange={this.handleInputChangeFor('firstName')}
               />
-            </div>
-            <div>
+              {this.state.first_nameError
+                 &&
+                <Box className={classes.warning}>{this.state.first_nameError}</Box>
+              }
               <TextField
                 type="text"
                 label="Last Name"
                 name="lastName"
+                className={classes.textField}
                 value={this.state.lastName}
                 onChange={this.handleInputChangeFor('lastName')}
               />
-            </div>
-            <div>
+              <TextField
+                required
+                type="email"
+                label="Email"
+                name="username"
+                className={classes.textField}
+                onBlur={this.validate('emailError')}
+                onFocus={this.clearError('emailError')}
+                value={this.state.username}
+                onChange={this.handleInputChangeFor('username')}
+              />
+              {this.state.emailError
+                 &&
+                  <Box className={classes.warning}>{this.state.emailError}</Box>
+              }
               <TextField
                 type="tel"
                 label="Phone Number"
                 name="phoneNumber"
+                className={classes.textField}
                 value={this.state.phoneNumber}
                 onChange={this.handleInputChangeFor('phoneNumber')}
               />
-            </div>
-            <div>
-            
+              <TextField
+                required
+                type="password"
+                label="Password"
+                name="password"
+                className={classes.textField}
+                onBlur={this.validate('passwordError')}
+                onFocus={this.clearError('passwordError')}
+                value={this.state.password}
+                onChange={this.handleInputChangeFor('password')}
+              />
+              {this.state.passwordError
+                 &&
+                <Box className={classes.warning}>{this.state.passwordError}</Box>
+              }
+              <TextField
+                required
+                type="password"
+                label="Confirm Password"
+                name="confirmPassword"
+                className={classes.textField}
+                value={this.state.confirmPassword}
+                onChange={this.handleInputChangeFor('confirmPassword')}
+              />
             <TextField
+              required
+              label="Birthday"
               id="date"
               type="date"
               value={this.state.birthday}
+              onBlur={this.validate('birthdayError')}
+              onFocus={this.clearError('birthdayError')}
               onChange={this.handleInputChangeFor('birthday')}
               className={classes.textField}
               InputLabelProps={{
-                shrink: false,
+                shrink: true,
               }}
             />
-            </div>
-            <div>
+            {this.state.birthdayError
+                 &&
+                <Box className={classes.warning}>{this.state.birthdayError}</Box>
+              }
               <Table className={classes.table}>
                 <TableHead>
                 <TableRow>
@@ -323,21 +409,21 @@ class RegisterPage extends Component {
                     </TableRow>
                 </TableBody>
               </Table>
-            </div>
-            <div>
-              <input
-                className="register"
-                type="submit"
-                name="submit"
-                value="Register"
-              />
-            </div>
+              <Button
+            variant="contained"
+            color="primary"
+            className={classes.button}
+            onClick={this.registerUser}
+          >
+            Register
+          </Button>
           </>
           :
             <h1>404</h1>
           }
-        </form>
-      </div>
+        </div>
+      </form>
+      </>
     );
   }
 }
