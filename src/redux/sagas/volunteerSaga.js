@@ -74,11 +74,12 @@ function* activateVolunteer(action) {
   }
 };
 
-//TODO Zach
+//Saga fired on getUserRoles when editing a users profile
 function* getUserRoles() {
-  console.log( 'In getUserRoles Saga' );
-try {
+  // get request to get all roles a user can fill and store in response variable
+  try {
   const response = yield axios.get('/roles');
+  // dispatche response.data with SET_USER_ROLES action to put roles on redux state
   yield put({ type: 'SET_USER_ROLES', payload: response.data });
 
 } catch (error) {

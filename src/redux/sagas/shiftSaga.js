@@ -39,7 +39,7 @@ function* fetchMySlots(action) {
   }
 }
 
-//TODO zach
+//Saga fired whenever user Clicks "GIVE UP" button on My Shifts page
 function* giveUpShift(action) {
   try {
     // first update the status of the selected shift to 'looking_to_give_up',
