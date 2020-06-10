@@ -20,6 +20,7 @@ router.get('/', rejectUnauthenticated, (req, res) => {
 router.get('/register/:token', async (req, res) => {
   // get token from req.params
   const token = req.params.token;
+
   try {
     // call decodeRegistrationToken module and pass token in
     if( decodeRegistrationToken( token ) ) {

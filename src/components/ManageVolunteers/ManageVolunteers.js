@@ -44,8 +44,10 @@ class ManageVolunteers extends Component {
   componentDidMount () {
     this.props.dispatch({type: 'FETCH_VOLUNTEERS'});
     this.props.dispatch ({ type: 'GET_USER_ROLES'});
+
   }
   componentDidUpdate(prevProps) {
+    //if the volunteer has changed in the redux store, get the roles for that volunteer again
     if(prevProps.state.volunteer.volunteer !== this.props.state.volunteer.volunteer)
     this.props.dispatch ({ type: 'GET_USER_ROLES'});
   }

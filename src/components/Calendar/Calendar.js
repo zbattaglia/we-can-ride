@@ -22,8 +22,6 @@ class Calendar extends Component {
   }
 }
 
-const mapStateToProps = state => ({
-  state
-});
 
-export default connect(mapStateToProps)(Calendar);
+
+export default connect()(Calendar);

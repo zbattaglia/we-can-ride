@@ -3,7 +3,6 @@ import {connect} from 'react-redux';
 import moment from 'moment';
 import { withStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
-import Button from '@material-ui/core/Button';
 import Checkbox from '@material-ui/core/Checkbox';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
@@ -89,7 +88,7 @@ class EditProfile extends Component {
   }
   // detects a change on an input field and updates the state accordingly
   handleChange = ( event, propName ) => {
-    console.log( `Got change on ${propName}`, event.target.value );
+    //console.log( `Got change on ${propName}`, event.target.value );
     this.setState({
       ...this.state,
       [ propName ]: event.target.value,
@@ -107,7 +106,7 @@ class EditProfile extends Component {
   // the field will be reset when the user completely deletes the information)
   // else, fetch the selected volunteer again.
   componentDidUpdate( prevProps, prevState ){
-    console.log( 'In update', this.props.state.volunteer.selectedVolunteer )
+      // if the selected volunteer has changed at all
     
       if( prevProps.state.volunteer.selectedVolunteer !== this.props.state.volunteer.selectedVolunteer ) {
         let newState = {};

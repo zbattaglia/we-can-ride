@@ -30,12 +30,15 @@ class AdminLanding extends React.Component {
   }
 
   componentDidMount(){
+    //the calendar needs all the shifts to display
     this.props.dispatch({type: 'FETCH_ALL_SHIFTS'});
     this.props.dispatch({type: 'FETCH_VOLUNTEERS'});
   }
   
   componentDidUpdate(prevProps, prevState){
+    //if all the shifts were retrieved and aren't the same as they were before, 
     if((this.props.allShifts.length >1) && prevProps.allShifts !== this.props.allShifts){
+      //make calendar events for all the shifts
       this.setState({
         calendarEvents: {
           events: this.eventConstructor(this.props.allShifts),
@@ -44,20 +47,24 @@ class AdminLanding extends React.Component {
     }
   }
 
+  //to open a modal
   handleOpen = () => {
     this.setState({open: true});
   };
 
+  //to close a modal
   handleClose = () => {
     this.setState({open: false});
   };
 
+  //keep track of which volunteer was selected
   handleChange = (propertyName) => (event) => {
     this.setState({
       [propertyName]: event.target.value,
     });
   }
 
+  //clear state once the event has been edited
   emptyState = () => {
     this.setState({
       selectUser: '',
@@ -65,6 +72,7 @@ class AdminLanding extends React.Component {
     });
   }
 
+  //after picking a volunteer for a shift, 
   handleSave = () => {
     let update = {
       selectUser: this.state.selectUser,
@@ -152,6 +160,10 @@ class AdminLanding extends React.Component {
     return (
       <div className='demo-app'>
         <div className='demo-app-top'>
+
+          {/* <button onClick={ this.toggleWeekends }>toggle weekends</button>&nbsp;
+          <button onClick={ this.gotoPast }>Test</button>&nbsp;*/}
+
         </div>
         <div className='demo-app-calendar'>
           <FullCalendar
@@ -170,7 +182,7 @@ class AdminLanding extends React.Component {
             cursor='pointer'
             />
         </div>
-
+            {/**here's the modal to pick a volunteer*/}
         <Dialog open={this.state.open} onClose={this.handleClose} aria-labelledby="form-dialog-title">
         <DialogTitle id="form-dialog-title">Assign volunteer</DialogTitle>
         <DialogContent>

@@ -9,9 +9,9 @@ const moment = require('moment');
 // require emailer to be able to send messages sent internally in the app by email
 const sendEmail = require('../modules/emailer');
 
-/**
- * GET route to return all messages for a specific user to display on their inbox
- */
+
+ //GET route to return all messages for a specific user to display on their inbox
+
 router.get('/', rejectUnauthenticated, (req, res) => {
     // query database to get all of the messages for current logged in user
     const sqlText = `SELECT "message"."id", "user"."first_name", "user"."last_name", "message"."message", "message"."sent" FROM "message"
@@ -31,9 +31,9 @@ router.get('/', rejectUnauthenticated, (req, res) => {
         })
 }); // end GET route
 
-/**
- * POST route to send a message
- */
+
+ // POST route to send a message
+
 router.post('/', rejectUnauthenticated, (req, res) => {
     // Set default accept/reject messages for user's to send.
     // For privacy reasons users can not send custom emails / messages
@@ -52,6 +52,7 @@ router.post('/', rejectUnauthenticated, (req, res) => {
     else {
         message = rejectMessage;
     }
+
 
     // requires two querires. One to get the id, email, and name of the user the response is being sent to, and the second to send the message
     const sqlTextOne = `SELECT "message"."sender", "user"."email", "user"."first_name", "message"."message", "user"."notification" FROM "message" 
@@ -138,6 +139,7 @@ router.post('/request', rejectUnauthenticated, async (req, res) => {
         // query database and set senderName to result
         let response = await pool.query( sqlTextOne, [ senderId ] )
         const senderName = response.rows[0].first_name + ' ' + response.rows[0].last_name[0];
+
         // query database and set recipient id based on result
         // notification is a boolean indicating if email notifications are turned on
         response = await pool.query( sqlTextTwo, [ email ] )

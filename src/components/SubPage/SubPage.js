@@ -72,7 +72,6 @@ class SubPage extends Component {
   };
 
   handleClick = ( event, shiftId ) => {
-    // console.log( 'Got a click on shift with id', shiftId );
     this.props.dispatch( { type: 'TAKE_SUB_SHIFT', payload: shiftId } );
     this.setState({
       open: true,

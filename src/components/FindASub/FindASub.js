@@ -46,10 +46,12 @@ class FindASub extends Component {
   }
 
   componentDidMount () {
-    this.props.dispatch({type: 'FETCH_VOLUNTEERS'})
-    this.props.dispatch( {type: 'FETCH_MY_SHIFTS' } )
+    //get all the volunteers I might want to ask to take my shift
+    //get all my shifts
+    this.props.dispatch({type: 'FETCH_VOLUNTEERS'});
+    this.props.dispatch( {type: 'FETCH_MY_SHIFTS' } );
   }
-
+//TODO ZACH what's going on here?
   componentDidUpdate( prevProps, prevState ) {
     if( ( this.state.shift === '' ) && this.props.state.shift.tradeShift ) {
       this.getShift( this.props.state.shift.tradeShift );
@@ -63,7 +65,7 @@ class FindASub extends Component {
       if( shift.id === tradeShiftId ) {
         this.setState({
           shift: shift,
-        })
+        });
       }
     }
   };
