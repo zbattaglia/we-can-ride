@@ -16,6 +16,7 @@ const CustomTableCell = withStyles(theme => ({
   head: {
     backgroundColor: 'lightgrey',
     color: 'black',
+
   },
   body: {
     fontsize: 14,
@@ -27,9 +28,6 @@ const styles = theme => ({
     width: '99%',
     marginTop: theme.spacing(3),
     overflowX: 'auto',
-  },
-  table: {
-    minWidth: 700,
   },
   row: {
     '&:nth-of-type(odd)': {
@@ -60,7 +58,7 @@ class ManageVolunteers extends Component {
         <Paper className={classes.root} id="registration-content">
           <SendRegistration />
         </Paper>
-        <Paper className={classes.root}>
+        <Paper className={classes.root} id="manageContent">
           <Table className={classes.table}>
             <TableHead>
               <TableRow>

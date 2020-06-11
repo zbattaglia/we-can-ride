@@ -31,10 +31,24 @@ import RegisterPage from '../RegisterPage/RegisterPage';
 import './App.css';
 
 class App extends Component {
+
+  // determines if side nav is open or close (for mobile)
+  state = {
+    open: false,
+  }
+
   componentDidMount () {
     this.props.dispatch({type: 'FETCH_USER'});
     this.props.dispatch({type: 'FETCH_VOLUNTEERS'});
     this.props.dispatch({type: 'FETCH_ALL_SHIFTS'});
+  }
+
+  // toggles side nav on click
+  toggleSide = () => {
+    console.log( 'Toggle Side Bar', this.state.open );
+    this.setState({
+      open: !this.state.open,
+    })
   }
 
   render() {
@@ -42,7 +56,9 @@ class App extends Component {
       <Router>
         <div className={this.props.user.id ? "" : "login-mode"}>
           <Nav />
-          <SideBar />
+          <div onClick={ () => this.toggleSide()}>
+            <SideBar open={this.state.open}/>
+          </div>
           <div className="content">
             <Switch>
               {/* Visiting localhost:3000 will redirect to localhost:3000/home */}

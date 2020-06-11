@@ -51,7 +51,8 @@ class FindASub extends Component {
     this.props.dispatch({type: 'FETCH_VOLUNTEERS'});
     this.props.dispatch( {type: 'FETCH_MY_SHIFTS' } );
   }
-//TODO ZACH what's going on here?
+//After component updates if the current state.shift is blank, but there is an id
+// of a shift to trade in redux state, call getShift, to set state
   componentDidUpdate( prevProps, prevState ) {
     if( ( this.state.shift === '' ) && this.props.state.shift.tradeShift ) {
       this.getShift( this.props.state.shift.tradeShift );
