@@ -29,7 +29,6 @@ class Calendar extends Component {
   render() {
     return (
       <>
-      {JSON.stringify(this.props.state.skill.mySkills)}
         <CalendarGrid />
       </>
     )
