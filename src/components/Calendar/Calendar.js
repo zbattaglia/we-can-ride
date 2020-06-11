@@ -22,7 +22,7 @@ class Calendar extends Component {
   }
 
   state = ({
-    user: ''
+    user: '',
   })
   render() {
     return (

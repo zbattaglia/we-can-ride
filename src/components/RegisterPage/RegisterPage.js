@@ -93,7 +93,6 @@ class RegisterPage extends Component {
 
   registerUser = (event) => {
     event.preventDefault();
-    console.log(`Dispatching register:`, this.state)
     if (this.state.username && this.state.birthday && this.state.password && (this.state.password === this.state.confirmPassword)) {
       this.props.dispatch({
         type: 'REGISTER',
@@ -148,7 +147,6 @@ class RegisterPage extends Component {
   };
 
   validate = propertyName => (event) => {
-    console.log('error', propertyName);
     if(propertyName === 'first_nameError'){
       if(!this.state.firstName){
         this.setState({

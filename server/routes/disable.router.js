@@ -5,7 +5,6 @@ const { rejectUnauthenticated } = require('../modules/authentication-middleware'
 
 //PUT route to disable a users account
 router.put('/:id', rejectUnauthenticated, (req, res) => {
-    console.log(`updating to disable user profile`, req.params);
     let queryText = `UPDATE "user" SET "disable"='true' WHERE "id"=$1`;
     pool.query(queryText, [req.params.id])
       .then(result => {

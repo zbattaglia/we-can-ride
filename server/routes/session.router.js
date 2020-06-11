@@ -68,7 +68,6 @@ router.post('/new', rejectUnauthenticated, (req, res) => {
   ;
   `;
   pool.query(sqlText, [req.body.date, yearlong, length]).then( response => {
-    console.log('response from database', response);
     res.sendStatus(200);
   }).catch( error => {
     console.log('error in adding session to database', error);
@@ -78,7 +77,6 @@ router.post('/new', rejectUnauthenticated, (req, res) => {
 
 //put route to let an admin decide which sessions the users should be able to see and add their names to
 router.put('/view', rejectUnauthenticated, (req, res) => {
-  console.log('in server on session volunteer view', req.body);
   //req.body looks like { session_id: 13, let_volunteer_view: false }
   let sqlText = `UPDATE "session" 
   SET "let_volunteer_view"=$2 
@@ -95,7 +93,6 @@ router.put('/view', rejectUnauthenticated, (req, res) => {
 
 //put route to take the information from the standard session and convert it into actual shifts
 router.put('/edit/:session_id', rejectUnauthenticated, async (req, res, next) => {
-  console.log('in the publish session router', req.params.session_id);
   const connection = await pool.connect();
   const session_id = req.params.session_id;
   try{
@@ -121,7 +118,7 @@ router.put('/edit/:session_id', rejectUnauthenticated, async (req, res, next) =>
 
     for(let i=0; i<slotResponse.rows.length; i++){
     //for each slot, make some shifts. Make one set of shifts for each slot
-    console.log(slotResponse.rows[i].id);
+    //console.log(slotResponse.rows[i].id);
       //decide how many days past the session start date to start making shifts
     let dayDifference = slotResponse.rows[i].weekday - sessionWeekday;
     //making one set of shifts. each set will have a shift with the same information except 7 days later, for

@@ -92,7 +92,6 @@ class EditVolunteer extends Component {
 
   // detects a change on an input field and updates the state accordingly
   handleChange = ( event, propName ) => {
-    console.log( `Got change on ${propName}`, event.target.value );
     this.setState({
       ...this.state,
       [ propName ]: event.target.value,

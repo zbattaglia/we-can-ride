@@ -94,7 +94,6 @@ router.put('/:shiftId', rejectUnauthenticated, (req, res) => {
 
     pool.query(sqlText, [true, shiftId])
         .then((response) => {
-            console.log('Successfully updated shift availability');
             res.sendStatus(200);
         })
         .catch((error) => {
@@ -110,12 +109,10 @@ router.get('/sub', rejectUnauthenticated, async (req, res, next) => {
     try{
         connection.query('BEGIN');
         //here's where we find out this user's roles and then get the shifts they can sub for
-        console.log('async await', req.user.id);
         //this query will get the skills this user is qualified for
         const getUserRolesQuery =`SELECT "skill_id" FROM "user_skill"
         WHERE "user_id" = $1;`;
         const userSkills = await connection.query(getUserRolesQuery, [req.user.id]);
-        await console.log('uer skills', userSkills.rows);
         //loop through the skills to make a string for the query
         const skillList = userSkills.rows;
         let skillString = '';
@@ -159,7 +156,7 @@ router.get('/sub', rejectUnauthenticated, async (req, res, next) => {
 router.put('/sub/shift', rejectUnauthenticated, (req, res) => {
     const userId = req.user.id;
     const shiftId = req.body.shiftId;
-    console.log(`Adding user with id ${userId} to shift with id ${shiftId}`);
+    //console.log(`Adding user with id ${userId} to shift with id ${shiftId}`);
 
     // query to update userId on shift table at appropriate shift id, reset user wants to trade since this has been picked up
     const sqlText = `UPDATE "shift" SET "assigned_user" = $1, "user_wants_to_trade" = FALSE
@@ -167,7 +164,6 @@ router.put('/sub/shift', rejectUnauthenticated, (req, res) => {
 
     pool.query(sqlText, [userId, shiftId])
         .then((response) => {
-            console.log('Successfully added user to shift table');
             res.sendStatus(200);
         })
         .catch((error) => {

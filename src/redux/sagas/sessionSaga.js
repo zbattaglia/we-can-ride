@@ -32,7 +32,6 @@ function* createSession(action) {
 //filled with actual volunteers on specific days at specific times
 function* publishSession(action) {
   //action.payload looks like {session_id: 6}
-  console.log('publish session', action.payload);
   //send the session Id to the server and create a bunch of shifts
   yield axios.put(`/session/edit/${action.payload.session_id}`);
   yield put({type: 'FETCH_SESSIONS'});
