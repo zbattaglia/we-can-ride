@@ -49,11 +49,23 @@ function* sendMessage(action) {
   }
 }
 
+// saga will be fired whenever admin emails all volunteers on a given day from print a day component
+function* emailDay(action) {
+  // POST with action payload
+  try {
+    yield axios.post( '/message/day', action.payload );
+  }
+  catch(error) {
+    console.log( 'Error emailing daily roster', error );
+  }
+}
+
 function* messageSaga() {
   yield takeLatest('FETCH_MESSAGE', fetchMessage);
   yield takeLatest('DELETE_MESSAGE', deleteMessage);
   yield takeLatest('REPLY_TO_MESSAGE', replyToMessage);
   yield takeLatest('SEND_MESSAGE', sendMessage);
-}
+  yield takeLatest('EMAIL_DAY', emailDay)
+;}
 
 export default messageSaga;

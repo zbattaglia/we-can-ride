@@ -3,7 +3,6 @@ import {connect} from 'react-redux';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
-import Paper from '@material-ui/core/Paper'
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import moment from 'moment';
@@ -11,7 +10,11 @@ import Button from '@material-ui/core/Button';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
-
+// for email modal
+import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogTitle from '@material-ui/core/DialogTitle';
 
 
 
@@ -25,15 +28,58 @@ const styles = theme => ({
         marginRight: theme.spacing.unit,
         width: 200,
       },
+      headerCell: {
+          width: '25%',
+      },
+      pageTitle: {
+          textAlign: 'center',
+      },
+      emailBody: {
+          width: '100%',
+      }
 });
 
 class PrintADay extends Component {
-
+    // initial state to track data, lessons and volunteers for selected day, and email message from admin
     state = ({
         date: moment().format('yyyy-MM-DD'),
         lessons: [],
         volunteers: [],
+        open: false,
+        email: '',
     })
+    // open email modal
+    email = () => {
+        this.setState({
+            ...this.state,
+            open: !this.state.open,
+        })
+    };
+
+    // track change in text area for email message
+    handleEmailChange = ( event ) => {
+        this.setState({
+            ...this.state,
+            email: event.target.value,
+        })
+    }
+    // when send is clicked, dispatch email message, lesson date, and volunteers
+    // then close email modal
+    sendEmail = () => {
+        this.props.dispatch( { type: 'EMAIL_DAY', payload: {message: this.state.email, date: this.state.date, volunteers: this.state.volunteers } } );
+        this.setState({
+            open: !this.state.open,
+            email: '',
+        });
+    };
+
+    // cancel button to close email modal without sending message
+    handleClose = () => {
+        this.setState({
+            open: !this.state.open,
+            email: '',
+        });   
+    }
 
     componentDidUpdate(prevProps, prevState){
         //if a different date is selected, get the lessons for that date
@@ -77,7 +123,8 @@ class PrintADay extends Component {
         const oldPage = document.body.innerHTML;
         document.body.innerHTML = orderHTML;
         window.print();
-        document.body.innerHTML = oldPage
+        document.body.innerHTML = oldPage;
+        window.location.reload()
     }
 
   render() {
@@ -86,11 +133,8 @@ class PrintADay extends Component {
       <>
 
 
-        <h1>Print A day!!!</h1>
-        {JSON.stringify(this.props.state.shift.dayShifts)}
-        <h2>state</h2>
-        {JSON.stringify(this.state)}
-
+        <h1 className={classes.pageTitle}>Print A day</h1>
+        <p className={classes.pageTitle}>Select a date in the calendar to view and print, or email the daily roster.</p>
         <form className={classes.container} noValidate>
       <TextField
 
@@ -121,6 +165,7 @@ class PrintADay extends Component {
                             </>
                             :
                             <>
+                            <p>Unassigned</p>
                             </>
                             }
 
@@ -144,17 +189,23 @@ class PrintADay extends Component {
         </Table>
         <div id='printarea' style={{display:'none'}}>
             <div style={{fontSize:'16', textAlign:'center'}}>
-            {this.state.date}
+            <h2> Sign-in: {moment(this.state.date).format('MMMM Do, YYYY')}</h2>
             <br/>
    <table>
-       <tr>
-           <th>Volunteer</th>
-           <th>Time</th>
-           <th>Role</th>
+       <tr className={classes.tableRow}>
+           <th className={classes.headerCell}>Volunteer</th>
+           <th className={classes.headerCell}>Time</th>
+           <th className={classes.headerCell}>Role</th>
+           <th className={classes.headerCell}>Initials</th>
        </tr>
        {this.props.state.shift.dayShifts.map(shift => (
            <tr>
-               <td>{shift.assigned_first_name} {shift.assigned_user_last_initial}</td>
+               <td>{shift.assigned_first_name ? 
+               <>{shift.assigned_first_name} {shift.assigned_user_last_initial}</>
+               :
+               <p>Unassigned</p>
+                }
+               </td>
                <td>                    {moment(shift.start_of_lesson, "HH:mm:ss").format('hh:mm a')} - {moment(shift.end_of_lesson, "HH:mm:ss").format('hh:mm a')}</td>
                <td>{shift.title}</td>
            </tr>
@@ -163,7 +214,32 @@ class PrintADay extends Component {
             </div>
         </div> {/**end of div to contain what will be printed */}
         <Button variant='contained' color='secondary' onClick={this.printOrder}>Print Day!</Button>
-      </>
+        <Button variant='contained' color='primary' onClick={this.email}>Email Roster</Button>
+
+    {/* dialog only visible when composing email */}
+    <Dialog
+        open={this.state.open}
+    >
+        <DialogTitle className={classes.title}>Email Volunteers on {moment(this.state.date).format('MMMM Do, YYYY')}</DialogTitle>
+              <DialogContent className={classes.iconContainer}>
+                <TextField
+                    className={classes.emailBody}
+                    multiline
+                    rows={6}
+                    onChange={ (event) => this.handleEmailChange( event )}
+                >                    
+                </TextField>
+              </DialogContent>
+              <DialogActions>
+                <Button onClick={this.handleClose}>
+                    Cancel
+                </Button>
+                <Button onClick={this.sendEmail} color="primary">
+                  Send
+                </Button>
+              </DialogActions>
+             </Dialog>
+    </>
     )
   }
 }
