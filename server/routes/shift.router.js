@@ -121,7 +121,6 @@ router.get('/sub', rejectUnauthenticated, async (req, res, next) => {
         let skillString = '';
 
         //make a list of the skills to get
-        console.log('skill string', skillString);
         for(let i=0; i < skillList.length; i++){
             if(i === 0){
                 skillString = skillString + '"skill"."id" = ' + skillList[i].skill_id;
@@ -145,7 +144,7 @@ router.get('/sub', rejectUnauthenticated, async (req, res, next) => {
         res.send(response.rows);
     }
     catch (error){
-        console.log( "Error getting sub shifts", error)
+        console.log( "Error getting sub shifts", error);
         await connection.query(`ROLLBACK`);
         res.sendStatus(500);
       }finally{

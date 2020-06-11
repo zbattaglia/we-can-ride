@@ -21,7 +21,7 @@ router.get(`/all`, rejectUnauthenticated, (req, res) => {
 
 //get the lessons for a particular session
 router.get(`/lessons/:session_id`, rejectUnauthenticated, (req, res) => {
-      let sqlText = `SELECT "user"."first_name", LEFT("user"."last_name",1) AS "last_name", "start_of_lesson", 
+      let sqlText = `SELECT "user"."first_name", "skill_needed", LEFT("user"."last_name",1) AS "last_name", "start_of_lesson", 
       ("start_of_lesson" + "length_of_lesson") AS "end_of_lesson", "length_of_lesson", "client",
        "slot"."id" AS "slot_id", "lesson_id", "expected_user", "skill"."title", EXTRACT (DOW FROM "day_of_week") AS "weekday" 
       FROM "session"
@@ -33,7 +33,7 @@ router.get(`/lessons/:session_id`, rejectUnauthenticated, (req, res) => {
       ORDER BY "lesson_id";`;
       //if the user is an admin, the request asks for full last names instead of last initials
     if (req.user.type_of_user === 'admin'){
-      sqlText = `SELECT "user"."first_name", "user"."last_name", "start_of_lesson", 
+      sqlText = `SELECT "user"."first_name", "user"."last_name", "skill_needed", "start_of_lesson", 
       ("start_of_lesson" + "length_of_lesson") AS "end_of_lesson", "length_of_lesson", "client",
        "slot"."id" AS "slot_id", "lesson_id", "expected_user", "skill"."title", EXTRACT (DOW FROM "day_of_week") AS "weekday" 
       FROM "session"
