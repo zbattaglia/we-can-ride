@@ -1,5 +1,7 @@
-import React, { Component } from 'react';
-import { connect } from 'react-redux';
+
+import React, {Component} from 'react';
+import {connect} from 'react-redux';
+
 import { withStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
@@ -112,6 +114,60 @@ class AssignVolunteerButton extends Component {
     //this component has a lot of conditional rendering because it is used for both admins and users,
     //and to assign volunteers and to remove them. admins can assign and remove anyone, while users can only assign
     //and remove themselves
+
+return (
+  <div>
+    <Button size="small" color='secondary' variant='contained' className={classes.button} onClick={this.handleClickOpen} >{this.props.name}</Button>
+    <Dialog
+  open={this.state.open}
+  onClose={this.handleClose}
+  aria-labelledby="assign-volunteer"
+>
+<DialogTitle id="assign-volunteer">{this.props.name}</DialogTitle>
+  <DialogContent>
+    {this.props.user_id
+    ?
+    <>
+    <DialogContentText>
+      You are {(this.props.name === 'Remove Yourself')?<>removing yourself from</>:<>accepting</> } this role for the whole session
+    </DialogContentText>
+    </>
+    :
+    <>
+    <DialogContentText>
+      {/* {JSON.stringify(this.state)} */}
+    Choose which volunteer will be taking this role.
+  </DialogContentText>
+  <Autocomplete
+      value={this.state.volunteer}
+      id="assign-volunteer"
+      options={this.props.state.volunteer.volunteer}
+      getOptionLabel={(option) => option.first_name}
+      style={{ width: 300 }}
+      onChange={(event, value) => this.setState({volunteer: value})}
+      renderInput={(params) => <TextField {...params} label="none" variant="outlined" ></TextField>}
+    />
+    </>
+    }
+
+
+  </DialogContent>
+  <DialogActions>
+    <Button onClick={this.handleClose} color="primary">
+      Cancel
+    </Button>
+    <Button onClick={() => this.handleClose('create')} color="primary">
+      {this.props.user_id
+      ?
+      <>Accept</>
+      :
+      <>Assign Volunteer</>
+      }
+    </Button>
+  </DialogActions>
+</Dialog>
+  </div>
+
     return (
       <div>
         <Button size="small" color='secondary' variant='contained' className={classes.button} onClick={this.handleClickOpen} >{this.props.name}</Button>
@@ -161,6 +217,7 @@ class AssignVolunteerButton extends Component {
           </DialogActions>
         </Dialog>
       </div>
+
     )
   }
 }
