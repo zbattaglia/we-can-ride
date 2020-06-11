@@ -1,18 +1,40 @@
-#from {
-    width: 10%;
-    text-align: center;
-    font-weight: bold;
+@media screen and (max-width: 760px) {
+    #from {
+        text-align: center;
+        font-weight: bold;
+    }
+
+    #action {
+        text-align: center;
+    }
+
+    #received {
+        text-align: center;
+        font-weight: bold;
+    }
+
+    #inboxContent {
+        width: 20%;
+    }
 }
 
-#action {
-    width: 12%;
-    text-align: center;
-}
-
-#received {
-    width: 20%;
-    text-align: center;
-    font-weight: bold;
+@media screen and (min-width: 760px) {
+    #from {
+        width: 10%;
+        text-align: center;
+        font-weight: bold;
+    }
+    
+    #action {
+        width: 12%;
+        text-align: center;
+    }
+    
+    #received {
+        width: 20%;
+        text-align: center;
+        font-weight: bold;
+    }
 }
 
 #inbox-title {

@@ -2,40 +2,78 @@
     text-align: center;
 }
 
-#name {
-    width: 25%;
-    text-align: center;
-    font-weight: bold;
+@media screen and (max-width: 760px) {
+
+    #name {
+        text-align: center;
+        font-weight: bold;
+    }
+
+    #age {
+        text-align: center;
+        font-weight: bold;
+    }
+
+    #hours {
+        text-align: center;
+        font-weight: bold;
+    }
+
+    #role {
+        text-align: center;
+        font-weight: bold;
+    }
+
+    #action {
+        text-align: center;
+        font-weight: bold;
+    }
+
+    #registration-content {
+        width: 40%;
+        padding: .5rem;
+    }
+
+    #manageContent {
+        width: 90%;
+    }
 }
 
-#age {
-    width: 15%;
-    text-align: center;
-    font-weight: bold;
+
+@media screen and (min-width: 760px) {
+
+    #name {
+        width: 25%;
+        text-align: center;
+        font-weight: bold;
+    }
+
+    #age {
+        width: 15%;
+        text-align: center;
+        font-weight: bold;
+    }
+
+    #hours {
+        width: 14%;
+        text-align: center;
+        font-weight: bold;
+    }
+
+    #role {
+        width: 30%;
+        text-align: center;
+        font-weight: bold;
+    }
+
+    #action {
+        width: 15%;
+        text-align: center;
+        font-weight: bold;
+    }
+
+    #registration-content {
+        width: 40%;
+        padding: .5rem;
+    }
 }
-
-#hours {
-    width: 14%;
-    text-align: center;
-    font-weight: bold;
-}
-
-#role {
-    width: 30%;
-    text-align: center;
-    font-weight: bold;
-}
-
-#action {
-    width: 15%;
-    text-align: center;
-    font-weight: bold;
-}
-
-#registration-content {
-    width: 40%;
-    padding: .5rem;
-}
-
-
-
