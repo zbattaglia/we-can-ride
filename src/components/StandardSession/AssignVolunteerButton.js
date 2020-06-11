@@ -168,56 +168,7 @@ return (
 </Dialog>
   </div>
 
-    return (
-      <div>
-        <Button size="small" color='secondary' variant='contained' className={classes.button} onClick={this.handleClickOpen} >{this.props.name}</Button>
-        <Dialog
-          open={this.state.open}
-          onClose={this.handleClose}
-          aria-labelledby="assign-volunteer"
-        >
-          <DialogTitle id="assign-volunteer">{this.props.name}</DialogTitle>
-          <DialogContent>
-            {this.props.user_id
-              ?
-              <>
-                <DialogContentText>
-                  You are {(this.props.name === 'Remove Yourself') ? <>removing yourself from</> : <>accepting</>} this role for the whole session
-                </DialogContentText>
-              </>
-              :
-              <>
-                <DialogContentText>
-                  Choose which volunteer will be taking this role.
-                </DialogContentText>
-                <Autocomplete
-                  value={this.state.volunteer}
-                  id="assign-volunteer"
-                  options={this.props.state.volunteer.volunteer}
-                  getOptionLabel={(option) => option.first_name}
-                  style={{ width: 300 }}
-                  onChange={(event, value) => this.setState({ volunteer: value })}
-                  renderInput={(params) => <TextField {...params} label="none" variant="outlined" ></TextField>}
-                />
-              </>
-            }
-          </DialogContent>
-          <DialogActions>
-            <Button onClick={this.handleClose} color="primary">
-              Cancel
-            </Button>
-            <Button onClick={() => this.handleClose('create')} color="primary">
-              {this.props.user_id
-                ?
-                <>Accept</>
-                :
-                <>Assign Volunteer</>
-              }
-            </Button>
-          </DialogActions>
-        </Dialog>
-      </div>
-
+    
     )
   }
 }
