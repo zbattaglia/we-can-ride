@@ -69,6 +69,15 @@ const subShifts = (state = [], action) => {
   }
 }
 
+const dayShifts = (state = [], action) => {
+  switch(action.type) {
+    case 'SET_DAY_SHIFTS':
+      return action.payload;
+    default:
+      return state;
+  }
+}
+
   export default combineReducers({
     fourWeeksShifts,
     myShifts,
@@ -76,4 +85,5 @@ const subShifts = (state = [], action) => {
     allShifts,
     subShifts,
     mySlots,
+    dayShifts,
   });
