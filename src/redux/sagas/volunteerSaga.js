@@ -4,7 +4,6 @@ import { put, takeLatest } from 'redux-saga/effects';
 // worker Saga: will be fired on "FETCH_USER" actions
 //this saga is to get all of the volunteers from the database
 function* fetchVolunteer() {
-    console.log( 'In fetchVolunteer Saga' );
   try {
     const response = yield axios.get('/volunteer/volunteer');
     //once they are retrieved, they are sent to the reducer
@@ -31,7 +30,6 @@ function* fetchSelectedVolunteer(action) {
 
 //this saga is for the admin to update a specific volunteer
 function* updateSelectedVolunteer(action) {
-  console.log( `In updateVolunteer saga`, action.payload );
 
   try{
     yield axios.put( `/volunteer/${action.payload.id}`, action.payload );
@@ -48,7 +46,6 @@ function* updateSelectedVolunteer(action) {
 
 //this saga is to set a user to disabled
 function* disableVolunteer(action) {
-  console.log( `In disableVolunteer saga`, action.payload );
 
   try{
     yield axios.put( `/disable/${action.payload}`, action.payload );

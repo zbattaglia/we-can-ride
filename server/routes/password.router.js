@@ -70,14 +70,14 @@ router.put( '/:id', (req, res) => {
     // extract user id and new password from req.params and req.body
     const userId = req.params.id;
     const password = encryptLib.encryptPassword(req.body.password);
-    console.log( `Updating password for user with id, ${userId}, to ${password} `)
+    //console.log( `Updating password for user with id, ${userId}, to ${password} `)
 
     const sqlText = `UPDATE "user"
                     SET "password" = $1
                     WHERE "user"."id" = $2;`;
     pool.query( sqlText, [ password, userId ] )
         .then( (response) => {
-            console.log( 'Successfully updated password' );
+            //console.log( 'Successfully updated password' );
             res.sendStatus( 200 );
         })
         .catch( (error) => {

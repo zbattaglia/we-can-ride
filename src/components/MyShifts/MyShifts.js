@@ -71,7 +71,6 @@ class MyShifts extends Component {
   }
 
   handleClick = ( event, shiftId ) => {
-    console.log( 'Got click to give up shift with id', shiftId)
     this.props.dispatch( { type: 'SHIFT_TO_TRADE', payload: shiftId } );
     this.props.history.push( '/findasub' );
   };

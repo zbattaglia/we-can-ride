@@ -23,7 +23,6 @@ function* registerUser(action) {
 }
 
 function* sendRegistrationLink(action) {
-  console.log( 'In sendRegistrationLink saga', action );
   yield axios.post( `/api/user/register/new`, { email: action.payload } );
 }
 
@@ -31,8 +30,7 @@ function* sendRegistrationLink(action) {
 function* decodeRegistrationToken(action) {
   // console.log( 'In decodeRegistrationToken saga', action );
   try {
-  const response = yield axios.get( `/api/user/register/${action.payload}`)
-  console.log( 'got response in decode registration saga', response.data );
+  const response = yield axios.get( `/api/user/register/${action.payload}`);
   yield put( { type: 'SET_TO_REGISTER_MODE' } );
   }
   catch( error ) {

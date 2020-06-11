@@ -77,7 +77,7 @@ router.post('/register', async (req, res, next) => {
     res.sendStatus(200);
   }
   catch (error) {
-    console.log( `Error on Register`, error)
+    console.log( `Error on Register`, error);
     await connection.query(`ROLLBACK`);
     res.sendStatus(500);
   }

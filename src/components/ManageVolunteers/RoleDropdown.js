@@ -51,7 +51,6 @@ class RoleDropdown extends React.Component {
     this.setState({
       [property]: event.target.checked,
     });
-    console.log('in handleCheckboxChangeFor', this.state)
   }
 
   componentDidMount() {

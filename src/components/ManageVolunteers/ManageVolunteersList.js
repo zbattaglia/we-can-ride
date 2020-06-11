@@ -82,12 +82,10 @@ class ManageVolunteersList extends Component {
     };
 
     disableVolunteer = (id) => {
-        console.log('In disableVolunteer', id)
         this.props.dispatch({ type: 'DISABLE_VOLUNTEER', payload: id });
     }
 
     activateVolunteer = (id) => {
-        console.log('In activateVolunteer', id)
         this.props.dispatch({ type: 'ACTIVATE_VOLUNTEER', payload: id });
 
     }

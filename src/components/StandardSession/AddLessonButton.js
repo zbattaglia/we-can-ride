@@ -145,7 +145,7 @@ class AddLessonButton extends Component {
   //this checks to see if you have filled in the required fields. if you click on a required field and then
   //click away without filling it in, a warning will appear to tell you what to do
   validate = propertyName => (event) => {
-    console.log('blur', propertyName);
+
     if(propertyName === 'start_timeError'){
       if(!this.state.start_time){
         this.setState({

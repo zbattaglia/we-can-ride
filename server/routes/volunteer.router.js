@@ -79,7 +79,7 @@ router.put( '/:selectedId', rejectUnauthenticated, async(req, res) => {
         };
     };
 
-    console.log( 'Type of user on server =', type_of_user )
+    //console.log( 'Type of user on server =', type_of_user )
     // console.log( `Updating user with id ${req.params.selectedId}`, id, first_name, last_name, phone, email, birthday );
     // console.log( 'Updating selected user`s skills and availabilities on server ', req.body, availability_skills );
 

@@ -105,7 +105,6 @@ class CreateSession extends Component {
     });
   };
   clearError = propertyName => (event) => {
-    console.log('focus', propertyName);
     //on focus, clear the error from this input
     this.setState({
       [propertyName]: null,
@@ -114,7 +113,7 @@ class CreateSession extends Component {
   }
 
   validate = propertyName => (event) => {
-    console.log('blur', propertyName);
+    
     if(propertyName === 'lengthError'){
       if(!this.state.length){
         this.setState({
