@@ -14,6 +14,7 @@ import TextField from '@material-ui/core/TextField';
 
 
 
+
 const styles = theme => ({
     container: {
         display: 'flex',
@@ -31,6 +32,7 @@ class PrintADay extends Component {
     state = ({
         date: moment().format('yyyy-MM-DD'),
         lessons: [],
+        volunteers: [],
     })
 
     componentDidUpdate(prevProps, prevState){
@@ -54,7 +56,10 @@ class PrintADay extends Component {
                 }
             }
             this.setState({lessons: uniqueLessons});
-            //make a lesson array in state
+            //make a volunteer array in state
+            const volunteers = this.props.state.shift.dayShifts.map(({assigned_user}) => assigned_user)
+            let uniqueVolunteers = [...new Set(volunteers)];
+            this.setState({volunteers: uniqueVolunteers});
         
 
         }
@@ -63,6 +68,17 @@ class PrintADay extends Component {
     handleChange = event => {
         this.setState({ date: moment(event.target.value).format('yyyy-MM-DD') });
       };
+
+      printOrder = () => {
+          console.log('in print order')
+        const printableElements = document.getElementById('printarea').innerHTML;
+        const orderHTML = '<html><head><title></title></head><body>' + printableElements + '</body></html>'
+        console.log('orderHTML', orderHTML)
+        const oldPage = document.body.innerHTML;
+        document.body.innerHTML = orderHTML;
+        window.print();
+        document.body.innerHTML = oldPage
+    }
 
   render() {
     const { classes } = this.props;
@@ -77,6 +93,7 @@ class PrintADay extends Component {
 
         <form className={classes.container} noValidate>
       <TextField
+
         id="date"
         label="Date"
         type="date"
@@ -89,7 +106,33 @@ class PrintADay extends Component {
       />
     </form>
         
-        {this.state.lessons.map(lesson => <Paper key={lesson}></Paper>)}
+        {this.state.lessons.map(lesson => (<TableBody key={lesson.lesson_id}>
+                {lesson.start_of_lesson} - {lesson.end_of_lesson}
+                {this.props.state.shift.dayShifts.map(shift => (
+                    <>
+                    {lesson.lesson_id === shift.lesson_id 
+                    && 
+                    <TableRow>
+                        <TableCell>
+                            {shift.assigned_user
+                            ?
+                            <>
+                                {shift.assigned_first_name} {shift.assigned_user_last_initial}
+                            </>
+                            :
+                            <>
+                            </>
+                            }
+
+                        </TableCell>
+                        <TableCell>{shift.title}</TableCell>
+                        <TableCell style={{width:'200px'}}></TableCell>
+                    </TableRow>
+                    }
+
+                </>
+                ))}
+            </TableBody>))}
         <Table>
             <TableHead>
                 <TableRow>
@@ -99,94 +142,27 @@ class PrintADay extends Component {
                 </TableRow>
             </TableHead>
         </Table>
-
-
-        <h2 style={{textAlign: 'center'}}>Print A Day!!!</h2>
-       {/*  <Paper>
-          <Table>
-            <TableHead>
-              <TableRow>
-                <CustomTableCell className={classes.dateHeader}>
-                Date 
-                </CustomTableCell >
-                <CustomTableCell className={classes.arrive}>
-                Time To Arrive 
-                </CustomTableCell >
-                <CustomTableCell className={classes.role}>
-                Role 
-                </CustomTableCell >
-                <CustomTableCell className={classes.action}>
-                  Action
-                </CustomTableCell >
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {this.props.state.shift.myShifts.map( (row) =>(
-                <TableRow key={row.id}>
-                  <CustomTableCell className={classes.tableCell}>
-                    {moment(row.date).format('dddd, MMMM Do, YYYY')}
-                  </CustomTableCell >
-                  <CustomTableCell className={classes.tableCell}>
-                  {moment(row.time_to_arrive, "HH:mm:ss").format('hh:mm a')}
-                  </CustomTableCell >
-                  <CustomTableCell className={classes.tableCell}>
-                    {row.role}
-                  </CustomTableCell >
-                  <CustomTableCell className={classes.tableCell}>
-                    <Button variant="contained" className={classes.button} onClick={ (event) => this.handleClick( event, row.id ) }>Give Up</Button>
-                  </CustomTableCell >
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </Paper> */
-
-/*         <h2 style={{textAlign: 'center'}}>Sessions I've signed up for</h2> */
-                /**here's where the slots I've signed up for show up(the ones that haven't started yet) */}
-      {/*   <Paper>
-          <Table>
-            <TableHead>
-              <TableRow>
-                <CustomTableCell className={classes.role}>
-                Session Start Date 
-                </CustomTableCell >
-                <CustomTableCell className={classes.role}>
-                Weekday
-                </CustomTableCell >
-                <CustomTableCell className={classes.role}>
-                Time
-                </CustomTableCell >
-                <CustomTableCell className={classes.role}>
-                Session Length in Weeks
-                </CustomTableCell >
-                <CustomTableCell className={classes.role}>
-                Role
-                </CustomTableCell >
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {this.props.state.shift.mySlots.map( (row) =>(
-                <TableRow key={row.id}>
-                  <CustomTableCell className={classes.tableCell}>
-                    {moment(row.session_start_date).format('dddd, MMMM Do, YYYY')}
-                  </CustomTableCell >
-                  <CustomTableCell className={classes.tableCell}>
-                    {row.weekday}
-                  </CustomTableCell >
-                  <CustomTableCell className={classes.tableCell}>
-                    {moment(row.start_of_lesson, "HH:mm:ss").format('hh:mm a')} - {moment(row.end_of_lesson, "HH:mm:ss").format('hh:mm a')}
-                  </CustomTableCell >
-                  <CustomTableCell className={classes.tableCell}>
-                    {row.length_in_weeks.days/7}
-                  </CustomTableCell >
-                  <CustomTableCell className={classes.tableCell}>
-                    {row.title}
-                  </CustomTableCell >
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </Paper>} */}
+        <div id='printarea' style={{display:'none'}}>
+            <div style={{fontSize:'16', textAlign:'center'}}>
+            {this.state.date}
+            <br/>
+   <table>
+       <tr>
+           <th>Volunteer</th>
+           <th>Time</th>
+           <th>Role</th>
+       </tr>
+       {this.props.state.shift.dayShifts.map(shift => (
+           <tr>
+               <td>{shift.assigned_first_name} {shift.assigned_user_last_initial}</td>
+               <td>                    {moment(shift.start_of_lesson, "HH:mm:ss").format('hh:mm a')} - {moment(shift.end_of_lesson, "HH:mm:ss").format('hh:mm a')}</td>
+               <td>{shift.title}</td>
+           </tr>
+       ))}
+   </table>
+            </div>
+        </div> {/**end of div to contain what will be printed */}
+        <Button variant='contained' color='secondary' onClick={this.printOrder}>Print Day!</Button>
       </>
     )
   }
