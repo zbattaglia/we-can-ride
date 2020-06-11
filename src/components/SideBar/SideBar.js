@@ -7,7 +7,7 @@ const SideBar = (props) => (
   <div>
       {props.user.id && (
         <>
-        <ul className="SideBar">
+        <ul className={props.open ? "WideSideBar" : "SideBar"}>
           {props.user.type_of_user === 'volunteer' ?
           <>
             <li>

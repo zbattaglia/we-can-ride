@@ -67,3 +67,7 @@ input {
     background-size: cover;
     height: 100vh;
 }
+
+.open {
+    border: solid;
+}

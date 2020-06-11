@@ -50,6 +50,7 @@ const styles = theme => ({
     color: theme.palette.secondary,
     display: 'flex',
     alignItems: 'flex-start',
+    flexWrap: 'wrap',
   },
   deleteX: {
     color: theme.palette.text.secondary,
