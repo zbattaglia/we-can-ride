@@ -4,7 +4,6 @@ import { put, takeLatest } from 'redux-saga/effects';
 // worker Saga: will be fired on "FETCH_USER" actions
 //this saga is to get all of the volunteers from the database
 function* fetchVolunteer() {
-    console.log( 'In fetchVolunteer Saga' );
   try {
     const response = yield axios.get('/volunteer/volunteer');
     //once they are retrieved, they are sent to the reducer
@@ -31,7 +30,6 @@ function* fetchSelectedVolunteer(action) {
 
 //this saga is for the admin to update a specific volunteer
 function* updateSelectedVolunteer(action) {
-  console.log( `In updateVolunteer saga`, action.payload );
 
   try{
     yield axios.put( `/volunteer/${action.payload.id}`, action.payload );
@@ -48,7 +46,6 @@ function* updateSelectedVolunteer(action) {
 
 //this saga is to set a user to disabled
 function* disableVolunteer(action) {
-  console.log( `In disableVolunteer saga`, action.payload );
 
   try{
     yield axios.put( `/disable/${action.payload}`, action.payload );
@@ -74,11 +71,12 @@ function* activateVolunteer(action) {
   }
 };
 
-//TODO Zach
+//Saga fired on getUserRoles when editing a users profile
 function* getUserRoles() {
-  console.log( 'In getUserRoles Saga' );
-try {
+  // get request to get all roles a user can fill and store in response variable
+  try {
   const response = yield axios.get('/roles');
+  // dispatche response.data with SET_USER_ROLES action to put roles on redux state
   yield put({ type: 'SET_USER_ROLES', payload: response.data });
 
 } catch (error) {

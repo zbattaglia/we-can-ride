@@ -68,7 +68,7 @@ class AddRoleButton extends Component {
   };
 
   handleClick = () => {
-    console.log('add role to lesson id:', this.props.lesson_id, this.props.session_id);
+    //console.log('add role to lesson id:', this.props.lesson_id, this.props.session_id);
   }
 
 

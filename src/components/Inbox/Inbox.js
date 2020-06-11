@@ -27,10 +27,6 @@ const styles = theme => ({
   root: {
     width: '99%',
     marginTop: theme.spacing(3),
-    overflowX: 'auto',
-  },
-  table: {
-    minWidth: 700,
   },
   row: {
     '&:nth-of-type(odd)': {
@@ -51,7 +47,7 @@ class Inbox extends Component {
     return (
       <>
         <h2 id="inbox-title">Inbox</h2>
-        <Paper className={classes.root}>
+        <Paper className={classes.root} id="inboxContent">
           <Table className={classes.table} id="inbox">
             <TableHead>
               <TableRow>

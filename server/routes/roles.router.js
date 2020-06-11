@@ -13,7 +13,6 @@ router.get('/', rejectUnauthenticated, (req, res) => {
 
     pool.query( sqlText )
         .then( (response) => {
-            console.log('In user role server get', response.rows);
             res.send( response.rows );
         })
         .catch( (error) => {

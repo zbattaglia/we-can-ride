@@ -30,7 +30,7 @@ class PasswordStrength extends React.Component {
     };
 
     confirm(event) {
-        console.log('matches');
+        //console.log('matches');
     }
 
     render() {

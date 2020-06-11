@@ -1,4 +1,5 @@
-.SideBar {
+@media screen and (min-width: 760px) {
+    .SideBar {
     height: 100%;
     position: fixed;
     z-index: 1;
@@ -8,6 +9,23 @@
     margin: 0;
     padding: 0;
     background-color: whitesmoke;
+    overflow: hidden;
+    }
+}
+
+@media screen and (max-width: 760px) {
+    .SideBar {
+    height: 100%;
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    width: 5%;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    background-color: whitesmoke;
+    overflow: hidden;
+    }
 }
 
 .side-link {
@@ -17,11 +35,43 @@
     text-align: center;
     padding: 2rem 0;
     text-decoration: none;
-    font-size: 15px;
+    font-size: 16px;
     width: 100%;
     margin-left: 0;
 }
 
 .side-link:hover {
     background-color: darkgray;
+  }
+
+  @media screen and (max-width: 760px) {
+  .WideSideBar {
+    height: 100%;
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    width: 20%;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    background-color: whitesmoke;
+    overflow: hidden;
+    opacity: 1;
+    }
+}
+
+@media screen and (min-width: 760px) {
+    .WideSideBar {
+      height: 100%;
+      position: fixed;
+      z-index: 1;
+      left: 0;
+      width: 10%;
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      background-color: whitesmoke;
+      overflow: hidden;
+      opacity: 1;
+      }
   }

@@ -34,7 +34,6 @@ router.post(`/roles`, rejectUnauthenticated, (req, res) => {
   VALUES($1, $2);
   `;
   pool.query(sqlText, [req.body.lesson_id, req.body.skill_id]).then(response =>{
-    console.log('inserted a new slot', response);
     res.sendStatus(200)
   }).catch( error => {
     console.log('error in inserting a slot into a lesson', error)
@@ -162,7 +161,7 @@ router.delete('/lesson', rejectUnauthenticated, async (req, res, next) => {
     const deleteShiftsQuery = `DELETE FROM "shift" WHERE "id"=$1;`;
     //delete each shift
     for(i=0; i<shiftsToDelete.rows.length; i++){
-      console.log('deleting shift', shiftsToDelete.rows[i].shift_id);
+      //console.log('deleting shift', shiftsToDelete.rows[i].shift_id);
       await connection.query(deleteShiftsQuery, [shiftsToDelete.rows[i].shift_id]);
     }
     const getSlotsQuery = `SELECT "lesson"."id" AS "lesson_id",
@@ -176,7 +175,7 @@ router.delete('/lesson', rejectUnauthenticated, async (req, res, next) => {
     // get slots from shiftsToDelete
     // delete the slots
     for(i=0; i<slotsToDelete.rows.length; i++){
-      console.log('deleting slot', slotsToDelete[i]);
+      //console.log('deleting slot', slotsToDelete[i]);
       await connection.query(deleteSlotsQuery, [slotsToDelete.rows[i].slot_id]);
     }
   //delete the lesson

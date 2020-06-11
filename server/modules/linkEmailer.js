@@ -7,7 +7,7 @@ module.exports = sendEmailLink = ( emailInfo) => {
     const recipient = emailInfo.name;
     const id = emailInfo.id;
     const token = emailInfo.newToken;
-    console.log( `Sending email to user ${recipient}, id = ${id}, at email address ${toAddress} with token ${token}` );
+    //console.log( `Sending email to user ${recipient}, id = ${id}, at email address ${toAddress} with token ${token}` );
 
 
     // transporter designates the email service for the We Can Ride account

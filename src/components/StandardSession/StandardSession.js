@@ -50,6 +50,7 @@ const styles = theme => ({
     color: theme.palette.secondary,
     display: 'flex',
     alignItems: 'flex-start',
+    flexWrap: 'wrap',
   },
   deleteX: {
     color: theme.palette.text.secondary,
@@ -86,6 +87,7 @@ class StandardSession extends Component {
     this.props.dispatch({type: 'FETCH_USER'});//know which user is looking at the standard session
     this.props.dispatch({type: 'FETCH_SESSIONS'});//get all of the sessions that the user could look at
     this.props.dispatch({type: 'GET_ROLES'});//get all the roles that could be assigned to a lesson
+    this.props.dispatch({type: 'GET_MY_SKILLS'});//get the skills that I have
   }
   componentDidUpdate (prevProps, prevState) {
     //if the page just loaded, set the top session in the reducer as the current session
@@ -108,7 +110,6 @@ class StandardSession extends Component {
     else if((prevProps.state.session.allSessions !== this.props.state.session.allSessions && this.state.session.id)){
       //find the object with the id of this.state.session.id and set that session to be the id.
       let tempSession = this.props.state.session.allSessions.find(x => x.id === this.state.session.id);
-        console.log('update',JSON.stringify(this.props.state.session.allSessions.find(x => x.id === this.state.session.id)));
       this.setState({
         session: tempSession
       });
@@ -264,6 +265,9 @@ class StandardSession extends Component {
                             &&
                             (this.state.session.ready_to_publish === false)
                             &&
+                            (this.props.state.skill.mySkills.includes(slot.skill_needed))
+                            &&
+
                             <AssignVolunteerButton  name='Sign Up' user_id={this.props.state.user.id} session_id={this.state.session.id} slot_id={slot.slot_id}/>
                             
                             }

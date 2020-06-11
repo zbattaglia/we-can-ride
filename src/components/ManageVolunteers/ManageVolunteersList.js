@@ -54,18 +54,6 @@ const styles = theme => ({
     },
 });
 
-const ITEM_HEIGHT = 48;
-const ITEM_PADDING_TOP = 8;
-const MenuProps = {
-    PaperProps: {
-        style: {
-            maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
-            width: 250,
-        },
-    },
-};
-
-
 class ManageVolunteersList extends Component {
 
     state = {
@@ -76,10 +64,9 @@ class ManageVolunteersList extends Component {
         this.setState({ name: event.target.value });
     };
 
-    componentDidMount () {
-        this.props.dispatch ({ type: "GET_USER_ROLES"})
-      }
-      
+    componentDidMount() {
+        this.props.dispatch({ type: "GET_USER_ROLES" })
+    }
 
     handleChangeMultiple = event => {
         const { options } = event.target;
@@ -94,15 +81,12 @@ class ManageVolunteersList extends Component {
         });
     };
 
-
     disableVolunteer = (id) => {
-        console.log('In disableVolunteer', id)
-        this.props.dispatch( { type: 'DISABLE_VOLUNTEER', payload: id } );
+        this.props.dispatch({ type: 'DISABLE_VOLUNTEER', payload: id });
     }
 
     activateVolunteer = (id) => {
-        console.log('In activateVolunteer', id)
-        this.props.dispatch( { type: 'ACTIVATE_VOLUNTEER', payload: id } );
+        this.props.dispatch({ type: 'ACTIVATE_VOLUNTEER', payload: id });
 
     }
 
@@ -118,21 +102,20 @@ class ManageVolunteersList extends Component {
                             </Link>
                         </CustomTableCell>
                         <CustomTableCell>
-                        {moment().diff((volunteer.birthday), 'years',false)}
+                            {moment().diff((volunteer.birthday), 'years', false)}
                         </CustomTableCell>
                         <CustomTableCell>
                             {/* {JSON.stringify(this.props.state.volunteer)} */}
                             {volunteer.total_hours && volunteer.total_hours.hours}
                         </CustomTableCell>
                         <CustomTableCell>
-                            <RoleDropdown user_id={volunteer.id}/>
+                            <RoleDropdown user_id={volunteer.id} />
                         </CustomTableCell>
                         <CustomTableCell>
-                            {volunteer.disable?
-                            <Button variant="contained" onClick={() => this.activateVolunteer(volunteer.id)}>Activate</Button>
-                            :
-                            <Button variant="contained" onClick={() => this.disableVolunteer(volunteer.id)}>Disable</Button>
-
+                            {volunteer.disable ?
+                                <Button variant="contained" onClick={() => this.activateVolunteer(volunteer.id)}>Activate</Button>
+                                :
+                                <Button variant="contained" onClick={() => this.disableVolunteer(volunteer.id)}>Disable</Button>
                             }
                         </CustomTableCell>
                     </TableRow>
@@ -141,7 +124,6 @@ class ManageVolunteersList extends Component {
         )
     }
 }
-
 
 const mapStateToProps = state => ({
     state,

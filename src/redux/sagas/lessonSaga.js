@@ -3,7 +3,6 @@ import { put, takeLatest } from 'redux-saga/effects';
 
 //this is the saga to delete the lesson based on its id
 function* deleteLesson(action) {
-  console.log( 'in delete a lesson by id saga', action.payload);
   // action.payload shaped like {session_id: 4, lesson_id: 4}
   const session_id = action.payload.session_id;
   try{
@@ -20,11 +19,9 @@ function* deleteLesson(action) {
 
 //this is the saga to create a lesson
 function* createLesson(action) {
-  console.log('saga for create a lesson', action.payload);
     try {
       const response = yield axios.post(`lesson/create`, action.payload );
 //here, the session id is being passed back from the database
-      yield console.log( 'the session_id back from the database', response.data);
       //then the session id is used to go get the lessons for the session since they've changed
       yield put({ type: 'FETCH_SESSION_LESSONS', payload: response.data});
     } catch (error) {

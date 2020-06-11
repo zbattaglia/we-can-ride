@@ -18,7 +18,7 @@ const styles = theme => ({
     flexWrap: 'wrap',
   },
   chip: {
-    margin: theme.spacing(1/4),
+    margin: theme.spacing(1 / 4),
   },
   noLabel: {
     marginTop: theme.spacing(3),
@@ -38,19 +38,8 @@ const styles = theme => ({
   },
 });
 
-const ITEM_HEIGHT = 48;
-const ITEM_PADDING_TOP = 8;
-const MenuProps = {
-  PaperProps: {
-    style: {
-      maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
-      width: 250,
-    },
-  },
-};
-
-
 class RoleDropdown extends React.Component {
+
   state = {
     sidewalker: '',
     leader: '',
@@ -58,39 +47,35 @@ class RoleDropdown extends React.Component {
     feeder: '',
   }
 
-
-
-
   handleCheckboxChangeFor = property => (event) => {
     this.setState({
       [property]: event.target.checked,
     });
-    console.log('in handleCheckboxChangeFor', this.state)
   }
 
   componentDidMount() {
-    this.props.dispatch ({ type: "GET_USER_ROLES"})
+    this.props.dispatch({ type: "GET_USER_ROLES" })
   }
 
 
   render() {
     const { classes } = this.props;
     return (
-        <div className={classes.rolesListDiv}>
-          {this.props.state.volunteer.userRoles.map(name => (
-            <>
+      <div className={classes.rolesListDiv}>
+        {this.props.state.volunteer.userRoles.map(name => (
+          <>
             {/**show the roles that apply to this volunteer */}
-            {(this.props.user_id === name.user_id) && 
-                          <ul key={name.id} className={classes.rolesListDiv2}>
-                          <li className={classes.rolesList}>
-                          {name.title.replace( '_', ' ' )}
-                          </li>
-                        </ul> 
-                        }
-            </>
-          ))}
-          </div>
-      )
+            {(this.props.user_id === name.user_id) &&
+              <ul key={name.id} className={classes.rolesListDiv2}>
+                <li className={classes.rolesList}>
+                  {name.title.replace('_', ' ')}
+                </li>
+              </ul>
+            }
+          </>
+        ))}
+      </div>
+    )
   }
 }
 

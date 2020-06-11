@@ -109,7 +109,6 @@ class RegisterPage extends Component {
   //DISPATCH volunteer information if all required fields have been filled in
   registerUser = (event) => {
     event.preventDefault();
-    console.log(`Dispatching register:`, this.state)
     if (this.state.username && this.state.birthday && this.state.password && (this.state.password === this.state.confirmPassword)) {
       this.props.dispatch({
         type: 'REGISTER',
@@ -168,7 +167,6 @@ class RegisterPage extends Component {
 
   //Checks whether the user has entered information into required fields (first name, email, birthday, and password)
   validate = propertyName => (event) => {
-    console.log('error', propertyName);
     if(propertyName === 'first_nameError'){
       if(!this.state.firstName){
         this.setState({

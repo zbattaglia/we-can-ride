@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
-import { withStyles, StylesProvider } from '@material-ui/core/styles';
+import { withStyles } from '@material-ui/core/styles';
 import TableCell from '@material-ui/core/TableCell';
 import TableRow from '@material-ui/core/TableRow';
 import DeleteForever from '@material-ui/icons/DeleteForever';

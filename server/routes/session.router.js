@@ -21,7 +21,7 @@ router.get(`/all`, rejectUnauthenticated, (req, res) => {
 
 //get the lessons for a particular session
 router.get(`/lessons/:session_id`, rejectUnauthenticated, (req, res) => {
-      let sqlText = `SELECT "user"."first_name", LEFT("user"."last_name",1) AS "last_name", "start_of_lesson", 
+      let sqlText = `SELECT "user"."first_name", "skill_needed", LEFT("user"."last_name",1) AS "last_name", "start_of_lesson", 
       ("start_of_lesson" + "length_of_lesson") AS "end_of_lesson", "length_of_lesson", "client",
        "slot"."id" AS "slot_id", "lesson_id", "expected_user", "skill"."title", EXTRACT (DOW FROM "day_of_week") AS "weekday" 
       FROM "session"
@@ -33,7 +33,7 @@ router.get(`/lessons/:session_id`, rejectUnauthenticated, (req, res) => {
       ORDER BY "lesson_id";`;
       //if the user is an admin, the request asks for full last names instead of last initials
     if (req.user.type_of_user === 'admin'){
-      sqlText = `SELECT "user"."first_name", "user"."last_name", "start_of_lesson", 
+      sqlText = `SELECT "user"."first_name", "user"."last_name", "skill_needed", "start_of_lesson", 
       ("start_of_lesson" + "length_of_lesson") AS "end_of_lesson", "length_of_lesson", "client",
        "slot"."id" AS "slot_id", "lesson_id", "expected_user", "skill"."title", EXTRACT (DOW FROM "day_of_week") AS "weekday" 
       FROM "session"
@@ -68,7 +68,6 @@ router.post('/new', rejectUnauthenticated, (req, res) => {
   ;
   `;
   pool.query(sqlText, [req.body.date, yearlong, length]).then( response => {
-    console.log('response from database', response);
     res.sendStatus(200);
   }).catch( error => {
     console.log('error in adding session to database', error);
@@ -78,7 +77,6 @@ router.post('/new', rejectUnauthenticated, (req, res) => {
 
 //put route to let an admin decide which sessions the users should be able to see and add their names to
 router.put('/view', rejectUnauthenticated, (req, res) => {
-  console.log('in server on session volunteer view', req.body);
   //req.body looks like { session_id: 13, let_volunteer_view: false }
   let sqlText = `UPDATE "session" 
   SET "let_volunteer_view"=$2 
@@ -95,7 +93,6 @@ router.put('/view', rejectUnauthenticated, (req, res) => {
 
 //put route to take the information from the standard session and convert it into actual shifts
 router.put('/edit/:session_id', rejectUnauthenticated, async (req, res, next) => {
-  console.log('in the publish session router', req.params.session_id);
   const connection = await pool.connect();
   const session_id = req.params.session_id;
   try{
@@ -121,7 +118,7 @@ router.put('/edit/:session_id', rejectUnauthenticated, async (req, res, next) =>
 
     for(let i=0; i<slotResponse.rows.length; i++){
     //for each slot, make some shifts. Make one set of shifts for each slot
-    console.log(slotResponse.rows[i].id);
+    //console.log(slotResponse.rows[i].id);
       //decide how many days past the session start date to start making shifts
     let dayDifference = slotResponse.rows[i].weekday - sessionWeekday;
     //making one set of shifts. each set will have a shift with the same information except 7 days later, for
