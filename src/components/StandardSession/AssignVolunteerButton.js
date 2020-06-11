@@ -64,12 +64,13 @@ class AssignVolunteerButton extends Component {
     this.props.dispatch({type: 'FETCH_VOLUNTEERS'})
   }
   
-  //
+  // Opens the modal
   handleClickOpen = () => {
     this.setState({ open: true });
 
   };
 
+  // Conditionally closes the modal and either assigns or removes a volunteer
   handleClose = (blob) => {
     if(blob === 'create'){
       if(this.props.user_id){

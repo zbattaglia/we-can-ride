@@ -11,6 +11,16 @@ import Checkbox from '@material-ui/core/Checkbox';
 import Box from '@material-ui/core/Box';
 import Button from '@material-ui/core/Button';
 
+//  Volunteers can only access this page via email link.
+//  The sidebar is not shown on this page.
+//  Each required TextField has a validation error attached.
+//  onSubmit={this.registerUser} and there is a submit button at bottom.
+
+// Component layout
+// styles
+
+
+//  Styling for the register form and table
 const styles = theme => ({
   container: {
     display: 'flex',
@@ -58,6 +68,8 @@ const styles = theme => ({
 });
 
 class RegisterPage extends Component {
+
+  // Required fields- password, first name, username (email), birthday.
   state = {
     username: null,
     password: null,
@@ -66,6 +78,7 @@ class RegisterPage extends Component {
     lastName: null,
     phoneNumber: null,
     birthday: null,
+      // Availability
       amSunday: false,
       pmSunday: false,
       amMonday: false,
@@ -80,6 +93,7 @@ class RegisterPage extends Component {
       pmFriday: false,
       amSaturday: false,
       pmSaturday: false,
+        //errors
         createError: null,
         first_nameError: null,
         emailError: null,
@@ -87,10 +101,12 @@ class RegisterPage extends Component {
         passwordError: null
   };
 
+  //This validates the web token associated with the user registering
   componentDidMount() {
     this.props.dispatch( { type: 'DECODE_REGISTRATION_TOKEN', payload: this.props.match.params.token } );
   }
 
+  //DISPATCH volunteer information if all required fields have been filled in
   registerUser = (event) => {
     event.preventDefault();
     console.log(`Dispatching register:`, this.state)
@@ -128,18 +144,21 @@ class RegisterPage extends Component {
       });    }
   }; // end registerUser
 
+  //Handles textField input changes
   handleInputChangeFor = propertyName => (event) => {
     this.setState({
       [propertyName]: event.target.value,
     });
   };
 
+  //Handles availability checkbox changes
   handleCheckboxChangeFor = propertyName => (event) => {
     this.setState({
       [propertyName]: event.target.checked,
     });
   };
 
+  //clears errors that pop up when user focus shifts from textField without input
   clearError = propertyName => (event) => {
     this.setState({
       [propertyName]: null,
@@ -147,6 +166,7 @@ class RegisterPage extends Component {
     })
   };
 
+  //Checks whether the user has entered information into required fields (first name, email, birthday, and password)
   validate = propertyName => (event) => {
     console.log('error', propertyName);
     if(propertyName === 'first_nameError'){
@@ -190,240 +210,242 @@ class RegisterPage extends Component {
     const { classes } = this.props;
     return (
       <>
-          <h2
-            className={classes.warning}
-            role="alert"
-          >
-            {this.state.createError}
-          </h2>
-        <form className={classes.container} onSubmit={this.registerUser}>
-          <div  className={classes.formContent}>
-          {this.props.state.loginMode === 'register' ?
-            <>
-            <h1 className={classes.title}>Register as a Volunteer!</h1>
+      {/* Handles errors on failed registration attempt */}
+        <h2
+          className={classes.warning}
+          role="alert"
+        >
+          {this.state.createError}
+        </h2>
+
+      <form className={classes.container} onSubmit={this.registerUser}>
+        <div  className={classes.formContent}>
+        {this.props.state.loginMode === 'register' ?
+          <>
+          <h1 className={classes.title}>Register as a Volunteer!</h1>
+          <TextField
+              required
+              type="text"
+              label="First Name"
+              name="firstName"
+              className={classes.textField}
+              value={this.state.firstName}
+              onBlur={this.validate('first_nameError')}
+              onFocus={this.clearError('first_nameError')}
+              onChange={this.handleInputChangeFor('firstName')}
+            />
+            {this.state.first_nameError
+                &&
+              <Box className={classes.warning}>{this.state.first_nameError}</Box>
+            }
             <TextField
-                required
-                type="text"
-                label="First Name"
-                name="firstName"
-                className={classes.textField}
-                value={this.state.firstName}
-                onBlur={this.validate('first_nameError')}
-                onFocus={this.clearError('first_nameError')}
-                onChange={this.handleInputChangeFor('firstName')}
-              />
-              {this.state.first_nameError
-                 &&
-                <Box className={classes.warning}>{this.state.first_nameError}</Box>
-              }
-              <TextField
-                type="text"
-                label="Last Name"
-                name="lastName"
-                className={classes.textField}
-                value={this.state.lastName}
-                onChange={this.handleInputChangeFor('lastName')}
-              />
-              <TextField
-                required
-                type="email"
-                label="Email"
-                name="username"
-                className={classes.textField}
-                onBlur={this.validate('emailError')}
-                onFocus={this.clearError('emailError')}
-                value={this.state.username}
-                onChange={this.handleInputChangeFor('username')}
-              />
-              {this.state.emailError
-                 &&
-                  <Box className={classes.warning}>{this.state.emailError}</Box>
-              }
-              <TextField
-                type="tel"
-                label="Phone Number"
-                name="phoneNumber"
-                className={classes.textField}
-                value={this.state.phoneNumber}
-                onChange={this.handleInputChangeFor('phoneNumber')}
-              />
-              <TextField
-                required
-                type="password"
-                label="Password"
-                name="password"
-                className={classes.textField}
-                onBlur={this.validate('passwordError')}
-                onFocus={this.clearError('passwordError')}
-                value={this.state.password}
-                onChange={this.handleInputChangeFor('password')}
-              />
-              {this.state.passwordError
-                 &&
-                <Box className={classes.warning}>{this.state.passwordError}</Box>
-              }
-              <TextField
-                required
-                type="password"
-                label="Confirm Password"
-                name="confirmPassword"
-                className={classes.textField}
-                value={this.state.confirmPassword}
-                onChange={this.handleInputChangeFor('confirmPassword')}
-              />
+              type="text"
+              label="Last Name"
+              name="lastName"
+              className={classes.textField}
+              value={this.state.lastName}
+              onChange={this.handleInputChangeFor('lastName')}
+            />
             <TextField
               required
-              label="Birthday"
-              id="date"
-              type="date"
-              value={this.state.birthday}
-              onBlur={this.validate('birthdayError')}
-              onFocus={this.clearError('birthdayError')}
-              onChange={this.handleInputChangeFor('birthday')}
+              type="email"
+              label="Email"
+              name="username"
               className={classes.textField}
-              InputLabelProps={{
-                shrink: true,
-              }}
+              onBlur={this.validate('emailError')}
+              onFocus={this.clearError('emailError')}
+              value={this.state.username}
+              onChange={this.handleInputChangeFor('username')}
             />
-            {this.state.birthdayError
-                 &&
-                <Box className={classes.warning}>{this.state.birthdayError}</Box>
-              }
-              <Table className={classes.table}>
-                <TableHead>
+            {this.state.emailError
+                &&
+                <Box className={classes.warning}>{this.state.emailError}</Box>
+            }
+            <TextField
+              type="tel"
+              label="Phone Number"
+              name="phoneNumber"
+              className={classes.textField}
+              value={this.state.phoneNumber}
+              onChange={this.handleInputChangeFor('phoneNumber')}
+            />
+            <TextField
+              required
+              type="password"
+              label="Password"
+              name="password"
+              className={classes.textField}
+              onBlur={this.validate('passwordError')}
+              onFocus={this.clearError('passwordError')}
+              value={this.state.password}
+              onChange={this.handleInputChangeFor('password')}
+            />
+            {this.state.passwordError
+                &&
+              <Box className={classes.warning}>{this.state.passwordError}</Box>
+            }
+            <TextField
+              required
+              type="password"
+              label="Confirm Password"
+              name="confirmPassword"
+              className={classes.textField}
+              value={this.state.confirmPassword}
+              onChange={this.handleInputChangeFor('confirmPassword')}
+            />
+          <TextField
+            required
+            label="Birthday"
+            id="date"
+            type="date"
+            value={this.state.birthday}
+            onBlur={this.validate('birthdayError')}
+            onFocus={this.clearError('birthdayError')}
+            onChange={this.handleInputChangeFor('birthday')}
+            className={classes.textField}
+            InputLabelProps={{
+              shrink: true,
+            }}
+          />
+          {this.state.birthdayError
+                &&
+              <Box className={classes.warning}>{this.state.birthdayError}</Box>
+            }
+            <Table className={classes.table}>
+              <TableHead>
+              <TableRow>
+                  <TableCell className={classes.tableTitle} colSpan={7}>
+                    Add Availability
+                  </TableCell>
+                </TableRow>
                 <TableRow>
-                    <TableCell className={classes.tableTitle} colSpan={7}>
-                      Add Availability
+                  <TableCell className={classes.columnTitle}>Sunday</TableCell>
+                  <TableCell className={classes.columnTitle}>Monday</TableCell>
+                  <TableCell className={classes.columnTitle}>Tuesday</TableCell>
+                  <TableCell className={classes.columnTitle}>Wednesday</TableCell>
+                  <TableCell className={classes.columnTitle}>Thursday</TableCell>
+                  <TableCell className={classes.columnTitle}>Friday</TableCell>
+                  <TableCell className={classes.columnTitle}>Saturday</TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                  <TableRow>
+                    <TableCell>
+                      AM
+                        <Checkbox
+                          checked={this.state.amSunday}
+                          onChange={this.handleCheckboxChangeFor('amSunday')}
+                          value="amSunday"
+                        />
+                      PM
+                        <Checkbox
+                          checked={this.state.pmSunday}
+                          onChange={this.handleCheckboxChangeFor('pmSunday')}
+                          value="pmSunday"
+                        />
+                    </TableCell>
+                    <TableCell>
+                      AM
+                        <Checkbox
+                          checked={this.state.amMonday}
+                          onChange={this.handleCheckboxChangeFor('amMonday')}
+                          value="amMonday"
+                        />
+                      PM
+                        <Checkbox
+                          checked={this.state.pmMonday}
+                          onChange={this.handleCheckboxChangeFor('pmMonday')}
+                          value="pmMonday"
+                        />
+                    </TableCell>
+                    <TableCell>
+                      AM
+                        <Checkbox
+                          checked={this.state.amTuesday}
+                          onChange={this.handleCheckboxChangeFor('amTuesday')}
+                          value="amTuesday"
+                        />
+                      PM
+                        <Checkbox
+                          checked={this.state.pmTuesday}
+                          onChange={this.handleCheckboxChangeFor('pmTuesday')}
+                          value="pmTuesday"
+                        />
+                    </TableCell>
+                    <TableCell>
+                      AM
+                        <Checkbox
+                          checked={this.state.amWednesday}
+                          onChange={this.handleCheckboxChangeFor('amWednesday')}
+                          value="amWednesday"
+                        />
+                      PM
+                        <Checkbox
+                          checked={this.state.pmWednesday}
+                          onChange={this.handleCheckboxChangeFor('pmWednesday')}
+                          value="pmWednesday"
+                        />
+                    </TableCell>
+                    <TableCell>
+                      AM
+                        <Checkbox
+                          checked={this.state.amThursday}
+                          onChange={this.handleCheckboxChangeFor('amThursday')}
+                          value="amThursday"
+                        />
+                      PM
+                        <Checkbox
+                          checked={this.state.pmThursday}
+                          onChange={this.handleCheckboxChangeFor('pmThursday')}
+                          value="pmThursday"
+                        />
+                    </TableCell>
+                    <TableCell>
+                      AM
+                        <Checkbox
+                          checked={this.state.amFriday}
+                          onChange={this.handleCheckboxChangeFor('amFriday')}
+                          value="amFriday"
+                        />
+                      PM
+                        <Checkbox
+                          checked={this.state.pmFriday}
+                          onChange={this.handleCheckboxChangeFor('pmFriday')}
+                          value="pmFriday"
+                        />
+                    </TableCell>
+                    <TableCell>
+                      AM
+                        <Checkbox
+                          checked={this.state.amSaturday}
+                          onChange={this.handleCheckboxChangeFor('amSaturday')}
+                          value="amSaturday"
+                        />
+                      PM
+                        <Checkbox
+                          checked={this.state.pmSaturday}
+                          onChange={this.handleCheckboxChangeFor('pmSaturday')}
+                          value="pmSaturday"
+                        />
                     </TableCell>
                   </TableRow>
-                  <TableRow>
-                    <TableCell className={classes.columnTitle}>Sunday</TableCell>
-                    <TableCell className={classes.columnTitle}>Monday</TableCell>
-                    <TableCell className={classes.columnTitle}>Tuesday</TableCell>
-                    <TableCell className={classes.columnTitle}>Wednesday</TableCell>
-                    <TableCell className={classes.columnTitle}>Thursday</TableCell>
-                    <TableCell className={classes.columnTitle}>Friday</TableCell>
-                    <TableCell className={classes.columnTitle}>Saturday</TableCell>
-                  </TableRow>
-                </TableHead>
-                <TableBody>
-                    <TableRow>
-                      <TableCell>
-                        AM
-                          <Checkbox
-                            checked={this.state.amSunday}
-                            onChange={this.handleCheckboxChangeFor('amSunday')}
-                            value="amSunday"
-                          />
-                        PM
-                          <Checkbox
-                            checked={this.state.pmSunday}
-                            onChange={this.handleCheckboxChangeFor('pmSunday')}
-                            value="pmSunday"
-                          />
-                      </TableCell>
-                      <TableCell>
-                        AM
-                          <Checkbox
-                            checked={this.state.amMonday}
-                            onChange={this.handleCheckboxChangeFor('amMonday')}
-                            value="amMonday"
-                          />
-                        PM
-                          <Checkbox
-                            checked={this.state.pmMonday}
-                            onChange={this.handleCheckboxChangeFor('pmMonday')}
-                            value="pmMonday"
-                          />
-                      </TableCell>
-                      <TableCell>
-                        AM
-                          <Checkbox
-                            checked={this.state.amTuesday}
-                            onChange={this.handleCheckboxChangeFor('amTuesday')}
-                            value="amTuesday"
-                          />
-                        PM
-                          <Checkbox
-                            checked={this.state.pmTuesday}
-                            onChange={this.handleCheckboxChangeFor('pmTuesday')}
-                            value="pmTuesday"
-                          />
-                      </TableCell>
-                      <TableCell>
-                        AM
-                          <Checkbox
-                            checked={this.state.amWednesday}
-                            onChange={this.handleCheckboxChangeFor('amWednesday')}
-                            value="amWednesday"
-                          />
-                        PM
-                          <Checkbox
-                            checked={this.state.pmWednesday}
-                            onChange={this.handleCheckboxChangeFor('pmWednesday')}
-                            value="pmWednesday"
-                          />
-                      </TableCell>
-                      <TableCell>
-                        AM
-                          <Checkbox
-                            checked={this.state.amThursday}
-                            onChange={this.handleCheckboxChangeFor('amThursday')}
-                            value="amThursday"
-                          />
-                        PM
-                          <Checkbox
-                            checked={this.state.pmThursday}
-                            onChange={this.handleCheckboxChangeFor('pmThursday')}
-                            value="pmThursday"
-                          />
-                      </TableCell>
-                      <TableCell>
-                        AM
-                          <Checkbox
-                            checked={this.state.amFriday}
-                            onChange={this.handleCheckboxChangeFor('amFriday')}
-                            value="amFriday"
-                          />
-                        PM
-                          <Checkbox
-                            checked={this.state.pmFriday}
-                            onChange={this.handleCheckboxChangeFor('pmFriday')}
-                            value="pmFriday"
-                          />
-                      </TableCell>
-                      <TableCell>
-                        AM
-                          <Checkbox
-                            checked={this.state.amSaturday}
-                            onChange={this.handleCheckboxChangeFor('amSaturday')}
-                            value="amSaturday"
-                          />
-                        PM
-                          <Checkbox
-                            checked={this.state.pmSaturday}
-                            onChange={this.handleCheckboxChangeFor('pmSaturday')}
-                            value="pmSaturday"
-                          />
-                      </TableCell>
-                    </TableRow>
-                </TableBody>
-              </Table>
-              <Button
-            variant="contained"
-            color="primary"
-            className={classes.button}
-            onClick={this.registerUser}
-          >
-            Register
-          </Button>
-          </>
-          :
-            <h1>404</h1>
-          }
-        </div>
-      </form>
-      </>
+              </TableBody>
+            </Table>
+            <Button
+          variant="contained"
+          color="primary"
+          className={classes.button}
+          onClick={this.registerUser}
+        >
+          Register
+        </Button>
+        </>
+        :
+          <h1>404</h1>
+        }
+      </div>
+    </form>
+    </>
     );
   }
 }
