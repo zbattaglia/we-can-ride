@@ -9,6 +9,8 @@ class Calendar extends Component {
     this.props.dispatch({ type: 'FETCH_USER' });
     this.props.dispatch({type: 'FETCH_ALL_SHIFTS'});
     this.props.dispatch({type: 'FETCH_VOLUNTEERS'});
+    this.props.dispatch({type: 'GET_MY_SKILLS'});//get the skills that I have
+
 
   }
   componentDidUpdate(prevProps) {
@@ -27,6 +29,7 @@ class Calendar extends Component {
   render() {
     return (
       <>
+      {JSON.stringify(this.props.state.skill.mySkills)}
         <CalendarGrid />
       </>
     )
