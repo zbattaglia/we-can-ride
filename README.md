@@ -1,6 +1,6 @@
 # We Can Ride 
 
-The purpose of this application is to help coordinate volunteers by creating a scheduling management framework.
+The purpose of this application is to help coordinate volunteers by creating a scheduling management framework.  Below you will find instructions for getting the app set up, and included in the documentation.pdf file are instructions for using and navigating the app as both an admin and a volunteer.
 
 ### Prerequisites
 
