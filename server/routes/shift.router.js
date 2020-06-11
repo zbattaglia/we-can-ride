@@ -85,7 +85,7 @@ router.get(`/all`, rejectUnauthenticated, (req, res) => {
 
 // PUT route to update a shift when a volunteer is trying to give up
 //this marks that shift as a shift that the volunteer would like to give up, so others can take it
-router.put('/:shiftId', (req, res) => {
+router.put('/:shiftId', rejectUnauthenticated, (req, res) => {
     const shiftId = req.params.shiftId;
     // console.log( 'Got shiftId in server', shiftId );
     const sqlText = `UPDATE "shift"
@@ -110,17 +110,37 @@ router.get('/sub', rejectUnauthenticated, async (req, res, next) => {
     try{
         connection.query('BEGIN');
         //here's where we find out this user's roles and then get the shifts they can sub for
-        
+        console.log('async await', req.user.id);
+        //this query will get the skills this user is qualified for
+        const getUserRolesQuery =`SELECT "skill_id" FROM "user_skill"
+        WHERE "user_id" = $1;`;
+        const userSkills = await connection.query(getUserRolesQuery, [req.user.id]);
+        await console.log('uer skills', userSkills.rows);
+        //loop through the skills to make a string for the query
+        const skillList = userSkills.rows;
+        let skillString = '';
+
+        //make a list of the skills to get
+        console.log('skill string', skillString);
+        for(let i=0; i < skillList.length; i++){
+            if(i === 0){
+                skillString = skillString + '"skill"."id" = ' + skillList[i].skill_id;
+            } else{
+                skillString = skillString + ' OR ' + '"skill"."id" = ' + skillList[i].skill_id;
+            }
+        }
+
+ 
         const sqlText = `SELECT "shift"."id", "date", "start_of_lesson", ("start_of_lesson" + "length_of_lesson") AS "end_of_lesson", "skill"."title", "eu"."first_name" AS "expected_first_name", "au"."first_name" AS "assigned_first_name", LEFT("au"."last_name", 1) AS "assigned_user_last_initial", "expected_user", "assigned_user", "client" FROM "shift" 
         JOIN "slot" ON "shift"."slot_id" = "slot"."id"
         JOIN "lesson" ON "slot"."lesson_id" = "lesson"."id"
         LEFT JOIN "user" AS "eu" ON "expected_user" = "eu"."id"
         LEFT JOIN "user" AS "au" ON "assigned_user" = "au"."id"
         LEFT JOIN "skill" ON "skill_needed" = "skill"."id"
-        WHERE "assigned_user" IS NULL OR "user_wants_to_trade" IS TRUE
+        WHERE ("assigned_user" IS NULL OR "user_wants_to_trade" IS TRUE)
+        AND (${skillString})
         ORDER BY "date";`;
         const response = await connection.query(sqlText);
-
         await connection.query(`COMMIT`);
         res.send(response.rows);
     }
@@ -160,7 +180,7 @@ router.put('/sub/shift', rejectUnauthenticated, (req, res) => {
 
 //this is so that the admin can change who is assigned to a shift from the calendar, by picking a user to
 //assign
-router.put('/update/volunteer', (req, res) => {
+router.put('/update/volunteer',rejectUnauthenticated, (req, res) => {
     const queryText = `UPDATE "shift" SET "assigned_user" = $1, "user_wants_to_trade" = FALSE WHERE "id" = $2;`;
     const queryValues = [req.body.selectUser, req.body.eventId];
     pool.query(queryText, queryValues)
