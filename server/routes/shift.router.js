@@ -104,27 +104,36 @@ router.put('/:shiftId', (req, res) => {
 });
 
 // GET route to get all shifts with open shifts for sub
-router.get('/sub', (req, res) => {
+router.get('/sub', rejectUnauthenticated, async (req, res, next) => {
     // console.log( 'Getting sub shifts on server' );
+    const connection = await pool.connect();
+    try{
+        connection.query('BEGIN');
+        //here's where we find out this user's roles and then get the shifts they can sub for
+        
+        const sqlText = `SELECT "shift"."id", "date", "start_of_lesson", ("start_of_lesson" + "length_of_lesson") AS "end_of_lesson", "skill"."title", "eu"."first_name" AS "expected_first_name", "au"."first_name" AS "assigned_first_name", LEFT("au"."last_name", 1) AS "assigned_user_last_initial", "expected_user", "assigned_user", "client" FROM "shift" 
+        JOIN "slot" ON "shift"."slot_id" = "slot"."id"
+        JOIN "lesson" ON "slot"."lesson_id" = "lesson"."id"
+        LEFT JOIN "user" AS "eu" ON "expected_user" = "eu"."id"
+        LEFT JOIN "user" AS "au" ON "assigned_user" = "au"."id"
+        LEFT JOIN "skill" ON "skill_needed" = "skill"."id"
+        WHERE "assigned_user" IS NULL OR "user_wants_to_trade" IS TRUE
+        ORDER BY "date";`;
+        const response = await connection.query(sqlText);
 
-    const sqlText = `SELECT "shift"."id", "date", "start_of_lesson", ("start_of_lesson" + "length_of_lesson") AS "end_of_lesson", "skill"."title", "eu"."first_name" AS "expected_first_name", "au"."first_name" AS "assigned_first_name", LEFT("au"."last_name", 1) AS "assigned_user_last_initial", "expected_user", "assigned_user", "client" FROM "shift" 
-                    JOIN "slot" ON "shift"."slot_id" = "slot"."id"
-                    JOIN "lesson" ON "slot"."lesson_id" = "lesson"."id"
-                    LEFT JOIN "user" AS "eu" ON "expected_user" = "eu"."id"
-                    LEFT JOIN "user" AS "au" ON "assigned_user" = "au"."id"
-                    LEFT JOIN "skill" ON "skill_needed" = "skill"."id"
-                    WHERE "assigned_user" IS NULL OR "user_wants_to_trade" IS TRUE
-                    ORDER BY "date";`;
+        await connection.query(`COMMIT`);
+        res.send(response.rows);
+    }
+    catch (error){
+        console.log( "Error getting sub shifts", error)
+        await connection.query(`ROLLBACK`);
+        res.sendStatus(500);
+      }finally{
+        connection.release();
+      }
 
-    pool.query(sqlText)
-        .then((response) => {
-            // console.log( 'Got sub shifts on server', response.rows );
-            res.send(response.rows);
-        })
-        .catch((error) => {
-            console.log("Error getting sub shifts", error);
-            res.sendStatus(error);
-        })
+
+
 });
 
 // PUT route to update sub table when volunteer takes an open shift
