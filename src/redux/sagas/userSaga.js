@@ -24,8 +24,23 @@ function* fetchUser() {
   }
 }
 
+function* fetchMySkills() {
+  try{
+    const response = yield axios.get('/api/user/skill');
+    yield console.log('skill response', response.data);
+    //reponse is shaped like [{skill_id: 1}, {skill_id: 2}]
+    const skillArray = response.data.map(({skill_id}) => skill_id);
+    yield console.log('skill array', skillArray);
+    yield put({type: 'SET_MY_SKILLS', payload: skillArray});
+  }
+  catch(error){ 
+    console.log('error in fetching my skills', error);
+  }
+}
+
 function* userSaga() {
   yield takeLatest('FETCH_USER', fetchUser);
+  yield takeLatest('GET_MY_SKILLS', fetchMySkills);
 }
 
 export default userSaga;

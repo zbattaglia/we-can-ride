@@ -9,6 +9,16 @@ const skills = (state = [], action) => {
     }
   };
 
+  const mySkills = (state = [], action) => {
+    switch (action.type) {
+      case 'SET_MY_SKILLS':
+        return action.payload;
+      default:
+        return state;
+    }
+  };
+
   export default combineReducers({
     skills,
+    mySkills
   });

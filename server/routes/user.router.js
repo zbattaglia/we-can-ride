@@ -34,6 +34,20 @@ router.get('/register/:token', async (req, res) => {
   }
 }); // end GET route
 
+//get the skills for this user
+router.get('/skill', rejectUnauthenticated, (req, res) =>{
+  const sqlText = `SELECT "skill_id" FROM "user_skill"
+  WHERE "user_id" = $1
+  ORDER BY "skill_id"
+  ;`;
+  pool.query(sqlText, [req.user.id]).then(response => {
+    res.send(response.rows);
+  }).catch( error => {
+    console.log('error in getting this users roles', error);
+    res.sendStatus(500);
+  });
+})
+
 // Handles POST request with new user information and availability with encrypted password
 router.post('/register', async (req, res, next) => {  
   const username = req.body.username;
