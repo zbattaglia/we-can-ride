@@ -50,6 +50,9 @@ const SideBar = (props) => (
               <Link className="side-link" to="/managevolunteers">
                 Manage Volunteers
               </Link>
+              <Link className="side-link" to="/printaday">
+                Print A Day
+              </Link>
               <Link className="side-link" to="/inbox">
                 Inbox
               </Link>

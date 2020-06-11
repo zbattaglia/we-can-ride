@@ -98,6 +98,18 @@ function* updateShift(action){
   }
 }
 
+function* getDaysShifts(action){
+  try{
+    // action.payload is shaped like {date: "2020-06-04"}
+
+    const response = yield axios.get('/shift/day', {params: action.payload});
+    yield put({type: 'SET_DAY_SHIFTS', payload: response.data});
+  }
+  catch(error){
+    console.log('error in getting the days shifts', error);
+  }
+}
+
 function* shiftSaga() {
   yield takeLatest('FETCH_FOUR_WEEKS_SHIFTS', fetchFourWeeksShifts);
   yield takeLatest('FETCH_MY_SHIFTS', fetchMyShifts);
@@ -107,6 +119,7 @@ function* shiftSaga() {
   yield takeLatest('TAKE_SUB_SHIFT', updateSubShift);
   yield takeLatest('FETCH_MY_SLOTS', fetchMySlots);
   yield takeLatest('UPDATE_SHIFT', updateShift);
+  yield takeLatest('GET_DAYS_SHIFTS', getDaysShifts);
 };
 
 export default shiftSaga;

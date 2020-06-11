@@ -27,6 +27,7 @@ import Schedule from '../Schedule/Schedule';
 import EditVolunteer from '../ManageVolunteers/EditVolunteer';
 import ResetPasswordPage from '../ResetPasswordPage/ResetPasswordPage';
 import RegisterPage from '../RegisterPage/RegisterPage';
+import PrintADay from '../PrintADay/PrintADay';
 
 import './App.css';
 
@@ -95,6 +96,11 @@ class App extends Component {
                 exact
                 path="/managevolunteers"
                 component={ManageVolunteers}
+              />
+              <ProtectedRoute
+                exact
+                path="/printaday"
+                component={PrintADay}
               />
               <ProtectedRoute
                 exact

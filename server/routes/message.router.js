@@ -8,7 +8,8 @@ const moment = require('moment');
 
 // require emailer to be able to send messages sent internally in the app by email
 const sendEmail = require('../modules/emailer');
-
+// require dayEmail to send custom email from admin to a days roster of volunteers
+const dayEmailer = require( '../modules/dayEmailer' );
 
  //GET route to return all messages for a specific user to display on their inbox
 
@@ -197,5 +198,33 @@ router.post('/trade', rejectUnauthenticated, async (req, res) => {
         res.sendStatus( 500 );
     }
 }); // end POST route
+
+// POST route to send email to a selected days volunteer roster
+router.post( '/day', rejectUnauthenticated, async(req, res) => {
+    // extract details from req.body
+    const date = moment(req.body.date).format('MMMM Do, YYYY');
+    const message = req.body.message;
+    const volunteers = req.body.volunteers;
+    // blank array to hold all users emails
+    let emails = [];
+    // query to get all volunteers emails based on their id
+    const sqlTextOne = `SELECT "user"."email" FROM "user" WHERE "user"."id" = $1;`;
+    try {
+        for( volunteer of volunteers ) {
+            if( volunteer !== null ) {
+                // get email from database for volunteer and push into emails array
+                const response = await pool.query( sqlTextOne, [ volunteer ] );
+                emails.push( response.rows[0].email );
+            }
+        }
+        dayEmailer( { emails, date, message } );
+        res.sendStatus( 200 );
+    }
+    catch(error) {
+        // if any errors, log to terminal
+        console.log( 'Error Emailing users for selected day', error );
+        res.sendStatus( 500 );
+    }
+}) // end POST route
 
 module.exports = router;
