@@ -46,8 +46,14 @@ router.get(`/myshift/:user_id`, rejectUnauthenticated, (req, res) => {
 router.get('/day', rejectUnauthenticated, (req, res) => {
     console.log('in get day shifts', req.query);
     //req.query is in the format { date: '2020-06-18' }
-    const sqlText = `SELECT * FROM "shift"
-    WHERE "date" = $1;`;
+    const sqlText = `SELECT "lesson"."id" AS "lesson_id", to_char("date", 'day') AS "weekday", "shift"."id", "date", "start_of_lesson", ("start_of_lesson" + "length_of_lesson") AS "end_of_lesson", "skill"."title", "eu"."first_name" AS "expected_first_name", "au"."first_name" AS "assigned_first_name", LEFT("au"."last_name", 1) AS "assigned_user_last_initial", "expected_user", "assigned_user", "client" FROM "shift" 
+    JOIN "slot" ON "shift"."slot_id" = "slot"."id"
+    JOIN "lesson" ON "slot"."lesson_id" = "lesson"."id"
+    LEFT JOIN "user" AS "eu" ON "expected_user" = "eu"."id"
+    LEFT JOIN "user" AS "au" ON "assigned_user" = "au"."id"
+    LEFT JOIN "skill" ON "skill_needed" = "skill"."id"
+    WHERE "date" = $1
+    ORDER BY  "start_of_lesson";`;
     pool.query(sqlText, [req.query.date]).then( response => {
         res.send(response.rows);
     }).catch( error => {

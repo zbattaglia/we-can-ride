@@ -100,7 +100,6 @@ function* updateShift(action){
 
 function* getDaysShifts(action){
   try{
-    yield console.log('in get shifts saga,', action.payload);
     // action.payload is shaped like {date: "2020-06-04"}
 
     const response = yield axios.get('/shift/day', {params: action.payload});
