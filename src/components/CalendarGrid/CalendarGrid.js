@@ -25,9 +25,23 @@ class CalendarGrid extends React.Component {
     open: false,
     eventId: '',
   }
+ 
+  componentDidMount() {
+    this.props.dispatch({type: 'GET_MY_SKILLS'});//get the skills that I have
 
+
+  }
   componentDidUpdate(prevProps, prevState){
     if((this.props.state.shift.allShifts.length > 1) && prevProps.state.shift.allShifts !== this.props.state.shift.allShifts){
+      this.setState({
+        calendarEvents: {
+          events: this.eventConstructor(this.props.state.shift.allShifts),
+        }
+
+      });
+    }
+    if(prevProps.state.skill.mySkills !== this.props.state.skill.mySkills){
+      this.props.dispatch({type: 'FETCH_ALL_SHIFTS'});
       this.setState({
         calendarEvents: {
           events: this.eventConstructor(this.props.state.shift.allShifts),
@@ -76,10 +90,10 @@ class CalendarGrid extends React.Component {
           case 'leader':
             parsedEvents.push({ title: 'Leader', start: parseDate, color: 'goldenrod', id: event.id});
             break;
-          case 'side walker':
+          case 'sidewalker':
             parsedEvents.push({ title: 'Walker', start: parseDate, color: 'forestgreen', id: event.id});
             break;
-          case 'barn aid':
+          case 'barn_aid':
             parsedEvents.push({ title: 'Barn Aid', start: parseDate, id: event.id});
             break;
           case 'feeder':
@@ -90,15 +104,15 @@ class CalendarGrid extends React.Component {
             break;
         }
       }
-      else if(event.assigned_user === null){
+      else if((event.assigned_user === null || event.user_wants_to_trade) && (this.props.state.skill.mySkills.includes(event.skill_needed))){
         switch (event.title) {
           case 'leader':
             parsedEvents.push({ title: 'Leader', start: parseDate, color: 'crimson', id: event.id});
             break;
-          case 'side walker':
+          case 'sidewalker':
             parsedEvents.push({ title: 'Walker', start: parseDate, color: 'crimson', id: event.id});
             break;
-          case 'barn aid':
+          case 'barn_aid':
             parsedEvents.push({ title: 'Barn Aid', start: parseDate, color: 'crimson', id: event.id});
             break;
           case 'feeder':
